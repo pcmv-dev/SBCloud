@@ -1,11 +1,12 @@
 #!/bin/sh
 
 # This script will install latest version of "Docker-Compose"
-if hash curl 2>/dev/null; then
-    echo "INFO: $(date "+%m/%d/%Y %r") - Curl is not installed. Install it first then try again."
-    exit 1
+if [ -f "/usr/bin/curl" ]; then
+    echo "INFO: $(date "+%m/%d/%Y %r") - Curl already installed..."
+else
+    echo "INFO: $(date "+%m/%d/%Y %r") - Installing Curl..."
+    sudo apt update && sudo apt install curl -y
 fi
-
 if [ -f "/usr/local/bin/docker-compose" ]; then
     echo "INFO: $(date "+%m/%d/%Y %r") - Docker-Compose is already Insalled"
     docker-compose --version
