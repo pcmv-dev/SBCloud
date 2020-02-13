@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # This script will install latest version of "Docker-Compose"
-if hash git 2>/dev/null; then
-    echo "INFO: $(date "+%m/%d/%Y %r") - Git is not installed. Install it first then try again."
+if hash curl 2>/dev/null; then
+    echo "INFO: $(date "+%m/%d/%Y %r") - Curl is not installed. Install it first then try again."
     exit 1
 fi
 
