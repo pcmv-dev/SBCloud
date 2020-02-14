@@ -27,7 +27,7 @@ fusermount -u $rclonemount > /dev/null 2>&1
 fusermount -u $mergerfsmount > /dev/null 2>&1
 
 # Remove empty folders
-echo "INFO: $(date "+%m/%d/%Y %r") - STARTING UNMOUNT SCRIPT for \""${media}\"""
+echo "INFO: $(date "+%m/%d/%Y %r") - ==== STARTING UNMOUNT SCRIPT ===="
 if [ "$(ls $appdata/)" != "" ]; then
     echo "INFO: $(date "+%m/%d/%Y %r") - Removing empty directories in \""$appdata\"""
     rmdir $rclonemount > /dev/null 2>&1 & rmdir $rcloneupload > /dev/null 2>&1
