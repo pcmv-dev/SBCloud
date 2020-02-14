@@ -21,7 +21,7 @@ rcloneupload="$appdata/rclone_upload" # Staging folder of files to be uploaded
 rclonemount="$appdata/rclone_mount" # Rclone mount folder
 
 # Unmount Rclone
-fusermount -u $rcloneupload > /dev/null 2>&1
+fusermount -u $rclonemount > /dev/null 2>&1
 
 # Remove empty folders
 echo "INFO: $(date "+%m/%d/%Y %r") - STARTING UNMOUNT SCRIPT for \""${media}\"""
