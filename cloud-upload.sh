@@ -30,7 +30,7 @@ if [[ -f "$appdata/rclone_upload_running" ]]; then
 echo "WARN: $(date "+%m/%d/%Y %r") - Upload already in progress!"
 exit
 else
-touch $data/rclone_upload_running
+touch $appdata/rclone_upload_running
 fi
 
 # Check if rclone mount created
