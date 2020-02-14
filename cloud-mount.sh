@@ -48,8 +48,8 @@ else
     # Create mountcheck file in case it doesn't already exist
     echo "INFO: $(date "+%m/%d/%Y %r") - Recreating mountcheck file for remote"
     echo "==== RCLONE DEBUG ===="
-    touch $rclonemount/mountcheck
-    rclone copy $rclonemount/mountcheck $remote: --no-traverse --log-level INFO
+    touch $appdata/mountcheck
+    rclone copy $appdata/mountcheck $remote: --no-traverse --log-level INFO
     echo "SUCCESS: $(date "+%m/%d/%Y %r") - Created mountcheck file for remote"
     
     # Rclone mount command and flags
@@ -89,10 +89,10 @@ else
     
     # Create mergerfs mount
     mergerfsoptions="rw,async_read=false,use_ino,allow_other,func.getattr=newest,category.action=all,category.create=ff,cache.files=partial,dropcacheonclose=true"
-    mergerfs $rcloneupload:$rclonemount $share -o $mergerfsoptions > /dev/null 2>&1
+    mergerfs $rcloneupload:$rclonemount $mergerfsmount -o $mergerfsoptions > /dev/null 2>&1
     
     # Check if mergerfs mounted correctly
-    if [ -f "$share/mountcheck" ]; then
+    if [ -f "$mergerfsmount/mountcheck" ]; then
         echo "SUCCESS: $(date "+%m/%d/%Y %r") - Check Passed! \""${media}\"" is mounted"
         echo "==== REMOTE DIRECTORIES ===="
         rclone lsd $remote:
