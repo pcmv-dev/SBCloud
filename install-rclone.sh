@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # Install Latest Rclone Beta
 if [ -f "/bin/fusermount" ]; then
     echo "INFO: $(date "+%m/%d/%Y %r") - Fusermount already installed..."

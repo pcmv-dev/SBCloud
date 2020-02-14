@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # Install Mergerfs
 url="https://github.com/trapexit/mergerfs/releases/download/2.28.3"
 debian="mergerfs_2.28.3.debian-stretch_amd64.deb"

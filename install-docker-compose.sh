@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # This script will install latest version of "Docker-Compose"
 if [ -f "/usr/bin/curl" ]; then
     echo "INFO: $(date "+%m/%d/%Y %r") - Curl already installed..."
