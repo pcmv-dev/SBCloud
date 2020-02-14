@@ -22,7 +22,6 @@ appdata="/mnt/user/appdata/rclonedata/$media" # Rclone data folder location NOTE
 rcloneupload="$appdata/rclone_upload" # Staging folder of files to be uploaded
 rclonemount="$appdata/rclone_mount" # Rclone mount folder
 mergerfsmount="$mediaroot/$media" # Media share location
-mountcheck="$rclonemount/mountcheck" # Mountcheck file
 
 # Create directories
 mkdir -p $appdata
@@ -41,7 +40,7 @@ else
 fi
 
 # Check if rclone mount already created
-if [ -f "$mountcheck" ]; then
+if [ -f "$rclonemount/mountcheck" ]; then
     echo "WARN: $(date "+%m/%d/%Y %r") - Remote already mounted to rclone mount"
 else
     echo "INFO: $(date "+%m/%d/%Y %r") - Mounting remote to \""${rclonemount}\"""
@@ -49,8 +48,8 @@ else
     # Create mountcheck file in case it doesn't already exist
     echo "INFO: $(date "+%m/%d/%Y %r") - Recreating mountcheck file for remote"
     echo "==== RCLONE DEBUG ===="
-    touch $mountcheck
-    rclone copy $mountcheck $remote: --no-traverse --log-level INFO
+    touch $rclonemount/mountcheck
+    rclone copy $rclonemount/mountcheck $remote: --no-traverse --log-level INFO
     echo "SUCCESS: $(date "+%m/%d/%Y %r") - Created mountcheck file for remote"
     
     # Rclone mount command and flags
@@ -67,7 +66,7 @@ else
     echo "INFO: $(date "+%m/%d/%Y %r") - Mount in progress please wait..."
     sleep 5
     echo "INFO: $(date "+%m/%d/%Y %r") - Proceeding..."
-    if [ -f "$mountcheck" ]; then
+    if [ -f "$rclonemount/mountcheck" ]; then
         echo "SUCCESS: $(date "+%m/%d/%Y %r") - Check Passed! remote mounted to rclone mount"
     else
         echo "ERROR: $(date "+%m/%d/%Y %r") - Check Failed! please check your configuration"

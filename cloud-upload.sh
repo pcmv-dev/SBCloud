@@ -23,7 +23,6 @@ appdata="/mnt/user/appdata/rclonedata/$media" # Rclone data folder location NOTE
 rcloneupload="$appdata/rclone_upload" # Staging folder of files to be uploaded
 rclonemount="$appdata/rclone_mount" # Rclone mount folder
 mergerfsmount="$mediaroot/$media" # Media share location
-mountcheck="$rclonemount/mountcheck" # Mountcheck file
 
 # Check if script is already running
 echo "INFO: $(date "+%m/%d/%Y %r") - STARTING UPLOAD SCRIPT for \""${media}\"""
@@ -35,7 +34,7 @@ touch $data/rclone_upload_running
 fi
 
 # Check if rclone mount created
-if [[ -f "$mountcheck" ]]; then
+if [[ -f "$rclonemount/mountcheck" ]]; then
 echo "SUCCESS: $(date "+%m/%d/%Y %r") - Check Passed! \""${media}\"" is mounted, proceeding with upload"
 else
 echo "ERROR: $(date "+%m/%d/%Y %r") - Check Failed! \""${media}\"" is not mounted, please check your configuration"
