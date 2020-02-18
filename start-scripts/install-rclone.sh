@@ -1,5 +1,6 @@
-#!/bin/sh
-# Install Latest Rclone Beta
+#!/bin/bash
+# Checks if fusermount is installed, then proceeds to install Rclone
+
 if [ -f "/bin/fusermount" ]; then
     echo "INFO: $(date "+%m/%d/%Y %r") - Fusermount already installed..."
 else
