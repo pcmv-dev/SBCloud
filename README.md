@@ -26,12 +26,12 @@ $ sudo apt update & sudo apt install git curl -y
 ```
 > Download the scripts
 ```
-$ git clone https://github.com/SenpaiBox/VPSCloudStorage.git $HOME
+$ git clone https://github.com/SenpaiBox/VPSCloudStorage.git ~/VPSCloudStorage
 ```
 
 > Make them executable
 ```
-$ sudo chmod -R +x VPSCloudStorage
+$ sudo chmod -R +x ~/VPSCloudStorage
 ```
 > Install Docker using the provided script or the given command
 ```
@@ -47,7 +47,7 @@ $ sudo usermod -aG docker USER
 $ logout
 $ docker ps <---After logging back in, no sudo required
 ```
-> Change directory to VPSCloudStorage --> start-scripts
+> Change directory to 'VPSCloudStorage/start-scripts' located in your user home folder
 ```
 $ cd ~/VPSCloudStorage/start-scripts
 ```
