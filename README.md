@@ -18,12 +18,42 @@ Use these scripts to help you upload from your VPS. The idea is to setup Docker,
 - Extra cost, to pay for a VPS
 - Working with a terminal
 
-### Prerequisites
+# Setup
 
-Install both plugins from "Community Applications Store"
-NOTE: These are meant for UNRAID
-- Rclone-Beta (Beta is needed) [INSTALL](https://forums.unraid.net/topic/51633-plugin-rclone/)
-- CA User Scripts [INSTALL](https://forums.unraid.net/topic/48286-plugin-ca-user-scripts/)
+> Install git and curl
+```
+$ sudo apt update & sudo apt install git curl -y
+```
+> Download the scripts
+```
+$ git clone https://github.com/SenpaiBox/VPSCloudStorage.git
+```
+
+> Make them executable
+```
+$ sudo chmod -R +x VPSCloudStorage
+```
+> Install Docker using the provided script or the given command
+```
+$ curl -fsSL https://get.docker.com -o install-docker.sh 
+$ sh install-docker.sh
+```
+> Install Docker-Compose
+```
+$ sudo sh install-docker-compose.sh
+```
+> Install Portainer
+```
+$ sudo sh install-portainer.sh
+```
+> Install Mergerfs NOTE: for Debian 9 and 10 provided
+```
+sudo sh install-mergerfs-debian10.sh
+```
+> Install Rclone
+```
+sudo sh install-rclone.sh
+```
 
 ## Configure Rclone Remotes
 
@@ -86,12 +116,6 @@ uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 ```
 - Set a schedule to run the script whenever you feel is a good time. For me it is midnight (0 00 * * *)
 
-## Changelog
-
-- v1.2 - Code revision and less configuration
-- v1.1 - Integrated mountcheck and Logging changes
-- v1.0 - Initial Scripts
-
 ## Support
 
 I am only a novice when it comes to scripting so for help and support please visit the forum for help
@@ -102,7 +126,3 @@ I am only a novice when it comes to scripting so for help and support please vis
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* BinsonBuzz for his super useful scripts :clap:
