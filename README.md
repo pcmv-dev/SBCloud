@@ -38,6 +38,10 @@ $ sudo chmod -R +x VPSCloudStorage
 $ curl -fsSL https://get.docker.com -o install-docker.sh 
 $ sh install-docker.sh
 ```
+> Change directory to VPSCloudStorage
+```
+$ cd VPSCloudStorage
+```
 > Install Docker-Compose
 ```
 $ sudo sh install-docker-compose.sh

@@ -16,7 +16,7 @@ else
     COMPOSE_VER=$(curl -s -o /dev/null -I -w "%{redirect_url}\n" https://github.com/docker/compose/releases/latest | grep -oP "[0-9]+(\.[0-9]+)+$")
     sudo curl -o /usr/local/bin/docker-compose -L https://github.com/docker/compose/releases/download/$COMPOSE_VER/docker-compose-$(uname -s)-$(uname -m)
     sudo chmod +x /usr/local/bin/docker-compose
+    printf "\nDocker-Compose successfully installed"
     docker-compose --version
-    echo "Docker-Compose successfully installed"
 fi
 exit
