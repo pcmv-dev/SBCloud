@@ -5,13 +5,12 @@
 url="https://github.com/trapexit/mergerfs/releases/download/2.28.3"
 pkg="mergerfs_2.28.3.debian-buster_amd64.deb"
 if [ -f "/usr/bin/mergerfs" ]; then
-    echo "INFO: $(date "+%m/%d/%Y %r") - Mergerfs already installed"
+    printf "Mergerfs already installed..."
+    exit
 else
-    mkdir -p /tmp
-    sudo wget -q /tmp/$pkg $url/$pkg
-    sudo dpkg -i /tmp/$pkg
-    echo "INFO: $(date "+%m/%d/%Y %r") - Mergerfs successfully installed"
-    mergerfs -v
-    find /tmp -name $pkg -delete >/dev/null
+    wget -q /tmp/$pkg $url/$pkg & dpkg -i /tmp/$pkg
 fi
+find /tmp -name $pkg -delete >/dev/null
+printf "Mergerfs successfully installed"
+mergerfs -v
 exit
