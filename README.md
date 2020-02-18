@@ -7,7 +7,7 @@
 
 # Info
 
-Use these scripts to help you upload from your VPS. The idea is to setup Docker,Portainer, and NZBget/ruTorrent to download your media and then have Rclone upload it to your GoogleDrive to be able to watch from your Plex/Emby Server. Why is this useful you might ask? well check out the pros and cons below.
+Use these scripts to help you upload from your VPS. The idea is to setup Docker,Portainer, and NZBget/ruTorrent to download your media and then have Rclone upload it to your GoogleDrive to be able to watch from your Plex/Emby Server. Why might you want this? well check out the pros and cons below.
 
 ### Pros
 - You have slow download/upload, so you use your VPS that has fast Gigabit speeds
@@ -17,8 +17,10 @@ Use these scripts to help you upload from your VPS. The idea is to setup Docker,
 ### Cons
 - Extra cost, to pay for a VPS
 - Working with a terminal
+- You can only download files that are smaller than your VPS storage
 
 # Setup
+- I have only tested scripts on <strong>Debian 9/10</strong> and <strong>Ubuntu 18.04<strong>
 
 > Install git and curl
 ```
@@ -47,9 +49,9 @@ $ sudo usermod -aG docker USER
 $ logout
 $ docker ps <---After logging back in, no sudo required
 ```
-> Change directory to 'VPSCloudStorage/start-scripts' located in your user home folder
+> Change directory to 'VPSCloudStorage/install-scripts' located in your user home folder
 ```
-$ cd ~/VPSCloudStorage/start-scripts
+$ cd ~/VPSCloudStorage/install-scripts
 ```
 > Install Docker-Compose
 ```
@@ -61,14 +63,14 @@ $ sudo sh install-portainer.sh
 ```
 > Install Mergerfs NOTE: for Debian 9 and 10 provided
 ```
-sudo sh install-mergerfs-debian10.sh
+$ sudo sh install-mergerfs-debian10.sh
 ```
 > Install Rclone
 ```
-sudo sh install-rclone.sh
+$ sudo sh install-rclone.sh
 ```
 
-## Configure Rclone Remotes
+# Configure Rclone
 
 - Create your rclone.conf
 - I assume most use Google Drive so make sure you create your own client_id [INSTRUCTIONS HERE](https://rclone.org/drive/#making-your-own-client-id)
@@ -94,47 +96,40 @@ password2 = **********
 
 ## Rclone Mount Script
 
-- Configure the <strong>cloudstorage_mount</strong> script. You only need to modify the "CONFIGURE" section
+> Configure the <strong>cloudstorage_mount</strong> script. You only need to modify the "CONFIGURE" section
 
 ```
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="unraidshare" # Unraid share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # Unraid share location
+media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
+mediaroot="/mnt/user" # VPS share location
 ```
-- Set a schedule to run the script 10min, hourly, or when you would like to begin upload
-- [Crontab Calculator](https://corntab.com/)
 
 ## Rclone Unmount Script
 
-- Configure the <strong>cloudstorage_unmount</strong> script. You only need to modify the "CONFIGURE" section
+> Configure the <strong>cloudstorage_unmount</strong> script. You only need to modify the "CONFIGURE" section
 
 ```
 # CONFIGURE
-media="unraidshare" # Unraid share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # Unraid share location
+media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
+mediaroot="/mnt/user" # VPS share location
 ```
-- Set a schedule to run at array startup. Note: You can manually trigger the unmount if needed
 
 ## Rclone Upload Script
 
-- Configure the <strong>cloudstorage_upload</strong> script. You only need to modify the "CONFIGURE" section
+> Configure the <strong>cloudstorage_upload</strong> script. You only need to modify the "CONFIGURE" section
 
 ```
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="unraidshare" # Unraid share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # Unraid share location
+media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
+mediaroot="/mnt/user" # VPS share location
 uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 ```
-- Set a schedule to run the script whenever you feel is a good time. For me it is midnight (0 00 * * *)
 
 ## Support
 
-I am only a novice when it comes to scripting so for help and support please visit the forum for help
 
-- [Guide: How To Use Rclone To Mount Cloud Drives And Play Files](https://forums.unraid.net/topic/75436-guide-how-to-use-rclone-to-mount-cloud-drives-and-play-files/)
-- [Original Scripts](https://github.com/BinsonBuzz/unraid_rclone_mount)
 
 ## License
 
