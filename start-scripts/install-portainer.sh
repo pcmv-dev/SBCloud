@@ -4,7 +4,8 @@
 
 container="portainer"
 if sudo docker ps -a --format '{{.Names}}' | grep -Eq "^${container}\$"; then
-    printf "Portainer is installed..."
+    printf "\nPortainer is installed...\n"
+    exit
 else
     printf "Installing Portainer..."
     docker volume create portainer_data
