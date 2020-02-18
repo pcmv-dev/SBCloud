@@ -26,7 +26,7 @@ $ sudo apt update & sudo apt install git curl -y
 ```
 > Download the scripts
 ```
-$ git clone https://github.com/SenpaiBox/VPSCloudStorage.git
+$ git clone https://github.com/SenpaiBox/VPSCloudStorage.git $HOME
 ```
 
 > Make them executable
@@ -38,9 +38,18 @@ $ sudo chmod -R +x VPSCloudStorage
 $ curl -fsSL https://get.docker.com -o install-docker.sh 
 $ sh install-docker.sh
 ```
-> Change directory to VPSCloudStorage
+> Run this to use Docker as non-root user NOTE: Change USER to your own
 ```
-$ cd VPSCloudStorage
+$ sudo usermod -aG docker USER
+```
+> You need to logout and log back in for your user to be added to Docker group
+```
+$ logout
+$ docker ps <---After logging back in, no sudo required
+```
+> Change directory to VPSCloudStorage --> start-scripts
+```
+$ cd ~/VPSCloudStorage/start-scripts
 ```
 > Install Docker-Compose
 ```
