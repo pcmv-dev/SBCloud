@@ -8,9 +8,9 @@ if [ -f "/usr/bin/mergerfs" ]; then
     printf "Mergerfs already installed..."
     exit
 else
-    wget -q /tmp/$pkg $url/$pkg & dpkg -i /tmp/$pkg
+    wget -q ~/tmp/$pkg $url/$pkg & dpkg -i ~/tmp/$pkg
 fi
-find /tmp -name $pkg -delete >/dev/null
+find ~/tmp -name $pkg -delete >/dev/null
 printf "Mergerfs successfully installed"
 mergerfs -v
 exit
