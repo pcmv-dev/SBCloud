@@ -126,10 +126,9 @@ media="vpsshare" # VPS share name NOTE: The name you want to give your share mou
 mediaroot="/mnt/user" # VPS share in your HOME directory
 ```
 
-> You will need this later for your Docker Containers as well
 ## Rclone Unmount Script
 
-> Configure the **vps-unmountt<i></i>.sh** script. You only need to modify the "CONFIGURE" section
+> Configure the **vps-unmount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
 
 ```bash
 $ cd /mnt/user/vpscloudstorage/rclone # Change to rclone scripts directory

@@ -3,7 +3,7 @@
 # You can only run this script once
 # To view your cronjobs type in terminal "crontab -l"
 # If you need to edit the times type in terminal "crontab -e"
-# Logs are located in "$HOME/user/logs"
+# Logs are located in "/mnt/user/logs"
 
 # CONFIGURE
 media="googlevps" # VPS share name NOTE: The name you want to give your share mount
@@ -12,7 +12,7 @@ media="googlevps" # VPS share name NOTE: The name you want to give your share mo
 #### DO NOT EDIT ANYTHING BELOW THIS ####
 #########################################
 
-appdata="$HOME/user/rclonedata/$media"
+appdata="/mnt/user/rclonedata/$media"
 mkdir -p $appdata
 if [ -f "$appdata/cron_job_added" ]; then
     echo "INFO: $(date "+%m/%d/%Y %r") - Cronjob already added please edit with \""crontab -e\"""
