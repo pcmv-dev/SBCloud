@@ -78,9 +78,8 @@ $ sudo sh install-rclone.sh
 
 >The next task is to create a directory where you want to store your media and appdata for **Rclone** and **Docker Containers**. The logs folder is optional, if you want to output your rclone scripts to a log.
 ```bash
-$ mkdir /mnt/user           # Root directory for Media and Appdata
-$ mkdir /mnt/user/appdata   # Root directory for Appdata
-$ mkdir /mnt/user/logs      # Root directory for Logs
+$ sudo mkdir /mnt/user/appdata   # Root directory for Appdata
+$ sudo mkdir /mnt/user/logs      # Root directory for Logs
 ```
 
 # Configure Rclone
