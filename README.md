@@ -180,6 +180,11 @@ $ crontab -e
 
 > Type "crontab -e" if you would like to change script schedule
 ```bash
+$ cd $HOME/vpscloudstorage/extras # Change to extras scripts directory
+$ nano add-to-cron.sh             # Edit the script
+$ sudo sh add-to-cron.sh          # Run the script
+```
+```bash
 # CONFIGURE
 media="googlevps" # VPS share name NOTE: The name you want to give your share mount
 ```
