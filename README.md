@@ -33,7 +33,7 @@ $ sudo apt update & sudo apt install git curl -y
 ```
 > Download the scripts
 ```
-$ git clone https://github.com/SenpaiBox/vpscloudstorage.git /mnt/user/vpscloudstorage
+$ sudo git clone https://github.com/SenpaiBox/vpscloudstorage.git /mnt/user/vpscloudstorage
 ```
 
 > Make them executable
