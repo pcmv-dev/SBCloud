@@ -1,8 +1,9 @@
 #!/bin/bash
 # This will add rclone scripts to crontab
 # You can only run this script once
-# To view your cronjobs type in terminal "sudo crontab -l"
-# If you need to edit the schedule type in terminal "sudo crontab -e"
+# To view your cronjobs type in terminal "crontab -l"
+# If you need to edit the schedule type in terminal "crontab -e"
+# To delete all cron tasks type in terminal "crontab -r"
 # Logs are located in "/mnt/user/logs"
 
 # CONFIGURE

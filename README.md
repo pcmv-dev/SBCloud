@@ -83,12 +83,22 @@ $ sudo mkdir /mnt/user/logs         # Root directory for Logs
 $ sudo chown -R user:user /mnt/user # Chnage permissions to current user
 ```
 > Change "user:user" with your username
-
+## Change Fusermount Permission
+> You must edit  /etc/fuse.conf to use option "allow_other" by uncommenting "user_allow_other"
+If you do not set this you will problems with permissions
+```
+$ sudo nano /etc/fuse.conf
+```
 # Configure Rclone
 
->Create your rclone.conf
+> Take ownership of rclone.conf
 ```bash
-$ sudo rclone config
+$ sudo chown -R user:user $HOME/.config
+```
+
+> Create your rclone.conf
+```bash
+$ rclone config
 ```
 - I assume most use Google Drive so make sure you create your own client_id [INSTRUCTIONS HERE](https://rclone.org/drive/#making-your-own-client-id)
 - Watch Spaceinvador One video for more help [WATCH HERE](https://youtu.be/-b9Ow2iX2DQ)
@@ -112,23 +122,22 @@ password2 = **********
 ```
 
 ## Rclone Mount Script
+- **Make sure you run the commands as written!**
+- **If you run the scripts as sudo you will have permission problems!**
 
 > Configure the **vps-mount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
 
 ```bash
 $ cd /mnt/user/vpscloudstorage/rclone # Change to rclone scripts directory
 $ nano vps-mount.sh                   # Edit the script
-$ sudo sh vps-mount.sh                # Run the script
+$ sh vps-mount.sh                     # Run the script
 ```
 ```bash
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
 mediaroot="/mnt/user" # VPS share in your HOME directory
-puid="1000" # Your user ID
-guid="1000" # Your group ID
 ```
-> Get your ID in terminal by typing "ID username" replace username with your own
 
 ## Rclone Unmount Script
 
@@ -136,8 +145,8 @@ guid="1000" # Your group ID
 
 ```bash
 $ cd /mnt/user/vpscloudstorage/rclone # Change to rclone scripts directory
-$ nano vps-mount.sh               # Edit the script
-$ sudo sh vps-unmount.sh          # Run the script
+$ nano vps-mount.sh                   # Edit the script
+$ sh vps-unmount.sh                   # Run the script
 ```
 ```bash
 # CONFIGURE
@@ -152,7 +161,7 @@ mediaroot="/mnt/user" # VPS share in your HOME directory
 ```bash
 $ cd /mnt/user/vpscloudstorage/rclone # Change to rclone scripts directory
 $ nano vps-mount.sh                   # Edit the script
-$ sudo sh vps-upload.sh               # Run the script
+$ sh vps-upload.sh                    # Run the script
 ```
 ```bash
 # CONFIGURE
@@ -166,7 +175,7 @@ uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 - Make sure you are in the correct directory before you try to run the scripts
 - Make sure they are executable. If not look up how in **Setup** section
 ```
-$ sudo sh vps-mount.sh
+$ sh vps-mount.sh
 ```
 ## Setup Cron Jobs
 
@@ -175,7 +184,7 @@ $ sudo sh vps-mount.sh
 
 > Example: 0 */1 * * * /mnt/user/vpscloudstorage/rclone/vps-mount.sh > /mnt/user/logs/vps-mount.log 2>&1
 ```
-$ sudo crontab -e
+$ crontab -e
 ```
 ### Using Provided Script
 
@@ -187,7 +196,7 @@ $ sudo crontab -e
 ```bash
 $ cd /mnt/user/vpscloudstorage/extras # Change to extras scripts directory
 $ nano add-to-cron.sh                 # Edit the script
-$ sudo sh add-to-cron.sh              # Run the script
+$ sh add-to-cron.sh                   # Run the script
 ```
 ```bash
 # CONFIGURE
