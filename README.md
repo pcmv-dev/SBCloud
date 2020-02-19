@@ -170,7 +170,7 @@ $ sudo sh vps-mount.sh
 
 > Example: 0 */1 * * * /mnt/user/vpscloudstorage/rclone/vps-mount.sh > /mnt/user/logs/vps-mount.log 2>&1
 ```
-$ crontab -e
+$ sudo crontab -e
 ```
 ### Using Provided Script
 
@@ -182,7 +182,7 @@ $ crontab -e
 ```bash
 $ cd /mnt/user/vpscloudstorage/extras # Change to extras scripts directory
 $ nano add-to-cron.sh                 # Edit the script
-$ sh add-to-cron.sh                   # Run the script
+$ sudo sh add-to-cron.sh              # Run the script
 ```
 ```bash
 # CONFIGURE
