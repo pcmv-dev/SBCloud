@@ -12,6 +12,8 @@
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 media="googlevps" # VPS share name NOTE: The name you want to give your share mount
 mediaroot="/mnt/user" # VPS share in your HOME directory
+puid="1000" # Your user ID
+guid="1000" # Your group ID
 
 #########################################
 #### DO NOT EDIT ANYTHING BELOW THIS ####
@@ -54,6 +56,8 @@ else
     
     # Rclone mount command and flags
     rclone mount \
+    --$puid \
+    --$guid \
     --log-level ERROR \
     --allow-other \
     --dir-cache-time 720h \
