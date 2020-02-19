@@ -42,7 +42,7 @@ $ sudo chmod -R +x /mnt/user/vpscloudstorage
 ```
 > Install Docker using the provided script or the given command
 ```
-$ curl -fsSL https://get.docker.com -o /mnt/user/vpscloudstorage/install-scripts/install-docker.sh 
+$ sudo curl -fsSL https://get.docker.com -o /mnt/user/vpscloudstorage/install-scripts/install-docker.sh 
 $ sh /mnt/user/vpscloudstorage/install-scripts/install-docker.sh
 ```
 > Run this to use Docker as non-root user NOTE: Change USER to your own
