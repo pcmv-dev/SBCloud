@@ -125,7 +125,10 @@ $ sudo sh vps-mount.sh                # Run the script
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
 mediaroot="/mnt/user" # VPS share in your HOME directory
+puid="1000" # Your user ID
+guid="1000" # Your group ID
 ```
+> Get your ID in terminal by typing "ID username" replace username with your own
 
 ## Rclone Unmount Script
 
