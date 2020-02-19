@@ -113,8 +113,10 @@ password2 = **********
 
 > Configure the **cloudstorage_mount** script. You only need to modify the "CONFIGURE" section
 
-```
-$ nano vps-mount.sh
+```bash
+$ cd $HOME/vpscloudstorage/rclone # Change to rclone scripts directory
+$ nano vps-mount.sh               # Edit the script
+$ sudo sh vps-mount.sh            # Run the script
 ```
 ```bash
 # CONFIGURE
@@ -127,8 +129,10 @@ mediaroot="$HOME/user" # VPS share in your HOME directory
 
 > Configure the **cloudstorage_unmount** script. You only need to modify the "CONFIGURE" section
 
-```
-$ nano vps-unmount.sh
+```bash
+$ cd $HOME/vpscloudstorage/rclone # Change to rclone scripts directory
+$ nano vps-mount.sh               # Edit the script
+$ sudo sh vps-unmount.sh          # Run the script
 ```
 ```bash
 # CONFIGURE
@@ -140,8 +144,10 @@ mediaroot="$HOME/user" # VPS share in your HOME directory
 
 > Configure the **cloudstorage_upload** script. You only need to modify the "CONFIGURE" section
 
-```
-$ nano vps-upload.sh
+```bash
+$ cd $HOME/vpscloudstorage/rclone # Change to rclone scripts directory
+$ nano vps-mount.sh               # Edit the script
+$ sudo sh vps-upload.sh           # Run the script
 ```
 ```bash
 # CONFIGURE

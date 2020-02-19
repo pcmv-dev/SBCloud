@@ -21,9 +21,9 @@ else
     echo "INFO: $(date "+%m/%d/%Y %r") - Added rclone scripts to crontab"
     touch $appdata/cron_job_added
     (crontab -l 2>/dev/null; echo "# Rclone scripts for \""${media}\""") | crontab -
-    (crontab -l 2>/dev/null; echo "0 */1 * * * $HOME/VPSCloudStorage/rclone/vps-mount.sh > $HOME/user/logs/vps-mount.log >/dev/null 2>&1") | crontab -
-    (crontab -l 2>/dev/null; echo "*/15 * * * * $HOME/VPSCloudStorage/rclone/vps-upload.sh > $HOME/user/logs/vps-upload.log >/dev/null 2>&1") | crontab -
-    (crontab -l 2>/dev/null; echo "@reboot $HOME/VPSCloudStorage/rclone/vps-unmount.sh > $HOME/user/logs/vps-mount.log >/dev/null 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "0 */1 * * * $HOME/vpscloudstorage/rclone/vps-mount.sh > $HOME/user/logs/vps-mount.log >/dev/null 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "*/15 * * * * $HOME/vpscloudstorage/rclone/vps-upload.sh > $HOME/user/logs/vps-upload.log >/dev/null 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "@reboot $HOME/vpscloudstorage/rclone/vps-unmount.sh > $HOME/user/logs/vps-mount.log >/dev/null 2>&1") | crontab -
 fi
 crontab -l
 exit
