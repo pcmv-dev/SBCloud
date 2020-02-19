@@ -124,6 +124,7 @@ password2 = **********
 ## Rclone Mount Script
 - **Make sure you run the commands as written!**
 - **If you run the scripts as sudo you will have permission problems!**
+> Make sure you edited **fuse.conf** first [CLICK HERE TO GO BACK](##Change-Fusermount-Permission)
 
 > Configure the **vps-mount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
 
@@ -177,6 +178,12 @@ uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 ```
 $ sh vps-mount.sh
 ```
+> Do one final permission sweep incase you missed a step
+```bash
+$ sudo chown -R user:user /mnt/user # Replace "user" with your own
+$ sudo chmod -R +x /mnt/user
+```
+
 ## Setup Cron Jobs
 
 ### Manual Entry
