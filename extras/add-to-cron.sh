@@ -24,6 +24,6 @@ else
     (crontab -l 2>/dev/null; echo "0 */1 * * * $HOME/vpscloudstorage/rclone/vps-mount.sh > $HOME/user/logs/vps-mount.log 2>&1") | crontab -
     (crontab -l 2>/dev/null; echo "*/15 * * * * $HOME/vpscloudstorage/rclone/vps-upload.sh > $HOME/user/logs/vps-upload.log 2>&1") | crontab -
     (crontab -l 2>/dev/null; echo "@reboot $HOME/vpscloudstorage/rclone/vps-unmount.sh > $HOME/user/logs/vps-mount.log 2>&1") | crontab -
+    /etc/init.d/cron reload
 fi
-crontab -l
 exit
