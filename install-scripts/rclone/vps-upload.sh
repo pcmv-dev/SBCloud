@@ -26,7 +26,7 @@ mergerfsmount="$mediaroot/$media" # Media share location
 
 # Check if script is already running
 echo "INFO: $(date "+%m/%d/%Y %r") - ==== STARTING UPLOAD SCRIPT ===="
-if [[ -f "$appdata/rclone_upload_running" ]]; then
+if [ -f "$appdata/rclone_upload_running" ]; then
 echo "WARN: $(date "+%m/%d/%Y %r") - Upload already in progress!"
 exit
 else
@@ -34,7 +34,7 @@ touch $appdata/rclone_upload_running
 fi
 
 # Check if rclone mount created
-if [[ -f "$rclonemount/mountcheck" ]]; then
+if [ -f "$rclonemount/mountcheck" ]; then
 echo "SUCCESS: $(date "+%m/%d/%Y %r") - Check Passed! \""${media}\"" is mounted, proceeding with upload"
 else
 echo "ERROR: $(date "+%m/%d/%Y %r") - Check Failed! \""${media}\"" is not mounted, please check your configuration"

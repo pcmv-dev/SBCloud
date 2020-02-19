@@ -23,8 +23,8 @@ rclonemount="$appdata/rclone_mount" # Rclone mount folder
 mergerfsmount="$mediaroot/$media" # Media share location
 
 # Unmount Rclone
-fusermount -u $rclonemount > /dev/null 2>&1
-fusermount -u $mergerfsmount > /dev/null 2>&1
+fusermount -uz $rclonemount > /dev/null 2>&1
+fusermount -uz $mergerfsmount > /dev/null 2>&1
 
 # Remove empty folders
 echo "INFO: $(date "+%m/%d/%Y %r") - ==== STARTING UNMOUNT SCRIPT ===="

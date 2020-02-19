@@ -67,7 +67,7 @@ else
     sleep 5
     echo "INFO: $(date "+%m/%d/%Y %r") - Proceeding..."
     if [ -f "$rclonemount/mountcheck" ]; then
-        echo "SUCCESS: $(date "+%m/%d/%Y %r") - Check Passed! remote mounted to rclone mount"
+        echo "SUCCESS: $(date "+%m/%d/%Y %r") - Check Passed! remote mounted"
     else
         echo "ERROR: $(date "+%m/%d/%Y %r") - Check Failed! please check your configuration"
         rm $appdata/rclone_mount_running
@@ -75,13 +75,13 @@ else
     fi
 fi
 # Check media share mount
-if [[ -f "$mergerfsmount/mountcheck" ]]; then
+if [ -f "$mergerfsmount/mountcheck" ]; then
     echo "SUCCESS: $(date "+%m/%d/%Y %r") - Check Passed! \""${media}\"" is mounted"
 else
     
     # Check if mergerfs is installed
     if [ -f "/usr/bin/mergerfs" ]; then
-        echo "INFO: $(date "+%m/%d/%Y %r") - Mergerfs is installed"
+        echo "INFO: $(date "+%m/%d/%Y %r") - Mergerfs found, Proceeding..."
     else
         echo "ERROR: $(date "+%m/%d/%Y %r") - Please install Mergerfs first"
         exit

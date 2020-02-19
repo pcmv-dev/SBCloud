@@ -132,7 +132,11 @@ media="vpsshare" # VPS share name NOTE: The name you want to give your share mou
 mediaroot="/mnt/user" # VPS share location
 uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 ```
-# Portainer and Dockers
+## Setup Cron Jobs
+
+> Add
+
+# Portainer
 
 You can install and configure Dockers very easily using Portainer. Now due to a VPS usually being an underpowred machine we should avoid overloading it. Depending on your VPS Provider your mileage may vary.
 
