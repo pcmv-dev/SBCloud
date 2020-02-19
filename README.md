@@ -42,8 +42,8 @@ $ sudo chmod -R +x $HOME/vpscloudstorage
 ```
 > Install Docker using the provided script or the given command
 ```
-$ curl -fsSL https://get.docker.com -o $HOME/vpscloudstorage/install-docker.sh 
-$ sh $HOME/vpscloudstorage/install-docker.sh
+$ curl -fsSL https://get.docker.com -o $HOME/vpscloudstorage/install-scripts/install-docker.sh 
+$ sh $HOME/vpscloudstorage/install-scripts/install-docker.sh
 ```
 > Run this to use Docker as non-root user NOTE: Change USER to your own
 ```
@@ -161,16 +161,16 @@ uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 - Make sure you are in the correct directory before you try to run the scripts
 - Make sure they are executable. If not look up how in **Setup** section
 ```
-$ sh vps-mount.sh
+$ sudo sh vps-mount.sh
 ```
 ## Setup Cron Jobs
 
 ### Manual Entry
 > Recommended to add your own cron entry per script: **vps-mount<i></i>.sh, vps-unmount<i></i>.sh, vps-upload<i></i>.sh**
 
-> Example: 0 */1 * * * $HOME/vpscloudstorage/rclone/vps-mount.sh > $HOME/user/logs/vps-mount.log >/dev/null 2>&1
+> Example: 0 */1 * * * $HOME/vpscloudstorage/rclone/vps-mount.sh > $HOME/user/logs/vps-mount.log 2>&1
 ```
-$ crontab -e
+$ sudo crontab -e
 ```
 ### Using Provided Script
 
@@ -178,7 +178,7 @@ $ crontab -e
 
 > Configure **add-to-cron<i></i>.sh** script in "extras" folder. You only need to modify the "CONFIGURE" section
 
-> Type "crontab -e" if you would like to change script schedule
+> Type "sudo crontab -e" if you would like to change script schedule
 ```bash
 $ cd $HOME/vpscloudstorage/extras # Change to extras scripts directory
 $ nano add-to-cron.sh             # Edit the script
