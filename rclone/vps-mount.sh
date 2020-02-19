@@ -56,8 +56,8 @@ else
     
     # Rclone mount command and flags
     rclone mount \
-    --$puid \
-    --$guid \
+    --uid $puid \
+    --gid $guid \
     --log-level ERROR \
     --allow-other \
     --dir-cache-time 720h \
