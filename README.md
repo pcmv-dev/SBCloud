@@ -2,7 +2,7 @@
 <center>
 <h1 align="center">VPSCloudStorage</h1>
 <h4 align="center">Rclone mount your GoogleDrive to upload from your VPS machine</h4>
-<h5 align="Center"><strong>02/18/2020 - Version 0.03</strong>
+<h5 align="Center">02/18/2020 - Version 0.03
 </center>
 
 # Info
@@ -10,17 +10,20 @@
 Use these scripts to help you upload from your VPS. The idea is to setup Docker,Portainer, and NZBget/ruTorrent to download your media and then have Rclone upload it to your GoogleDrive to be able to watch from your Plex/Emby Server. Why might you want this? well check out the pros and cons below.
 
 ### Pros
-- You have slow download/upload, so you use your VPS that has fast Gigabit speeds
-- Bandwidth is freed up on your end
-- You can upload media, quicker
+- Fast Gigabit speeds (Depends on VPS Provider)
+- Increased Bandwidth (Depends on VPS Provider)
+- Save Bandwidth
+- Build up your Media Library
+- A seedbox
 
 ### Cons
 - Extra cost, to pay for a VPS
 - Working with a terminal
-- You can only download files that are smaller than your VPS storage
+- Limited storage
+- Low powered machine (Depends on VPS Provider)
 
 # Setup
-- I have only tested scripts on <strong>Debian 9/10</strong> and <strong>Ubuntu 18.04<strong>
+- I have only tested scripts on **Debian 9/10** and **Ubuntu 18.04**
 
 > Install git and curl
 ```
@@ -61,9 +64,9 @@ $ sudo sh install-docker-compose.sh
 ```
 $ sudo sh install-portainer.sh
 ```
-> Install Mergerfs NOTE: for Debian 9 and 10 provided
+> Install Mergerfs NOTE: for Debian 9/10 and Ubuntu 18.04 supported
 ```
-$ sudo sh install-mergerfs-debian10.sh
+$ sudo sh install-mergerfs-ubuntu.sh
 ```
 > Install Rclone
 ```
@@ -72,7 +75,10 @@ $ sudo sh install-rclone.sh
 
 # Configure Rclone
 
-- Create your rclone.conf
+>Create your rclone.conf
+```bash
+$ sudo rclone config
+```
 - I assume most use Google Drive so make sure you create your own client_id [INSTRUCTIONS HERE](https://rclone.org/drive/#making-your-own-client-id)
 - Watch Spaceinvador One video for more help [WATCH HERE](https://youtu.be/-b9Ow2iX2DQ)
 
@@ -85,9 +91,9 @@ scope = drive
 token = {"access_token":"**********"}
 server_side_across_configs = true
 
-[googledrive_encrypted]
+[googledrive_encrypt]
 type = crypt
-remote = gdrive:crypt
+remote = googledrive:encrypt
 filename_encryption = standard
 directory_name_encryption = true
 password = **********
@@ -96,9 +102,9 @@ password2 = **********
 
 ## Rclone Mount Script
 
-> Configure the <strong>cloudstorage_mount</strong> script. You only need to modify the "CONFIGURE" section
+> Configure the **cloudstorage_mount** script. You only need to modify the "CONFIGURE" section
 
-```
+```bash
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
@@ -107,9 +113,9 @@ mediaroot="/mnt/user" # VPS share location
 
 ## Rclone Unmount Script
 
-> Configure the <strong>cloudstorage_unmount</strong> script. You only need to modify the "CONFIGURE" section
+> Configure the **cloudstorage_unmount** script. You only need to modify the "CONFIGURE" section
 
-```
+```bash
 # CONFIGURE
 media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
 mediaroot="/mnt/user" # VPS share location
@@ -117,15 +123,34 @@ mediaroot="/mnt/user" # VPS share location
 
 ## Rclone Upload Script
 
-> Configure the <strong>cloudstorage_upload</strong> script. You only need to modify the "CONFIGURE" section
+> Configure the **cloudstorage_upload** script. You only need to modify the "CONFIGURE" section
 
-```
+```bash
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
 mediaroot="/mnt/user" # VPS share location
 uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 ```
+# Portainer and Dockers
+
+You can install and configure Dockers very easily using Portainer. Now due to a VPS usually being an underpowred machine we should avoid overloading it. Depending on your VPS Provider your mileage may vary.
+
+I recommend only installing *letsecrypt,nzbget,rutorrent,and portainer* then use scripts to organize and move your files.
+
+> Create a "Network" so your containers can communicate with each other (needed for letsencrypt)
+
+> Via terminal window or using Portainer (See Screenshot)
+```
+$ docker create network proxynet
+```
+> Networks > Add network
+![Imgur](https://i.imgur.com/SXzepsf.png)
+
+> Containers > "NZBGET" > Bottom of Page > Join Network
+![Image](https://i.imgur.com/qKHpK7w.png)
+> Add all containers to this network that you wish to reverse proxy
+
 
 ## Support
 
