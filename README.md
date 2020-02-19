@@ -33,17 +33,17 @@ $ sudo apt update & sudo apt install git curl -y
 ```
 > Download the scripts
 ```
-$ git clone https://github.com/SenpaiBox/vpscloudstorage.git $HOME/vpscloudstorage
+$ git clone https://github.com/SenpaiBox/vpscloudstorage.git /mnt/user/vpscloudstorage
 ```
 
 > Make them executable
 ```
-$ sudo chmod -R +x $HOME/vpscloudstorage
+$ sudo chmod -R +x /mnt/user/vpscloudstorage
 ```
 > Install Docker using the provided script or the given command
 ```
-$ curl -fsSL https://get.docker.com -o $HOME/vpscloudstorage/install-scripts/install-docker.sh 
-$ sh $HOME/vpscloudstorage/install-scripts/install-docker.sh
+$ curl -fsSL https://get.docker.com -o /mnt/user/vpscloudstorage/install-scripts/install-docker.sh 
+$ sh /mnt/user/vpscloudstorage/install-scripts/install-docker.sh
 ```
 > Run this to use Docker as non-root user NOTE: Change USER to your own
 ```
@@ -56,7 +56,7 @@ $ docker ps <---After logging back in, no sudo required
 ```
 > Change directory to 'vpscloudstorage/install-scripts' located in your user home folder
 ```
-$ cd $HOME/vpscloudstorage/install-scripts
+$ cd /mnt/user/vpscloudstorage/install-scripts
 ```
 > Install Docker-Compose
 ```
@@ -76,10 +76,11 @@ $ sudo sh install-rclone.sh
 ```
 ## Create Data Folder
 
->The next task is to create a directory where you want to store your media and appdata for **Rclone** and **Docker Containers**. We need to have read/write access to this folder. It is recommended to use the HOME folder of your current user.
+>The next task is to create a directory where you want to store your media and appdata for **Rclone** and **Docker Containers**. The logs folder is optional, if you want to output your rclone scripts to a log.
 ```bash
-$ mkdir -p $HOME/user           # Root directory for Media and Appdata
-$ mkdir -p $HOME/user/appdata   # Root directory for Appdata
+$ mkdir /mnt/user           # Root directory for Media and Appdata
+$ mkdir /mnt/user/appdata   # Root directory for Appdata
+$ mkdir /mnt/user/logs      # Root directory for Logs
 ```
 
 # Configure Rclone
@@ -111,49 +112,50 @@ password2 = **********
 
 ## Rclone Mount Script
 
-> Configure the **cloudstorage_mount** script. You only need to modify the "CONFIGURE" section
+> Configure the **vps-mount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
 
 ```bash
-$ cd $HOME/vpscloudstorage/rclone # Change to rclone scripts directory
-$ nano vps-mount.sh               # Edit the script
-$ sudo sh vps-mount.sh            # Run the script
+$ cd /mnt/user/vpscloudstorage/rclone # Change to rclone scripts directory
+$ nano vps-mount.sh                   # Edit the script
+$ sudo sh vps-mount.sh                # Run the script
 ```
 ```bash
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="$HOME/user" # VPS share in your HOME directory
+mediaroot="/mnt/user" # VPS share in your HOME directory
 ```
 
+> You will need this later for your Docker Containers as well
 ## Rclone Unmount Script
 
-> Configure the **cloudstorage_unmount** script. You only need to modify the "CONFIGURE" section
+> Configure the **vps-unmountt<i></i>.sh** script. You only need to modify the "CONFIGURE" section
 
 ```bash
-$ cd $HOME/vpscloudstorage/rclone # Change to rclone scripts directory
+$ cd /mnt/user/vpscloudstorage/rclone # Change to rclone scripts directory
 $ nano vps-mount.sh               # Edit the script
 $ sudo sh vps-unmount.sh          # Run the script
 ```
 ```bash
 # CONFIGURE
 media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="$HOME/user" # VPS share in your HOME directory
+mediaroot="/mnt/user" # VPS share in your HOME directory
 ```
 
 ## Rclone Upload Script
 
-> Configure the **cloudstorage_upload** script. You only need to modify the "CONFIGURE" section
+> Configure the **vps-upload<i></i>.sh** script. You only need to modify the "CONFIGURE" section
 
 ```bash
-$ cd $HOME/vpscloudstorage/rclone # Change to rclone scripts directory
-$ nano vps-mount.sh               # Edit the script
-$ sudo sh vps-upload.sh           # Run the script
+$ cd /mnt/user/vpscloudstorage/rclone # Change to rclone scripts directory
+$ nano vps-mount.sh                   # Edit the script
+$ sudo sh vps-upload.sh               # Run the script
 ```
 ```bash
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="$HOME/user" # VPS share in your HOME directory
+mediaroot="/mnt/user" # VPS share in your HOME directory
 uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 ```
 ## Testing
@@ -168,9 +170,9 @@ $ sudo sh vps-mount.sh
 ### Manual Entry
 > Recommended to add your own cron entry per script: **vps-mount<i></i>.sh, vps-unmount<i></i>.sh, vps-upload<i></i>.sh**
 
-> Example: 0 */1 * * * $HOME/vpscloudstorage/rclone/vps-mount.sh > $HOME/user/logs/vps-mount.log 2>&1
+> Example: 0 */1 * * * /mnt/user/vpscloudstorage/rclone/vps-mount.sh > /mnt/user/logs/vps-mount.log 2>&1
 ```
-$ sudo crontab -e
+$ crontab -e
 ```
 ### Using Provided Script
 
@@ -178,11 +180,11 @@ $ sudo crontab -e
 
 > Configure **add-to-cron<i></i>.sh** script in "extras" folder. You only need to modify the "CONFIGURE" section
 
-> Type "sudo crontab -e" if you would like to change script schedule
+> Type "crontab -e" if you would like to change script schedule
 ```bash
-$ cd $HOME/vpscloudstorage/extras # Change to extras scripts directory
-$ nano add-to-cron.sh             # Edit the script
-$ sudo sh add-to-cron.sh          # Run the script
+$ cd /mnt/user/vpscloudstorage/extras # Change to extras scripts directory
+$ nano add-to-cron.sh                 # Edit the script
+$ sh add-to-cron.sh                   # Run the script
 ```
 ```bash
 # CONFIGURE
