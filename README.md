@@ -1,6 +1,6 @@
 
 <center>
-<h1 align="center">VPSCloudStorage</h1>
+<h1 align="center">vpscloudstorage</h1>
 <h4 align="center">Rclone mount your GoogleDrive to upload from your VPS machine</h4>
 <h5 align="Center">02/18/2020 - Version 0.03
 </center>
@@ -8,6 +8,7 @@
 # Info
 
 Use these scripts to help you upload from your VPS. The idea is to setup Docker,Portainer, and NZBget/ruTorrent to download your media and then have Rclone upload it to your GoogleDrive to be able to watch from your Plex/Emby Server. Why might you want this? well check out the pros and cons below.
+
 
 ### Pros
 - Fast Gigabit speeds (Depends on VPS Provider)
@@ -23,6 +24,7 @@ Use these scripts to help you upload from your VPS. The idea is to setup Docker,
 - Low powered machine (Depends on VPS Provider)
 
 # Setup
+- Please read the Disclaimer at the bottom of the page. If you agree then you may proceed
 - I have only tested scripts on **Debian 9/10** and **Ubuntu 18.04**
 
 > Install git and curl
@@ -31,17 +33,17 @@ $ sudo apt update & sudo apt install git curl -y
 ```
 > Download the scripts
 ```
-$ git clone https://github.com/SenpaiBox/VPSCloudStorage.git ~/VPSCloudStorage
+$ git clone https://github.com/SenpaiBox/vpscloudstorage.git $HOME/vpscloudstorage
 ```
 
 > Make them executable
 ```
-$ sudo chmod -R +x ~/VPSCloudStorage
+$ sudo chmod -R +x $HOME/vpscloudstorage
 ```
 > Install Docker using the provided script or the given command
 ```
-$ curl -fsSL https://get.docker.com -o install-docker.sh 
-$ sh install-docker.sh
+$ curl -fsSL https://get.docker.com -o $HOME/vpscloudstorage/install-docker.sh 
+$ sh $HOME/vpscloudstorage/install-docker.sh
 ```
 > Run this to use Docker as non-root user NOTE: Change USER to your own
 ```
@@ -52,9 +54,9 @@ $ sudo usermod -aG docker USER
 $ logout
 $ docker ps <---After logging back in, no sudo required
 ```
-> Change directory to 'VPSCloudStorage/install-scripts' located in your user home folder
+> Change directory to 'vpscloudstorage/install-scripts' located in your user home folder
 ```
-$ cd ~/VPSCloudStorage/install-scripts
+$ cd $HOME/vpscloudstorage/install-scripts
 ```
 > Install Docker-Compose
 ```
@@ -71,6 +73,13 @@ $ sudo sh install-mergerfs-ubuntu.sh
 > Install Rclone
 ```
 $ sudo sh install-rclone.sh
+```
+## Create Data Folder
+
+>The next task is to create a directory where you want to store your media and appdata for **Rclone** and **Docker Containers**. We need to have read/write access to this folder. It is recommended to use the HOME folder of your current user.
+```bash
+$ mkdir -p $HOME/user           # Root directory for Media and Appdata
+$ mkdir -p $HOME/user/appdata   # Root directory for Appdata
 ```
 
 # Configure Rclone
@@ -104,43 +113,77 @@ password2 = **********
 
 > Configure the **cloudstorage_mount** script. You only need to modify the "CONFIGURE" section
 
+```
+$ nano vps-mount.sh
+```
 ```bash
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # VPS share location
+mediaroot="$HOME/user" # VPS share in your HOME directory
 ```
 
 ## Rclone Unmount Script
 
 > Configure the **cloudstorage_unmount** script. You only need to modify the "CONFIGURE" section
 
+```
+$ nano vps-unmount.sh
+```
 ```bash
 # CONFIGURE
 media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # VPS share location
+mediaroot="$HOME/user" # VPS share in your HOME directory
 ```
 
 ## Rclone Upload Script
 
 > Configure the **cloudstorage_upload** script. You only need to modify the "CONFIGURE" section
 
+```
+$ nano vps-upload.sh
+```
 ```bash
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # VPS share location
+mediaroot="$HOME/user" # VPS share in your HOME directory
 uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
+```
+## Testing
+- After you have configured each script run them manually to check if they are working
+- Make sure you are in the correct directory before you try to run the scripts
+- Make sure they are executable. If not look up how in **Setup** section
+```
+$ sh vps-mount.sh
 ```
 ## Setup Cron Jobs
 
-> Add
+### Manual Entry
+> Recommended to add your own cron entry per script: **vps-mount<i></i>.sh, vps-unmount<i></i>.sh, vps-upload<i></i>.sh**
+
+> Example: 0 */1 * * * $HOME/vpscloudstorage/rclone/vps-mount.sh > $HOME/user/logs/vps-mount.log >/dev/null 2>&1
+```
+$ crontab -e
+```
+### Using Provided Script
+
+:warning: Script is experimental!
+
+> Configure **add-to-cron<i></i>.sh** script in "extras" folder. You only need to modify the "CONFIGURE" section
+
+> Type "crontab -e" if you would like to change script schedule
+```bash
+# CONFIGURE
+media="googlevps" # VPS share name NOTE: The name you want to give your share mount
+```
+- [Crontab Calculator](https://corntab.com/)
 
 # Portainer
 
 You can install and configure Dockers very easily using Portainer. Now due to a VPS usually being an underpowred machine we should avoid overloading it. Depending on your VPS Provider your mileage may vary.
 
-I recommend only installing *letsecrypt,nzbget,rutorrent,and portainer* then use scripts to organize and move your files.
+I recommend only installing **letsecrypt,nzbget,rutorrent,and portainer** then use scripts to organize and move your files.
 
 > Create a "Network" so your containers can communicate with each other (needed for letsencrypt)
 
@@ -158,8 +201,9 @@ $ docker create network proxynet
 
 ## Support
 
+- Help is limited with these scripts as I do not have alot of freetime to give support
+- Intended for personal testing
 
+## Disclaimer
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+- I am not responsible for anything that could go wrong. I am not responsible for any data loss that could potentialy happen. You agree to proceed at your own risk.

@@ -11,7 +11,7 @@
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 media="googlevps" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # VPS share location
+mediaroot="$HOME/user" # VPS share in your HOME directory
 uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 
 #########################################
@@ -19,7 +19,7 @@ uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 #########################################
 
 # Create location variables
-appdata="/mnt/user/appdata/rclonedata/$media" # Rclone data folder location NOTE: Best not to touch this or map anything here
+appdata="$HOME/user/appdata/rclonedata/$media" # Rclone data folder location NOTE: Best not to touch this or map anything here
 rcloneupload="$appdata/rclone_upload" # Staging folder of files to be uploaded
 rclonemount="$appdata/rclone_mount" # Rclone mount folder
 mergerfsmount="$mediaroot/$media" # Media share location
