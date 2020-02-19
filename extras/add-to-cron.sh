@@ -12,7 +12,7 @@ media="googlevps" # VPS share name NOTE: The name you want to give your share mo
 #### DO NOT EDIT ANYTHING BELOW THIS ####
 #########################################
 
-appdata="/mnt/user/rclonedata/$media"
+appdata="/mnt/user/appdata/rclonedata/$media"
 mkdir -p $appdata
 if [ -f "$appdata/cron_job_added" ]; then
     echo "INFO: $(date "+%m/%d/%Y %r") - Cronjob already added please edit with \""crontab -e\"""
