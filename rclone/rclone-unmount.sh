@@ -9,7 +9,7 @@
 ########################
 
 #### Configuration ####
-media="cloudstorage" # VPS share name NOTE: The name you want to give your share mount
+media="media" # VPS share name NOTE: The name you want to give your share mount
 mediaroot="/mnt/user" # VPS share in your HOME directory
 
 #########################################
