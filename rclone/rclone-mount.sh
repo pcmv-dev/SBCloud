@@ -10,7 +10,7 @@
 
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="googlevps" # VPS share name NOTE: The name you want to give your share mount
+media="cloudstorage" # VPS share name NOTE: The name you want to give your share mount
 mediaroot="/mnt/user" # VPS share in your HOME directory
 
 #########################################

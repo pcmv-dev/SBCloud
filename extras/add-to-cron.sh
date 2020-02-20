@@ -7,7 +7,7 @@
 # Logs are located in "/mnt/user/logs"
 
 # CONFIGURE
-media="googlevps" # VPS share name NOTE: The name you want to give your share mount
+media="cloudstorage" # rclone share name NOTE: The name you want to give your share mount
 
 #########################################
 #### DO NOT EDIT ANYTHING BELOW THIS ####
@@ -22,9 +22,9 @@ else
     echo "INFO: $(date "+%m/%d/%Y %r") - Added rclone scripts to crontab"
     touch $appdata/cron_job_added
     (crontab -l 2>/dev/null; echo "# Rclone scripts for \""${media}\""") | crontab -
-    (crontab -l 2>/dev/null; echo "0 */1 * * * /mnt/user/vpscloudstorage/rclone/vps-mount.sh > /mnt/user/logs/vps-mount.log 2>&1") | crontab -
-    (crontab -l 2>/dev/null; echo "*/15 * * * * /mnt/user/vpscloudstorage/rclone/vps-upload.sh > /mnt/user/logs/vps-upload.log 2>&1") | crontab -
-    (crontab -l 2>/dev/null; echo "@reboot /mnt/user/vpscloudstorage/rclone/vps-unmount.sh > /mnt/user/logs/vps-unmount.log 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "0 */1 * * * /mnt/user/cloudstorage/rclone/rclone-mount.sh > /mnt/user/logs/rclone-mount.log 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "*/15 * * * * /mnt/user/cloudstorage/rclone/rclone-upload.sh > /mnt/user/logs/rclone-upload.log 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "@reboot /mnt/user/cloudstorage/rclone/rclone-unmount.sh > /mnt/user/logs/rclone-unmount.log 2>&1") | crontab -
     /etc/init.d/cron reload
 fi
 exit

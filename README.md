@@ -1,31 +1,29 @@
 
 <center>
-<h1 align="center">cloudstorage</h1>
-<h4 align="center">Rclone mount your GoogleDrive to upload from your VPS machine</h4>
+<h1 align="center">CloudStorage</h1>
+<h4 align="center">Automate Uploads to Cloud Storage</h4>
 <h5 align="Center">02/18/2020 - Version 0.03
 </center>
 
 # Info
+Automate uploading to your cloud storage. This uses "Mergerfs" for compatiability with Sonarr, Radarr, and streaming to Plex/Emby. Automate uploading from a local or remote machine running Ubuntu 18.04 or Debian 9/10.
 
-Use these scripts to help you upload from your VPS. The idea is to setup Docker,Portainer, and NZBget/ruTorrent to download your media and then have Rclone upload it to your GoogleDrive to be able to watch from your Plex/Emby Server. Why might you want this? well check out the pros and cons below.
+# About
+This guide will help you get started and is by no means the best way of doing things... this is what works for me. I created this repo for my own reference.
 
+## Guides Included
+- Installing Docker with Portainer frontend
+- Setup Rclone and config
+- Creating dockers using Portainer
+- Using cron to schedule Rclone scripts
 
-### Pros
-- Fast Gigabit speeds (Depends on VPS Provider)
-- Increased Bandwidth (Depends on VPS Provider)
-- Save Bandwidth
-- Build up your Media Library
-- A seedbox
+# Disclaimer
 
-### Cons
-- Extra cost, to pay for a VPS
-- Working with a terminal
-- Limited storage
-- Low powered machine (Depends on VPS Provider)
+> I am not responsible for anything that could go wrong. I am not responsible for any data loss that could potentialy happen. You agree to use these scripts at your own risk.
 
-# Setup
-- Please read the Disclaimer at the bottom of the page. If you agree then you may proceed
-- I have only tested scripts on **Debian 9/10** and **Ubuntu 18.04**
+# Installation
+- We will be working from the main directory "/mnt/user", you may change this if you prefer something else
+- Scripts have only been tested on **Debian 9/10** and **Ubuntu 18.04**
 
 > Install git and curl
 ```
@@ -33,30 +31,29 @@ $ sudo apt update & sudo apt install git curl -y
 ```
 > Download the scripts
 ```
-$ sudo git clone https://github.com/SenpaiBox/vpscloudstorage.git /mnt/user/vpscloudstorage
+$ sudo git clone https://github.com/SenpaiBox/CloudStorage.git /mnt/user/cloudstorage
 ```
 
 > Make them executable
 ```
-$ sudo chmod -R +x /mnt/user/vpscloudstorage
+$ sudo chmod -R +x /mnt/user/cloudstorage
 ```
 > Install Docker using the provided script or the given command
 ```
-$ sudo curl -fsSL https://get.docker.com -o /mnt/user/vpscloudstorage/install-scripts/install-docker.sh 
-$ sh /mnt/user/vpscloudstorage/install-scripts/install-docker.sh
+$ sudo curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh 
+$ sh /mnt/user/cloudstorage/install-scripts/install-docker.sh
 ```
 > Run this to use Docker as non-root user NOTE: Change USER to your own
-```
-$ sudo usermod -aG docker USER
+```bash
+$ sudo usermod -aG docker USER # Change USER to your own
 ```
 > You need to logout and log back in for your user to be added to Docker group
+```bash
+$ docker ps # After logging back in, no sudo required
 ```
-$ logout
-$ docker ps <---After logging back in, no sudo required
+> Change directory to "cloudstorage/install-scripts" located in your user home folder
 ```
-> Change directory to 'vpscloudstorage/install-scripts' located in your user home folder
-```
-$ cd /mnt/user/vpscloudstorage/install-scripts
+$ cd /mnt/user/cloudstorage/install-scripts
 ```
 > Install Docker-Compose
 ```
@@ -90,20 +87,18 @@ $ sudo chmod -R +x /mnt/user        # Change permissions to current user
 > Change "user:user" with your username
 ## Change Fusermount Permission
 > You must edit  /etc/fuse.conf to use option "allow_other" by uncommenting "user_allow_other"
-If you do not set this you will have problems with permissions
+If you do not set this, rclone-mount<i></i>.sh will throw an error.
 ```
 $ sudo nano /etc/fuse.conf
 ```
+## Video Guide
+View all these steps in a video example
+- [Install and Setup CloudStorage](https://www.youtube.com/channel/UCvkzMSyKaGNz3Skg5g3KZSg)
 # Configure Rclone
-
-> Take ownership of rclone.conf
-```bash
-$ sudo chown -R user:user $HOME/.config
-```
 
 > Create your rclone.conf
 ```bash
-$ rclone config
+$ rclone config --config="/mnt/user/appdata/rclonedata/rclone.conf"
 ```
 - I assume most use Google Drive so make sure you create your own client_id [INSTRUCTIONS HERE](https://rclone.org/drive/#making-your-own-client-id)
 - Watch Spaceinvador One video for more help [WATCH HERE](https://youtu.be/-b9Ow2iX2DQ)
@@ -125,76 +120,85 @@ directory_name_encryption = true
 password = <PASSWORD>
 password2 = <PASSWORDSALT>
 ```
+## Video Guide
+View this step in a video example
+- [How to Create An Rclone Remote](https://www.youtube.com/channel/UCvkzMSyKaGNz3Skg5g3KZSg)
 
+# Rclone Scripts
+### Do not run these scripts as sudo unless you are running everything as root or you will have permission problems
 ## Rclone Mount Script
-- **Make sure you run the commands as written!**
-- **If you run the scripts as sudo you will have permission problems!**
+### This script mounts your cloud storage to your local machine
+
 > Make sure you edited **fuse.conf** first [CLICK HERE TO GO BACK](##Change-Fusermount-Permission)
 
-> Configure the **vps-mount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
+> Configure the **rclone-mount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
 
 ```bash
-$ cd /mnt/user/vpscloudstorage/rclone # Change to rclone scripts directory
-$ nano vps-mount.sh                   # Edit the script
-$ sh vps-mount.sh                     # Run the script
+$ cd /mnt/user/cloudstorage/rclone    # Change to rclone scripts directory
+$ nano rclone-mount.sh                # Edit the script
+$ sh rclone-mount.sh                  # Run the script
 ```
 ```bash
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # VPS share in your HOME directory
+media="cloudstorage" # Local share name NOTE: The name you want to give your share mount
+mediaroot="/mnt/user" # Local share in your HOME directory
 ```
 
 ## Rclone Unmount Script
+### This script unmounts your cloud storage
 
-> Configure the **vps-unmount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
+> Configure the **rclone-unmount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
 
 ```bash
-$ cd /mnt/user/vpscloudstorage/rclone # Change to rclone scripts directory
-$ nano vps-mount.sh                   # Edit the script
-$ sh vps-unmount.sh                   # Run the script
+$ cd /mnt/user/cloudstorage/rclone   # Change to rclone scripts directory
+$ nano rclone-unmount.sh               # Edit the script
+$ sh rclone-unmount.sh               # Run the script
 ```
 ```bash
 # CONFIGURE
-media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # VPS share in your HOME directory
+media="cloudstorage" # Local share name NOTE: The name you want to give your share mount
+mediaroot="/mnt/user" # Local share in your HOME directory
 ```
 
 ## Rclone Upload Script
+### This script uploads new files to your cloud storage
 
-> Configure the **vps-upload<i></i>.sh** script. You only need to modify the "CONFIGURE" section
+> Configure the **rclone-upload<i></i>.sh** script. You only need to modify the "CONFIGURE" section
 
 ```bash
-$ cd /mnt/user/vpscloudstorage/rclone # Change to rclone scripts directory
-$ nano vps-mount.sh                   # Edit the script
-$ sh vps-upload.sh                    # Run the script
+$ cd /mnt/user/cloudstorage/rclone   # Change to rclone scripts directory
+$ nano rclone-upload.sh               # Edit the script
+$ sh rclone-upload.sh                # Run the script
 ```
 ```bash
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="vpsshare" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # VPS share in your HOME directory
+media="cloudstorage" # Local share name NOTE: The name you want to give your share mount
+mediaroot="/mnt/user" # Local share in your HOME directory
 uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 ```
 ## Testing
-- After you have configured each script run them manually to check if they are working
-- Make sure you are in the correct directory before you try to run the scripts
-- Make sure they are executable. If not look up how in **Setup** section
+After you have configured each script run them manually to check if they are working.
+Make sure you are in the correct directory before you try to run the scripts.
+Make sure they are executable, if not look up how in the [Installation](#installation) section
 ```
-$ sh vps-mount.sh
+$ sh rclone-mount.sh
 ```
 > Do one final permission sweep incase you missed a step
 ```bash
 $ sudo chown -R user:user /mnt/user # Replace "user" with your own
 $ sudo chmod -R +x /mnt/user
 ```
-
+## Video Guide
+View how to configure and run these scripts in a video example
+- [Configure and run Rclone Scripts](https://www.youtube.com/channel/UCvkzMSyKaGNz3Skg5g3KZSg)
 ## Setup Cron Jobs
 
 ### Manual Entry
-> Recommended to add your own cron entry per script: **vps-mount<i></i>.sh, vps-unmount<i></i>.sh, vps-upload<i></i>.sh**
+> Recommended to add your own cron entry per script: **rclone-mount<i></i>.sh, rclone-unmount<i></i>.sh, rclone-upload<i></i>.sh**
 
-> Example: 0 */1 * * * /mnt/user/vpscloudstorage/rclone/vps-mount.sh > /mnt/user/logs/vps-mount.log 2>&1
+> Example: 0 */1 * * * /mnt/user/cloudstorage/rclone/rclone-mount.sh > /mnt/user/logs/rclone-mount.log 2>&1
 ```
 $ crontab -e
 ```
@@ -205,42 +209,34 @@ $ crontab -e
 > Configure **add-to-cron<i></i>.sh** script in "extras" folder. You only need to modify the "CONFIGURE" section
 
 > Type "crontab -e" if you would like to change script schedule
+
+> If you would like to reset your cron tasks type "crontab -r"
 ```bash
-$ cd /mnt/user/vpscloudstorage/extras # Change to extras scripts directory
-$ nano add-to-cron.sh                 # Edit the script
-$ sh add-to-cron.sh                   # Run the script
+$ cd /mnt/user/cloudstorage/extras  # Change to extras scripts directory
+$ nano add-to-cron.sh               # Edit the script
+$ sh add-to-cron.sh                 # Run the script
 ```
 ```bash
 # CONFIGURE
-media="googlevps" # VPS share name NOTE: The name you want to give your share mount
+media="cloudstorage" # Local share name NOTE: The name you want to give your share mount
 ```
 - [Crontab Calculator](https://corntab.com/)
+## Video Guide
+View how to setup scripts in a cron schedule
+- [Setup Rclone Scripts in Cron](https://www.youtube.com/channel/UCvkzMSyKaGNz3Skg5g3KZSg)
 
 # Portainer
 
-You can install and configure Dockers very easily using Portainer. Now due to a VPS usually being an underpowred machine we should avoid overloading it. Depending on your VPS Provider your mileage may vary.
+You can install and configure Dockers very easily using Portainer
 
-I recommend only installing **letsecrypt,nzbget,rutorrent,and portainer** then use scripts to organize and move your files.
+Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
+- Letsencrypt
+- NZBget
+- ruTorrent
+- Sonarr
+- Radarr
 
-> Create a "Network" so your containers can communicate with each other (needed for letsencrypt)
+## Video Guides
 
-> Via terminal window or using Portainer (See Screenshot)
-```
-$ docker create network proxynet
-```
-> Networks > Add network
-![Imgur](https://i.imgur.com/SXzepsf.png)
-
-> Containers > "NZBGET" > Bottom of Page > Join Network
-![Image](https://i.imgur.com/qKHpK7w.png)
-> Add all containers to this network that you wish to reverse proxy
-
-
-## Support
-
-- Help is limited with these scripts as I do not have alot of freetime to give support
-- Intended for personal testing
-
-## Disclaimer
-
-- I am not responsible for anything that could go wrong. I am not responsible for any data loss that could potentialy happen. You agree to use these scripts at your own risk.
+- [How To Create a Docker in Portainer](https://www.youtube.com/channel/UCvkzMSyKaGNz3Skg5g3KZSg)
+- [How To Reverse Proxy]
