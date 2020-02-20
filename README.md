@@ -239,4 +239,3 @@ Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 ## Video Guides
 
 - [How To Create a Docker in Portainer](https://www.youtube.com/channel/UCvkzMSyKaGNz3Skg5g3KZSg)
-- [How To Reverse Proxy]
