@@ -1,6 +1,6 @@
 
 <center>
-<h1 align="center">vpscloudstorage</h1>
+<h1 align="center">cloudstorage</h1>
 <h4 align="center">Rclone mount your GoogleDrive to upload from your VPS machine</h4>
 <h5 align="Center">02/18/2020 - Version 0.03
 </center>
@@ -67,6 +67,9 @@ $ sudo sh install-docker-compose.sh
 $ sudo sh install-portainer.sh
 ```
 > Install Mergerfs NOTE: for Debian 9/10 and Ubuntu 18.04 supported
+
+Pick your OS > install-mergerfs-ubuntu<i></i>.sh | install-mergerfs-debian9<i></i>.sh | install-mergerfs-debian10<i></i>.sh
+
 ```
 $ sudo sh install-mergerfs-ubuntu.sh
 ```
@@ -105,11 +108,11 @@ $ rclone config
 - I assume most use Google Drive so make sure you create your own client_id [INSTRUCTIONS HERE](https://rclone.org/drive/#making-your-own-client-id)
 - Watch Spaceinvador One video for more help [WATCH HERE](https://youtu.be/-b9Ow2iX2DQ)
 
-```
+```bash
 [googledrive]
 type = drive
-client_id = **********
-client_secret = **********
+client_id = <CLIENTID>
+client_secret = <CLIENTSECRET>
 scope = drive
 token = {"access_token":"**********"}
 server_side_across_configs = true
@@ -119,8 +122,8 @@ type = crypt
 remote = googledrive:encrypt
 filename_encryption = standard
 directory_name_encryption = true
-password = **********
-password2 = **********
+password = <PASSWORD>
+password2 = <PASSWORDSALT>
 ```
 
 ## Rclone Mount Script
