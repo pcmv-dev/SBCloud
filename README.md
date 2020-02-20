@@ -80,7 +80,9 @@ $ sudo sh install-rclone.sh
 ```bash
 $ sudo mkdir /mnt/user/appdata      # Root directory for Appdata
 $ sudo mkdir /mnt/user/logs         # Root directory for Logs
-$ sudo chown -R user:user /mnt/user # Chnage permissions to current user
+$ sudo chown -R user:user /mnt/user # Change owner to current user
+$ sudo chmod -R +x /mnt/user        # Change permissions to current user
+
 ```
 > Change "user:user" with your username
 ## Change Fusermount Permission
