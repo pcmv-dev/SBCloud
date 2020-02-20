@@ -22,7 +22,7 @@ appdata="/mnt/user/appdata/rclonedata/$media" # Rclone data folder location NOTE
 rcloneupload="$appdata/rclone_upload" # Staging folder of files to be uploaded
 rclonemount="$appdata/rclone_mount" # Rclone mount folder
 mergerfsmount="$mediaroot/$media" # Media share location
-
+rcloneconf="/mnt/user/appdata/rclonedata/rclone.conf" # Rclone config file location
 # Check if script is already running
 echo "INFO: $(date "+%m/%d/%Y %r") - ==== STARTING UPLOAD SCRIPT ===="
 if [ -f "$appdata/rclone_upload_running" ]; then
@@ -44,6 +44,7 @@ fi
 # Rclone upload flags
 echo "==== RCLONE DEBUG ===="
 rclone move $rcloneupload/ $remote: \
+--config=$rcloneconf \
 --user-agent="CloudStorage" \
 --log-level INFO \
 --buffer-size 32M \

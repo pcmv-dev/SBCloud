@@ -22,6 +22,7 @@ appdata="/mnt/user/appdata/rclonedata/$media" # Rclone data folder location NOTE
 rcloneupload="$appdata/rclone_upload" # Staging folder of files to be uploaded
 rclonemount="$appdata/rclone_mount" # Rclone mount folder
 mergerfsmount="$mediaroot/$media" # Media share location
+rcloneconf="/mnt/user/appdata/rclonedata/rclone.conf" # Rclone config file location
 
 # Create directories
 mkdir -p $appdata
@@ -53,7 +54,7 @@ else
     echo "SUCCESS: $(date "+%m/%d/%Y %r") - Created mountcheck file for remote"
     
     # Rclone mount command and flags
-    rclone mount \
+    rclone mount --config=$rcloneconf \
     --log-level ERROR \
     --allow-other \
     --dir-cache-time 720h \
