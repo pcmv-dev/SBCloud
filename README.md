@@ -141,7 +141,7 @@ $ sh rclone-mount.sh                  # Run the script
 ```bash
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="cloudstorage" # Local share name NOTE: The name you want to give your share mount
+media="media" # Local share name NOTE: The name you want to give your share mount
 mediaroot="/mnt/user" # Local share in your HOME directory
 ```
 
@@ -157,7 +157,7 @@ $ sh rclone-unmount.sh               # Run the script
 ```
 ```bash
 # CONFIGURE
-media="cloudstorage" # Local share name NOTE: The name you want to give your share mount
+media="media" # Local share name NOTE: The name you want to give your share mount
 mediaroot="/mnt/user" # Local share in your HOME directory
 ```
 
@@ -174,7 +174,7 @@ $ sh rclone-upload.sh                # Run the script
 ```bash
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="cloudstorage" # Local share name NOTE: The name you want to give your share mount
+media="media" # Local share name NOTE: The name you want to give your share mount
 mediaroot="/mnt/user" # Local share in your HOME directory
 uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 ```

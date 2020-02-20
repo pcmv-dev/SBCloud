@@ -50,11 +50,12 @@ else
     echo "INFO: $(date "+%m/%d/%Y %r") - Recreating mountcheck file for remote"
     echo "==== RCLONE DEBUG ===="
     touch $appdata/mountcheck
-    rclone copy $appdata/mountcheck $remote: --no-traverse --log-level INFO
+    rclone copy $appdata/mountcheck $remote: --no-traverse --log-level INFO --config $rcloneconf
     echo "SUCCESS: $(date "+%m/%d/%Y %r") - Created mountcheck file for remote"
     
     # Rclone mount command and flags
-    rclone mount --config=$rcloneconf \
+    rclone mount \
+    --config $rcloneconf \
     --log-level ERROR \
     --allow-other \
     --dir-cache-time 720h \
@@ -96,7 +97,7 @@ else
     if [ -f "$mergerfsmount/mountcheck" ]; then
         echo "SUCCESS: $(date "+%m/%d/%Y %r") - Check Passed! \""${media}\"" is mounted"
         echo "==== REMOTE DIRECTORIES ===="
-        rclone lsd $remote:
+        rclone lsd $remote: --config $rcloneconf
         echo "============================"
     else
         echo "ERROR: $(date "+%m/%d/%Y %r") - Check Failed! \""${media}\"" failed to mount, please check your configuration"
