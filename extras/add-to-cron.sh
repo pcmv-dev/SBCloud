@@ -7,7 +7,7 @@
 # Logs are located in "/mnt/user/logs"
 
 # CONFIGURE
-media="cloudstorage" # rclone share name NOTE: The name you want to give your share mount
+media="media" # rclone share name NOTE: The name you want to give your share mount
 
 #########################################
 #### DO NOT EDIT ANYTHING BELOW THIS ####
