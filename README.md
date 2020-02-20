@@ -87,7 +87,7 @@ $ sudo chmod -R +x /mnt/user        # Change permissions to current user
 > Change "user:user" with your username
 ## Change Fusermount Permission
 > You must edit  /etc/fuse.conf to use option "allow_other" by uncommenting "user_allow_other"
-If you do not set this you will problems with permissions
+If you do not set this you will have problems with permissions
 ```
 $ sudo nano /etc/fuse.conf
 ```
