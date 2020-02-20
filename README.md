@@ -243,4 +243,4 @@ $ docker create network proxynet
 
 ## Disclaimer
 
-- I am not responsible for anything that could go wrong. I am not responsible for any data loss that could potentialy happen. You agree to proceed at your own risk.
+- I am not responsible for anything that could go wrong. I am not responsible for any data loss that could potentialy happen. You agree to use these scripts at your own risk.
