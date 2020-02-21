@@ -93,7 +93,7 @@ $ sudo nano /etc/fuse.conf
 ```
 ## Video Guide
 View all these steps in a video example
-- [Install and Setup CloudStorage](https://www.youtube.com/channel/UCvkzMSyKaGNz3Skg5g3KZSg)
+- [Install and Setup CloudStorage](https://youtu.be/XW_lkjJsB9I)
 # Configure Rclone
 
 > Create your rclone.conf
@@ -122,7 +122,7 @@ password2 = <PASSWORDSALT>
 ```
 ## Video Guide
 View this step in a video example
-- [How to Create An Rclone Remote](https://www.youtube.com/channel/UCvkzMSyKaGNz3Skg5g3KZSg)
+- [How to Create An Rclone Remote](https://youtu.be/XW_lkjJsB9I)
 
 # Rclone Scripts
 ### Do not run these scripts as sudo unless you are running everything as root or you will have permission problems
@@ -192,7 +192,8 @@ $ sudo chmod -R +x /mnt/user
 ```
 ## Video Guide
 View how to configure and run these scripts in a video example
-- [Configure and run Rclone Scripts](https://www.youtube.com/channel/UCvkzMSyKaGNz3Skg5g3KZSg)
+- [Configure and run Rclone Scripts](https://youtu.be/8GlwCoV1SEc)
+
 ## Setup Cron Jobs
 
 ### Manual Entry
@@ -223,7 +224,7 @@ media="cloudstorage" # Local share name NOTE: The name you want to give your sha
 - [Crontab Calculator](https://corntab.com/)
 ## Video Guide
 View how to setup scripts in a cron schedule
-- [Setup Rclone Scripts in Cron](https://www.youtube.com/channel/UCvkzMSyKaGNz3Skg5g3KZSg)
+- [Setup Rclone Scripts in Cron](https://youtu.be/osfKtjjHrfs)
 
 # Portainer
 
@@ -238,4 +239,4 @@ Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 
 ## Video Guides
 
-- [How To Create a Docker in Portainer](https://www.youtube.com/channel/UCvkzMSyKaGNz3Skg5g3KZSg)
+- [How To Create a Docker in Portainer](https://youtu.be/0ibF-BZNsxQ)
