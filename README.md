@@ -240,3 +240,9 @@ Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 ## Video Guides
 
 - [How To Create a Docker in Portainer](https://youtu.be/0ibF-BZNsxQ)
+
+## Acknowledgments
+
+You can view the original Rclone scripts [BinsonBuzz/unraid_rclone_mount](https://github.com/BinsonBuzz/unraid_rclone_mount)
+
+* BinsonBuzz for his super useful scripts :clap:
