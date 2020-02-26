@@ -122,7 +122,7 @@ password2 = <PASSWORDSALT>
 ```
 ## Video Guide
 View this step in a video example
-- [How to Create An Rclone Remote](https://youtu.be/XW_lkjJsB9I)
+- [How to Create An Rclone Remote](https://youtu.be/tVN3v8OHkeM)
 
 # Rclone Scripts
 ### Do not run these scripts as sudo unless you are running everything as root or you will have permission problems
@@ -192,7 +192,7 @@ $ sudo chmod -R +x /mnt/user
 ```
 ## Video Guide
 View how to configure and run these scripts in a video example
-- [Configure and run Rclone Scripts](https://youtu.be/8GlwCoV1SEc)
+- [Configure and run Rclone Scripts](https://youtu.be/BUUzEpF3XaM)
 
 ## Setup Cron Jobs
 
