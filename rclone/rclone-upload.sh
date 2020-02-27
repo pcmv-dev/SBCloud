@@ -10,8 +10,8 @@
 
 # CONFIGURE
 remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="media" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # VPS share in your HOME directory
+media="media" # Local share name NOTE: The name you want to give your share mount
+mediaroot="/mnt/user" # Local share directory
 uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 
 #########################################

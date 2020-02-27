@@ -9,8 +9,8 @@
 ########################
 
 #### Configuration ####
-media="media" # VPS share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # VPS share in your HOME directory
+media="media" # Local share name NOTE: The name you want to give your share mount
+mediaroot="/mnt/user" # Local share directory
 
 #########################################
 #### DO NOT EDIT ANYTHING BELOW THIS ####
