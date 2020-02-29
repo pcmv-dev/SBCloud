@@ -2,7 +2,7 @@
 <center>
 <h1 align="center">CloudStorage</h1>
 <h4 align="center">Automate Uploads to Cloud Storage</h4>
-<h5 align="Center">02/18/2020 - Version 0.03
+<h5 align="Center">02/29/2020 - Version 0.04
 </center>
 
 # Info
@@ -27,7 +27,7 @@ This guide will help you get started and is by no means the best way of doing th
 
 > Install git and curl
 ```
-$ sudo apt update & sudo apt install git curl -y
+$ sudo apt update && sudo apt install git curl -y
 ```
 > Download the scripts
 ```
@@ -40,7 +40,7 @@ $ sudo chmod -R +x /mnt/user/cloudstorage
 ```
 > Install Docker using the provided script or the given command
 ```
-$ sudo curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh 
+$ curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh 
 $ sh /mnt/user/cloudstorage/install-scripts/install-docker.sh
 ```
 > Run this to use Docker as non-root user NOTE: Change USER to your own
@@ -63,12 +63,12 @@ $ sudo sh install-docker-compose.sh
 ```
 $ sudo sh install-portainer.sh
 ```
-> Install Mergerfs NOTE: for Debian 9/10 and Ubuntu 18.04 supported
+> Install Mergerfs NOTE: for Debian 9/10 and Ubuntu supported
 
-Pick your OS > install-mergerfs-ubuntu<i></i>.sh | install-mergerfs-debian9<i></i>.sh | install-mergerfs-debian10<i></i>.sh
+Install Mergerfs and its dependency Fusermount > install-mergerfs<i></i>.sh
 
 ```
-$ sudo sh install-mergerfs-ubuntu.sh
+$ sudo sh install-mergerfs.sh
 ```
 > Install Rclone
 ```
@@ -240,6 +240,11 @@ Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 ## Video Guides
 
 - [How To Create a Docker in Portainer](https://youtu.be/0ibF-BZNsxQ)
+
+## Changelog
+
+- 2/29/2020 - v0.04 - All in one install script for Mergerfs
+- 2/18/2020 - v0.03 - Initial release
 
 ## Acknowledgments
 
