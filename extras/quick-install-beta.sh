@@ -3,23 +3,14 @@
 # Autosetup of "CloudStorage"
 
 # Install needed packages
-packages="('curl' '7z' 'git' 'fuse')"
-for tool in ${packages[*]}; do
-    trash=`hash $tool 2>>errors`
-    if [ "$?" -eq 0 ]; then
-        packages_tool="$tool"
-        break
-    fi
-done
-if [ -z "${packages_tool}" ]; then
-    sudo apt update && sudo apt install git curl p7zip-full fuse -y
-fi
+sudo apt update && sudo apt install git p7zip-full fuse -y >/dev/null
 
 # Install Rclone
 if [ -f "/usr/bin/rclone" ]; then
+    echo "Rclone already installed..."
+else
     curl https://rclone.org/install.sh | sudo bash -s beta
 fi
-sleep 3
 
 # Install Mergerfs
 ID="$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')"
@@ -42,10 +33,7 @@ else
     sudo chmod +x $mergerfs
     sudo dpkg -i $mergerfs
 fi
-sudo rm $mergerfs
-echo "Mergerfs successfully installed"
-mergerfs -v
-sleep 3
+sudo rm $mergerfs >/dev/null
 
 # Install Docker
 if [ -x "$(command -v docker)" ]; then
@@ -53,14 +41,34 @@ if [ -x "$(command -v docker)" ]; then
     echo -n "Run anyway (y/n)? "
     read docker
     if [ "$docker" != "${docker#[Yy]}" ]; then
+        sudo rm -f /mnt/user/cloudstorage/install-scripts/install-docker.sh
         curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh
         sh /mnt/user/cloudstorage/install-scripts/install-docker.sh
     fi
 else
+    mkdir -p /mnt/user/cloudstorage/install-scripts
     curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh
     sh /mnt/user/cloudstorage/install-scripts/install-docker.sh
 fi
-sleep 3
+clear
+
+# Install docker-compose
+dockercompose="/usr/local/bin/docker-compose"
+compose_ver="$(curl -s -o /dev/null -I -w "%{redirect_url}\n" https://github.com/docker/compose/releases/latest | grep -oP "[0-9]+(\.[0-9]+)+$")"
+compose_url="https://github.com/docker/compose/releases/download/$compose_ver/docker-compose-$(uname -s)-$(uname -m)"
+if [ -f "$dockercompose" ]; then
+    echo "docker-compose is installed..."
+    echo -n "Install/Update anyway (y/n)? "
+    read answer
+    if [ "$answer" != "${answer#[Yy]}" ]; then
+        sudo rm -rf $dockercompose
+        sudo curl -fsSL $compose_url -o $dockercompose
+        sudo chmod +x $dockercompose
+    fi
+else
+    sudo curl -fsSL $compose_url -o $dockercompose
+    sudo chmod +x $dockercompose
+fi
 
 # Install Portainer
 container="portainer"
@@ -71,9 +79,9 @@ else
     docker volume create portainer_data
     docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
 fi
-sleep 3
 
 # Install Rclone Scripts
+mkdir -p /mnt/user/cloudstorage/rclone
 if [ -f "/mnt/user/cloudstorage" ]; then
     echo "Rclone scripts already installed"
     echo -n "Download and replace current scripts (y/n)?"
@@ -97,5 +105,18 @@ fi
 # Create directories and set permissions
 mkdir -p /mnt/user & mkdir -p /mnt/user/appdata & mkdir -p /mnt/user/logs
 sudo chmod -R +x /mnt/user
+
+# Install complete
+echo "Rclone successfully installed..."
+echo "Mergerfs successfully installed..."
+echo "Docker successfully installed..."
+echo "docker-compose successfully installed..."
+echo "================================"
+mergerfs -v
+echo "================================"
+rclone --version
+echo "================================"
+docker-compose --version
+echo "Run 'sudo usermod -aG docker USER' to run docker without root, then relog"
 echo "Install complete! Now just setup your Rclone Config file and Cronjob!"
 exit
