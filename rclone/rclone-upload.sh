@@ -48,8 +48,9 @@ rclone move $rcloneupload/ $remote: \
 --config $rcloneconf \
 --user-agent="CloudStorage" \
 --log-level INFO \
---buffer-size 32M \
---drive-chunk-size 16M \
+--buffer-size 128M \
+--drive-chunk-size 128M \
+--use-mmap \
 --tpslimit 4 \
 --checkers 4 \
 --transfers 4 \
