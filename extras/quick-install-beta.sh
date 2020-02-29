@@ -3,7 +3,7 @@
 # Autosetup of "CloudStorage"
 
 # Install needed packages
-sudo apt update && sudo apt install git p7zip-full fuse -y >/dev/null
+sudo apt update >/dev/null && sudo apt install git p7zip-full fuse -y >/dev/null
 
 # Install Rclone
 if [ -f "/usr/bin/rclone" ]; then
