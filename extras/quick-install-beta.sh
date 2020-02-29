@@ -80,6 +80,7 @@ else
     docker volume create portainer_data
     docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
 fi
+clear
 
 # Install Rclone Scripts
 mkdir -p /mnt/user/cloudstorage/rclone
@@ -111,11 +112,6 @@ sudo chown -R $(id -u):$(id -g) /mnt/user
 sudo chmod -R +x /mnt/user
 
 # Install complete
-echo "================================"
-echo "Rclone successfully installed..."
-echo "Mergerfs successfully installed..."
-echo "Docker successfully installed..."
-echo "docker-compose successfully installed..."
 echo "================================"
 mergerfs -v
 echo "================================"
