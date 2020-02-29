@@ -16,13 +16,14 @@ media="media" # rclone share name NOTE: The name you want to give your share mou
 appdata="/mnt/user/appdata/rclonedata/$media"
 mkdir -p $appdata
 if [ -f "$appdata/cron_job_added" ]; then
-    echo "INFO: $(date "+%m/%d/%Y %r") - Cronjob already added please edit with \""crontab -e\"""
+    echo "Cronjob already added..."
+    echo "Edit with \""crontab -e\"" or reset with \""crontab -r\"""
     exit
 else
-    echo "INFO: $(date "+%m/%d/%Y %r") - Added rclone scripts to crontab"
+    echo "Added rclone scripts to crontab"
     touch $appdata/cron_job_added
     (crontab -l 2>/dev/null; echo "# Rclone scripts for \""${media}\""") | crontab -
-    (crontab -l 2>/dev/null; echo "0 */1 * * * /mnt/user/cloudstorage/rclone/rclone-mount.sh > /mnt/user/logs/rclone-mount.log 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "@hourly /mnt/user/cloudstorage/rclone/rclone-mount.sh > /mnt/user/logs/rclone-mount.log 2>&1") | crontab -
     (crontab -l 2>/dev/null; echo "*/15 * * * * /mnt/user/cloudstorage/rclone/rclone-upload.sh > /mnt/user/logs/rclone-upload.log 2>&1") | crontab -
     (crontab -l 2>/dev/null; echo "@reboot /mnt/user/cloudstorage/rclone/rclone-unmount.sh > /mnt/user/logs/rclone-unmount.log 2>&1") | crontab -
     /etc/init.d/cron reload
