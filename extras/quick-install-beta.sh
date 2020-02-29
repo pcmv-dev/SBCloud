@@ -33,7 +33,7 @@ else
     sudo chmod +x $mergerfs
     sudo dpkg -i $mergerfs
 fi
-sudo rm $mergerfs >/dev/null
+sudo rm $mergerfs >/dev/null 2>&1
 
 # Install Docker
 if [ -x "$(command -v docker)" ]; then
@@ -50,6 +50,7 @@ else
     curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh
     sh /mnt/user/cloudstorage/install-scripts/install-docker.sh
 fi
+-t 5
 clear
 
 # Install docker-compose
@@ -107,6 +108,7 @@ mkdir -p /mnt/user & mkdir -p /mnt/user/appdata & mkdir -p /mnt/user/logs
 sudo chmod -R +x /mnt/user
 
 # Install complete
+echo "================================"
 echo "Rclone successfully installed..."
 echo "Mergerfs successfully installed..."
 echo "Docker successfully installed..."
