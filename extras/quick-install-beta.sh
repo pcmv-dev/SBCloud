@@ -3,13 +3,13 @@
 # Autosetup of "CloudStorage"
 
 # Install needed packages
-sudo apt update >/dev/null && sudo apt install git p7zip-full fuse -y >/dev/null
+sudo apt update && sudo apt install git p7zip-full fuse -y
 
 # Install Rclone
 if [ -f "/usr/bin/rclone" ]; then
     echo "Rclone already installed..."
 else
-    curl https://rclone.org/install.sh | sudo bash -s beta
+    curl https://rclone.org/install.sh | sudo bash -s beta >/dev/null
 fi
 
 # Install Mergerfs
@@ -48,10 +48,8 @@ if [ -x "$(command -v docker)" ]; then
 else
     mkdir -p /mnt/user/cloudstorage/install-scripts
     curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh
-    sh /mnt/user/cloudstorage/install-scripts/install-docker.sh
+    sh /mnt/user/cloudstorage/install-scripts/install-docker.sh >/dev/null
 fi
--t 5
-clear
 
 # Install docker-compose
 dockercompose="/usr/local/bin/docker-compose"
@@ -80,11 +78,10 @@ else
     docker volume create portainer_data
     docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
 fi
-clear
 
 # Install Rclone Scripts
 mkdir -p /mnt/user/cloudstorage/rclone
-if [ -f "/mnt/user/cloudstorage" ]; then
+if [ "$(ls /mnt/user/cloudstorage/)" != "" ]; then
     echo "Rclone scripts already installed"
     echo -n "Download and replace current scripts (y/n)?"
     read rclonescripts
@@ -93,8 +90,6 @@ if [ -f "/mnt/user/cloudstorage" ]; then
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o /mnt/user/cloudstorage/rclone/rclone-mount.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o /mnt/user/cloudstorage/rclone/rclone-unmount.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o /mnt/user/cloudstorage/rclone/rclone-upload.sh
-        sudo chown -R $(id -u):$(id -g) /mnt/user
-        sudo chmod -R +x /mnt/user/cloudstorage/rclone
     else
         exit
     fi
@@ -117,6 +112,7 @@ mergerfs -v
 echo "================================"
 rclone --version
 echo "================================"
+docker -v
 docker-compose --version
 echo "Run 'sudo usermod -aG docker USER' to run docker without root, then relog"
 echo "Install complete! Now just setup your Rclone Config file and Cronjob!"
