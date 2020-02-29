@@ -92,6 +92,7 @@ if [ -f "/mnt/user/cloudstorage" ]; then
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o /mnt/user/cloudstorage/rclone/rclone-mount.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o /mnt/user/cloudstorage/rclone/rclone-unmount.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o /mnt/user/cloudstorage/rclone/rclone-upload.sh
+        sudo chown -R $(id -u):$(id -g) /mnt/user
         sudo chmod -R +x /mnt/user/cloudstorage/rclone
     else
         exit
@@ -100,11 +101,13 @@ else
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o /mnt/user/cloudstorage/rclone/rclone-mount.sh
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o /mnt/user/cloudstorage/rclone/rclone-unmount.sh
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o /mnt/user/cloudstorage/rclone/rclone-upload.sh
+    sudo chown -R $(id -u):$(id -g) /mnt/user
     sudo chmod -R +x /mnt/user/cloudstorage/rclone
 fi
 
 # Create directories and set permissions
 mkdir -p /mnt/user & mkdir -p /mnt/user/appdata & mkdir -p /mnt/user/logs
+sudo chown -R $(id -u):$(id -g) /mnt/user
 sudo chmod -R +x /mnt/user
 
 # Install complete
