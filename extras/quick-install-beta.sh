@@ -3,7 +3,7 @@
 # Autosetup of "CloudStorage"
 
 # Install needed packages
-packages=('curl' '7z' 'git' 'fuse')
+packages="('curl' '7z' 'git' 'fuse')"
 for tool in ${packages[*]}; do
     trash=`hash $tool 2>>errors`
     if [ "$?" -eq 0 ]; then
