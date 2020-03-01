@@ -84,25 +84,25 @@ fi
 
 # Install Rclone Scripts and create directories
 mkdir -p /mnt/user/appdata && mkdir -p /mnt/user/logs
-PATH="/mnt/user/cloudstorage/rclone"
-if [ -f "$PATH/.update" ]; then
+scriptspath="/mnt/user/cloudstorage/rclone"
+if [ -f "$scriptspath/.update" ]; then
     echo
     echo "Rclone scripts already installed"
     echo -n "Download and replace current scripts (y/n)? "
     read rclonescripts
     if [ "$rclonescripts" != "${rclonescripts#[Yy]}" ]; then
-        rm -f $PATH/rclone-mount.sh &&  rm -f $PATH/rclone-unmount.sh &&  rm -f $PATH/rclone-upload.sh
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $PATH/rclone-mount.sh
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $PATH/rclone-unmount.sh
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $PATH/rclone-upload.sh
+        rm -f $scriptspath/rclone-mount.sh &&  rm -f $scriptspath/rclone-unmount.sh &&  rm -f $scriptspath/rclone-upload.sh
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $scriptspath/rclone-mount.sh
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $scriptspath/rclone-unmount.sh
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $scriptspath/rclone-upload.sh
     else
         exit
     fi
 else
-    touch $PATH/.update
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $PATH/rclone-mount.sh
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $PATH/rclone-unmount.sh
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $PATH/rclone-upload.sh
+    touch $scriptspath/.update
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $scriptspath/rclone-mount.sh
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $scriptspath/rclone-unmount.sh
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $scriptspath/rclone-upload.sh
 fi
 
 # Install complete
