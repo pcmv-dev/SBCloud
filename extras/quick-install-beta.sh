@@ -19,7 +19,7 @@ mergerfs="/tmp/mergerfs.deb"
 mergerfs_latest="$(curl -s -o /dev/null -I -w "%{redirect_url}\n" https://github.com/trapexit/mergerfs/releases/latest | grep -oP "[0-9]+(\.[0-9]+)+$")"
 url="https://github.com/trapexit/mergerfs/releases/download/$mergerfs_latest/mergerfs_$mergerfs_latest.$ID-${VERSION_CODENAME}_amd64.deb"
 if [ -f "/usr/bin/mergerfs" ]; then
-    echo "Mergerfs already installed..."
+    echo -e "\nMergerfs already installed..."
     echo -n "Install/Update anyway (y/n)? "
     read answer
     if [ "$answer" != "${answer#[Yy]}" ]; then
@@ -37,7 +37,7 @@ sudo rm $mergerfs >/dev/null 2>&1
 
 # Install Docker
 if [ -x "$(command -v docker)" ]; then
-    echo "Docker already installed..."
+    echo -e "\nDocker already installed..."
     echo -n "Run anyway (y/n)? "
     read docker
     if [ "$docker" != "${docker#[Yy]}" ]; then
@@ -56,7 +56,7 @@ dockercompose="/usr/local/bin/docker-compose"
 compose_ver="$(curl -s -o /dev/null -I -w "%{redirect_url}\n" https://github.com/docker/compose/releases/latest | grep -oP "[0-9]+(\.[0-9]+)+$")"
 compose_url="https://github.com/docker/compose/releases/download/$compose_ver/docker-compose-$(uname -s)-$(uname -m)"
 if [ -f "$dockercompose" ]; then
-    echo "docker-compose is installed..."
+    echo -e "\ndocker-compose is installed..."
     echo -n "Install/Update anyway (y/n)? "
     read answer
     if [ "$answer" != "${answer#[Yy]}" ]; then
@@ -82,7 +82,7 @@ fi
 # Install Rclone Scripts
 mkdir -p /mnt/user/cloudstorage/rclone
 if [ "$(ls /mnt/user/cloudstorage/)" != "" ]; then
-    echo "Rclone scripts already installed"
+    echo -e "\nRclone scripts already installed"
     echo -n "Download and replace current scripts (y/n)?"
     read rclonescripts
     if [ "$rclonescripts" != "${rclonescripts#[Yy]}" ]; then
@@ -97,14 +97,10 @@ else
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o /mnt/user/cloudstorage/rclone/rclone-mount.sh
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o /mnt/user/cloudstorage/rclone/rclone-unmount.sh
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o /mnt/user/cloudstorage/rclone/rclone-upload.sh
-    sudo chown -R $(id -u):$(id -g) /mnt/user
-    sudo chmod -R +x /mnt/user/cloudstorage/rclone
 fi
 
 # Create directories and set permissions
 mkdir -p /mnt/user & mkdir -p /mnt/user/appdata & mkdir -p /mnt/user/logs
-sudo chown -R $(id -u):$(id -g) /mnt/user
-sudo chmod -R +x /mnt/user
 
 # Install complete
 echo "================================"
@@ -114,6 +110,7 @@ rclone --version
 echo "================================"
 docker -v
 docker-compose --version
-echo "Run 'sudo usermod -aG docker USER' to run docker without root, then relog"
+echo -e "\nRun 'sudo usermod -aG docker USER' to run docker without root, then relog"
+echo "Run 'sudo chmod -R +x /mnt/user && sudo chown -R user:user /mnt/user', change 'user' to your own"
 echo "Install complete! Now just setup your Rclone Config file and Cronjob!"
 exit
