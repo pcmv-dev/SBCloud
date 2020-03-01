@@ -19,17 +19,18 @@ mergerfs="/tmp/mergerfs.deb"
 mergerfs_latest="$(curl -s -o /dev/null -I -w "%{redirect_url}\n" https://github.com/trapexit/mergerfs/releases/latest | grep -oP "[0-9]+(\.[0-9]+)+$")"
 url="https://github.com/trapexit/mergerfs/releases/download/$mergerfs_latest/mergerfs_$mergerfs_latest.$ID-${VERSION_CODENAME}_amd64.deb"
 if [ -f "/usr/bin/mergerfs" ]; then
-    echo -e "\nMergerfs already installed..."
+    echo
+    echo "Mergerfs already installed..."
     echo -n "Install/Update anyway (y/n)? "
     read answer
     if [ "$answer" != "${answer#[Yy]}" ]; then
         sudo rm -rf /usr/bin/mergerfs
-        sudo curl -fsSL $url -o $mergerfs
+        curl -fsSL $url -o $mergerfs
         sudo chmod +x $mergerfs
         sudo dpkg -i $mergerfs
     fi
 else
-    sudo curl -fsSL $url -o $mergerfs
+    curl -fsSL $url -o $mergerfs
     sudo chmod +x $mergerfs
     sudo dpkg -i $mergerfs
 fi
@@ -37,7 +38,8 @@ sudo rm $mergerfs >/dev/null 2>&1
 
 # Install Docker
 if [ -x "$(command -v docker)" ]; then
-    echo -e "\nDocker already installed..."
+    echo
+    echo "Docker already installed..."
     echo -n "Run anyway (y/n)? "
     read docker
     if [ "$docker" != "${docker#[Yy]}" ]; then
@@ -56,17 +58,18 @@ dockercompose="/usr/local/bin/docker-compose"
 compose_ver="$(curl -s -o /dev/null -I -w "%{redirect_url}\n" https://github.com/docker/compose/releases/latest | grep -oP "[0-9]+(\.[0-9]+)+$")"
 compose_url="https://github.com/docker/compose/releases/download/$compose_ver/docker-compose-$(uname -s)-$(uname -m)"
 if [ -f "$dockercompose" ]; then
-    echo -e "\ndocker-compose is installed..."
+    echo
+    echo "docker-compose already installed..."
     echo -n "Install/Update anyway (y/n)? "
     read answer
     if [ "$answer" != "${answer#[Yy]}" ]; then
-        sudo rm -rf $dockercompose
-        sudo curl -fsSL $compose_url -o $dockercompose
-        sudo chmod +x $dockercompose
+        rm -rf $dockercompose
+        curl -fsSL $compose_url -o $dockercompose
+        chmod +x $dockercompose
     fi
 else
-    sudo curl -fsSL $compose_url -o $dockercompose
-    sudo chmod +x $dockercompose
+    curl -fsSL $compose_url -o $dockercompose
+    chmod +x $dockercompose
 fi
 
 # Install Portainer
@@ -79,28 +82,28 @@ else
     docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
 fi
 
-# Install Rclone Scripts
-mkdir -p /mnt/user/cloudstorage/rclone
-if [ "$(ls /mnt/user/cloudstorage/)" != "" ]; then
-    echo -e "\nRclone scripts already installed"
-    echo -n "Download and replace current scripts (y/n)?"
+# Install Rclone Scripts and create directories
+mkdir -p /mnt/user/appdata && mkdir -p /mnt/user/logs
+PATH="/mnt/user/cloudstorage/rclone"
+if [ -f "$PATH/.update" ]; then
+    echo
+    echo "Rclone scripts already installed"
+    echo -n "Download and replace current scripts (y/n)? "
     read rclonescripts
     if [ "$rclonescripts" != "${rclonescripts#[Yy]}" ]; then
-        sudo rm -rf /mnt/user/cloudstorage/rclone
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o /mnt/user/cloudstorage/rclone/rclone-mount.sh
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o /mnt/user/cloudstorage/rclone/rclone-unmount.sh
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o /mnt/user/cloudstorage/rclone/rclone-upload.sh
+        sudo rm -f $PATH/rclone-mount.sh && sudo rm -f $PATH/rclone-unmount.sh && sudo rm -f $PATH/rclone-upload.sh
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $PATH/rclone-mount.sh
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $PATH/rclone-unmount.sh
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $PATH/rclone-upload.sh
     else
         exit
     fi
 else
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o /mnt/user/cloudstorage/rclone/rclone-mount.sh
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o /mnt/user/cloudstorage/rclone/rclone-unmount.sh
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o /mnt/user/cloudstorage/rclone/rclone-upload.sh
+    sudo touch $PATH/.update
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $PATH/rclone-mount.sh
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $PATH/rclone-unmount.sh
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $PATH/rclone-upload.sh
 fi
-
-# Create directories and set permissions
-mkdir -p /mnt/user & mkdir -p /mnt/user/appdata & mkdir -p /mnt/user/logs
 
 # Install complete
 echo "================================"
@@ -110,7 +113,9 @@ rclone --version
 echo "================================"
 docker -v
 docker-compose --version
-echo -e "\nRun 'sudo usermod -aG docker USER' to run docker without root, then relog"
-echo "Run 'sudo chmod -R +x /mnt/user && sudo chown -R user:user /mnt/user', change 'user' to your own"
-echo "Install complete! Now just setup your Rclone Config file and Cronjob!"
+echo
+echo "Install complete! Now do the following:"
+echo "1.) Run 'sudo usermod -aG docker USER' to run docker without root, change 'USER' to your own"
+echo "2.) Run 'sudo chmod -R +x /mnt/user && sudo chown -R USER:USER /mnt/user', change 'USER' to your own"
+echo "3.) Relog"
 exit
