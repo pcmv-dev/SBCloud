@@ -66,6 +66,7 @@ if [ -f "$dockercompose" ]; then
         rm -rf $dockercompose
         curl -fsSL $compose_url -o $dockercompose
         sudo chmod +x $dockercompose
+        docker-compose --version
     fi
 else
     curl -fsSL $compose_url -o $dockercompose
@@ -75,6 +76,7 @@ fi
 # Install Portainer
 container="portainer"
 if  docker ps -a --format '{{.Names}}' | grep -Eq "^${container}\$"; then
+    echo
     echo "Portainer already installed..."
 else
     echo "Installing Portainer..."
@@ -95,10 +97,10 @@ if [ -f "$scriptspath/.update" ]; then
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $scriptspath/rclone-mount.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $scriptspath/rclone-unmount.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $scriptspath/rclone-upload.sh
-    else
         exit
     fi
 else
+    mkdir -p $scriptspath
     touch $scriptspath/.update
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $scriptspath/rclone-mount.sh
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $scriptspath/rclone-unmount.sh
@@ -115,7 +117,7 @@ docker -v
 docker-compose --version
 echo
 echo "Install complete! Now do the following:"
-echo "1.) Run ' usermod -aG docker USER' to run docker without root, change 'USER' to your own"
-echo "2.) Run ' chmod -R +x /mnt/user &&  chown -R USER:USER /mnt/user', change 'USER' to your own"
+echo "1.) Run 'sudo usermod -aG docker USER' to run docker without root, change 'USER' to your own"
+echo "2.) Run 'sudo chmod -R +x /mnt/user && sudo chown -R USER:USER /mnt/user', change 'USER' to your own"
 echo "3.) Relog"
 exit
