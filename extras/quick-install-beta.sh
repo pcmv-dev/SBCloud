@@ -44,12 +44,12 @@ if [ -x "$(command -v docker)" ]; then
     read docker
     if [ "$docker" != "${docker#[Yy]}" ]; then
         sudo rm -f /mnt/user/cloudstorage/install-scripts/install-docker.sh
-        curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh
+        sudo curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh
         sh /mnt/user/cloudstorage/install-scripts/install-docker.sh
     fi
 else
     mkdir -p /mnt/user/cloudstorage/install-scripts
-    curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh
+    sudo curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh
     sh /mnt/user/cloudstorage/install-scripts/install-docker.sh >/dev/null
 fi
 
@@ -64,12 +64,12 @@ if [ -f "$dockercompose" ]; then
     read answer
     if [ "$answer" != "${answer#[Yy]}" ]; then
         rm -rf $dockercompose
-        curl -fsSL $compose_url -o $dockercompose
-        chmod +x $dockercompose
+        sudo curl -fsSL $compose_url -o $dockercompose
+        sudo chmod +x $dockercompose
     fi
 else
-    curl -fsSL $compose_url -o $dockercompose
-    chmod +x $dockercompose
+    sudo curl -fsSL $compose_url -o $dockercompose
+    sudo chmod +x $dockercompose
 fi
 
 # Install Portainer
@@ -92,17 +92,17 @@ if [ -f "$PATH/.update" ]; then
     read rclonescripts
     if [ "$rclonescripts" != "${rclonescripts#[Yy]}" ]; then
         sudo rm -f $PATH/rclone-mount.sh && sudo rm -f $PATH/rclone-unmount.sh && sudo rm -f $PATH/rclone-upload.sh
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $PATH/rclone-mount.sh
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $PATH/rclone-unmount.sh
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $PATH/rclone-upload.sh
+        sudo curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $PATH/rclone-mount.sh
+        sudo curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $PATH/rclone-unmount.sh
+        sudo curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $PATH/rclone-upload.sh
     else
         exit
     fi
 else
     sudo touch $PATH/.update
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $PATH/rclone-mount.sh
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $PATH/rclone-unmount.sh
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $PATH/rclone-upload.sh
+    sudo curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $PATH/rclone-mount.sh
+    sudo curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $PATH/rclone-unmount.sh
+    sudo curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $PATH/rclone-upload.sh
 fi
 
 # Install complete
