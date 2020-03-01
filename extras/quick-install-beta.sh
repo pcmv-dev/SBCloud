@@ -107,7 +107,6 @@ else
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $scriptspath/rclone-mount.sh
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $scriptspath/rclone-unmount.sh
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $scriptspath/rclone-upload.sh
-    ln $scriptspath/rclone-mount.sh /usr/local/bin/rclone-mount.sh && ln $scriptspath/rclone-unmount.sh /usr/local/bin/rclone-unmount.sh && ln $scriptspath/rclone-upload.sh /usr/local/bin/rclone-upload.sh
 fi
 
 # Install complete
