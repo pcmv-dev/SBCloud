@@ -1,0 +1,119 @@
+#!/bin/bash
+
+#######################
+#### Upload Script ####
+#######################
+
+REMOTE="googledrive"
+SOURCE="$HOME/media"
+
+DISCORD_WEBHOOK_URL=""
+DISCORD_ICON_OVERRIDE="https://raw.githubusercontent.com/rclone/rclone/master/graphics/logo/logo_symbol/logo_symbol_color_256px.png"
+DISCORD_NAME_OVERRIDE="RCLONE"
+
+RCLONE_CONF="$HOME/.config/rclone/rclone.conf"
+UPLOAD_LOCK="$HOME/appdata/rclonedata/rclone-upload.lock"
+
+if [ -f "$UPLOAD_LOCK" ]; then
+    echo "WARN: $(date "+%m/%d/%Y %r") - Upload already in progress!"
+    exit
+else
+    touch "$UPLOAD_LOCK"
+    rclone_upload() {
+        rclone_command=$(
+            rclone move -vP \
+            --config $RCLONE_CONF \
+            --user-agent="CloudStorage" \
+            --stats=9999m \
+            --buffer-size 128M \
+            --drive-chunk-size 128M \
+            --use-mmap \
+            --tpslimit 4 \
+            --checkers 4 \
+            --transfers 4 \
+            --order-by modtime,ascending \
+            --exclude downloads/** \
+            --exclude .Recycle.Bin/** \
+            --exclude *fuse_hidden* \
+            --exclude *_HIDDEN \
+            --exclude .recycle** \
+            --exclude *.backup~* \
+            --exclude *.partial~*  \
+            --delete-empty-src-dirs \
+            --drive-stop-on-upload-limit \
+            --min-age 10m \
+            "$SOURCE/" "$REMOTE:"
+        )
+        echo "$rclone_command"
+    }
+    rclone_upload
+    
+    if [ "$DISCORD_WEBHOOK_URL" != "" ]; then
+        
+        rclone_sani_command="$(echo $rclone_command | sed 's/\x1b\[[0-9;]*[a-zA-Z]//g')" # Remove all escape sequences
+        
+        # Notifications assume following rclone ouput:
+        # Transferred: 0 / 0 Bytes, -, 0 Bytes/s, ETA - Errors: 0 Checks: 0 / 0, - Transferred: 0 / 0, - Elapsed time: 0.0s
+        
+        transferred_amount=${rclone_sani_command#*Transferred: }
+        transferred_amount=${transferred_amount%% /*}
+        
+        send_notification() {
+            output_transferred_main=${rclone_sani_command#*Transferred: }
+            output_transferred_main=${output_transferred_main% Errors*}
+            output_errors=${rclone_sani_command#*Errors: }
+            output_errors=${output_errors% Checks*}
+            output_checks=${rclone_sani_command#*Checks: }
+            output_checks=${output_checks% Transferred*}
+            output_transferred=${rclone_sani_command##*Transferred: }
+            output_transferred=${output_transferred% Elapsed*}
+            output_elapsed=${rclone_sani_command##*Elapsed time: }
+            
+            notification_data='{
+                "username": "'"$DISCORD_NAME_OVERRIDE"'",
+                "avatar_url": "'"$DISCORD_ICON_OVERRIDE"'",
+                "content": null,
+                "embeds": [
+                    {
+                        "title": "Rclone Upload Task: Success!",
+                        "color": 4094126,
+                        "fields": [
+                            {
+                                "name": "Transferred",
+                                "value": "'"$output_transferred_main"'"
+                            },
+                            {
+                                "name": "Errors",
+                                "value": "'"$output_errors"'"
+                            },
+                            {
+                                "name": "Checks",
+                                "value": "'"$output_checks"'"
+                            },
+                            {
+                                "name": "Transferred",
+                                "value": "'"$output_transferred"'"
+                            },
+                            {
+                                "name": "Elapsed time",
+                                "value": "'"$output_elapsed"'"
+                            }
+                        ],
+                        "thumbnail": {
+                            "url": null
+                        }
+                    }
+                ]
+            }'
+            
+            curl -H "Content-Type: application/json" -d "$notification_data" $DISCORD_WEBHOOK_URL
+        }
+        
+        if [ "$transferred_amount" != "0" ]; then
+            send_notification
+        fi
+        
+    fi
+    rm -f "$UPLOAD_LOCK"
+    exit
+fi

@@ -1,0 +1,25 @@
+[Unit]
+Description=Rclone Mount
+Wants=network-online.target
+After=network-online.target
+ 
+[Service]
+Type=notify
+Environment=RCLONE_CONFIG=/home/USER/.config/rclone/rclone.conf
+ 
+ExecStart=/usr/bin/rclone mount \
+--log-level ERROR \
+--allow-other \
+--buffer-size 128M \
+--dir-cache-time 720h \
+--drive-chunk-size 128M \
+--vfs-read-chunk-size 128M \
+--vfs-read-chunk-size-limit off \
+--vfs-cache-mode writes \
+REMOTE: /home/USER/appdata/rclonedata/rclone_mount
+
+ExecStop=/bin/fusermount -uz /home/USER/appdata/rclonedata/rclone_mount
+Restart=on-failure
+ 
+[Install]
+WantedBy=default.target
