@@ -28,11 +28,15 @@ if [ -f "/usr/bin/mergerfs" ]; then
         curl -fsSL $url -o $mergerfs
         sudo chmod +x $mergerfs
         sudo dpkg -i $mergerfs
+        sudo chown root /usr/bin/mergerfs
+        sudo chmod u+s /usr/bin/mergerfs
     fi
 else
     curl -fsSL $url -o $mergerfs
     sudo chmod +x $mergerfs
     sudo dpkg -i $mergerfs
+    sudo chown root /usr/bin/mergerfs
+    sudo chmod u+s /usr/bin/mergerfs
 fi
 rm $mergerfs >/dev/null 2>&1
 

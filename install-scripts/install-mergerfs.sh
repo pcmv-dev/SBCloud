@@ -23,6 +23,8 @@ if [ -f "/usr/bin/mergerfs" ]; then
         sudo curl -fsSL $url -o $mergerfs
         sudo chmod +x $mergerfs
         sudo dpkg -i $mergerfs
+        sudo chown root /usr/bin/mergerfs
+        sudo chmod u+s /usr/bin/mergerfs
     else
         exit
     fi
@@ -30,6 +32,8 @@ else
     sudo curl -fsSL $url -o $mergerfs
     sudo chmod +x $mergerfs
     sudo dpkg -i $mergerfs
+    sudo chown root /usr/bin/mergerfs
+    sudo chmod u+s /usr/bin/mergerfs
 fi
 sudo rm $mergerfs
 echo "Mergerfs successfully installed"
