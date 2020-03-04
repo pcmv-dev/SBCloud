@@ -194,6 +194,7 @@ Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 
 ## Changelog
 
+- 3/03/2020 - v0.05 - Discord notifications and Service Accounts
 - 2/29/2020 - v0.04 - All in one install script for Mergerfs
 - 2/18/2020 - v0.03 - Initial release
 
