@@ -134,7 +134,6 @@ if [ -f "$cloudstorage/.update" ]; then
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/add-to-cron.sh -o $extras/add-to-cron.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/watchtower-notification.sh -o $extras/watchtower-notification.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh
-        ln $rclonescripts/rclone-mount /usr/local/bin && ln $rclonescripts/rclone-unmount /usr/local/bin && ln $rclonescripts/rclone-upload /usr/local/bin
         echo
         echo "================================"
         echo "Scripts have been overwritten!"
