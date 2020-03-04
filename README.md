@@ -25,6 +25,8 @@ This guide will help you get started and is by no means the best way of doing th
 - We will be working from the main directory "/mnt"
 - Script has only been tested on **Debian 9/10** and **Ubuntu 18.04**
 
+:warning: Script is still in experimental!
+
 > Install/Update script
 ```
 sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/install-scripts/quick-install.sh | sudo bash
@@ -48,7 +50,7 @@ $ sudo nano /etc/fuse.conf
 
 > Create your rclone.conf
 ```bash
-$ rclone config --config="/mnt/user/appdata/rclonedata/rclone.conf"
+$ rclone config
 ```
 - I assume most use Google Drive so make sure you create your own client_id [INSTRUCTIONS HERE](https://rclone.org/drive/#making-your-own-client-id)
 - Watch Spaceinvador One video for more help [WATCH HERE](https://youtu.be/-b9Ow2iX2DQ)
@@ -81,7 +83,7 @@ View this step in a video example
 
 > Make sure you edited **fuse.conf** first [CLICK HERE TO GO BACK](##Change-Fusermount-Permission)
 
-> Configure the **rclone-mount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
+> Configure the **rclone-mount** script. You only need to modify the "CONFIGURE" section
 
 ```bash
 $ cd /mnt/user/cloudstorage/rclone    # Change to rclone scripts directory
@@ -100,7 +102,7 @@ GROUPID="1000" # Your group ID
 ## Rclone Unmount Script
 ### This script unmounts your cloud storage
 
-> Configure the **rclone-unmount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
+> Configure the **rclone-unmount** script. You only need to modify the "CONFIGURE" section
 
 ```bash
 $ cd /mnt/user/cloudstorage/rclone   # Change to rclone scripts directory
@@ -116,7 +118,7 @@ MEDIAROOT="/mnt" # Local share directory
 ## Rclone Upload Script
 ### This script uploads new files to your cloud storage
 
-> Configure the **rclone-upload<i></i>.sh** script. You only need to modify the "CONFIGURE" section
+> Configure the **rclone-upload** script. You only need to modify the "CONFIGURE" section
 
 ```bash
 $ cd /mnt/user/cloudstorage/rclone   # Change to rclone scripts directory
@@ -147,7 +149,7 @@ After you have configured each script run them manually to check if they are wor
 The scripts are on PATH so you may run from any directory.
 Make sure they are executable, if not look up how in the [Set Permissions](#setpermissions) section
 ```
-$ sh rclone-mount.sh
+$ rclone-mount
 ```
 
 ## Video Guide
@@ -157,7 +159,7 @@ View how to configure and run these scripts in a video example
 ## Setup Cron Jobs
 
 ### Manual Entry
-> Add each script to crontab: **rclone-mount<i></i>.sh, rclone-unmount<i></i>.sh, rclone-upload<i></i>.sh**
+> Add each script to crontab: **rclone-mount, rclone-unmount, rclone-upload**
 
 > Example: 0 */1 * * * /mnt/user/cloudstorage/rclone/rclone-mount.sh > /mnt/user/logs/rclone-mount.log 2>&1
 ```
@@ -165,22 +167,11 @@ $ crontab -e
 ```
 ### Using Provided Script
 
-:warning: Script is experimental!
-
-> Configure **add-to-cron<i></i>.sh** script in "extras" folder. You only need to modify the "CONFIGURE" section
-
-> Type "crontab -e" if you would like to change script schedule
-
-> If you would like to reset your cron tasks type "crontab -r"
-```bash
-$ cd /mnt/user/cloudstorage/extras  # Change to extras scripts directory
-$ nano add-to-cron.sh               # Edit the script
-$ sh add-to-cron.sh                 # Run the script
 ```
-```bash
-# CONFIGURE
-media="media" # Local share name NOTE: The name you want to give your share mount
+$ cd /mnt/cloudstorage/extras
+$ sh add-to-cron.sh
 ```
+
 - [Crontab Calculator](https://corntab.com/)
 ## Video Guide
 View how to setup scripts in a cron schedule
