@@ -2,7 +2,7 @@
 <center>
 <h1 align="center">CloudStorage</h1>
 <h4 align="center">Automate Uploads to Cloud Storage</h4>
-<h5 align="Center">02/29/2020 - Version 0.04
+<h5 align="Center">03/03/2020 - Version 0.05
 </center>
 
 # Info
@@ -22,83 +22,35 @@ This guide will help you get started and is by no means the best way of doing th
 > I am not responsible for anything that could go wrong. I am not responsible for any data loss that could potentialy happen. You agree to use these scripts at your own risk.
 
 # Installation
-- We will be working from the main directory "/mnt/user", you may change this if you prefer something else
-- Scripts have only been tested on **Debian 9/10** and **Ubuntu 18.04**
+- We will be working from the main directory "/mnt"
+- Script has only been tested on **Debian 9/10** and **Ubuntu 18.04**
 
-> Install git and curl
+:warning: Script is still experimental!
+
+> Install/Update script
 ```
-$ sudo apt update && sudo apt install git curl -y
-```
-> Download the scripts
-```
-$ sudo git clone https://github.com/SenpaiBox/CloudStorage.git /mnt/user/cloudstorage
+sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/install-scripts/quick-install.sh | sudo bash
 ```
 
-> Make them executable
-```
-$ sudo chmod -R +x /mnt/user/cloudstorage
-```
-> Install Docker using the provided script or the given command
-```
-$ curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh 
-$ sh /mnt/user/cloudstorage/install-scripts/install-docker.sh
-```
-> Run this to use Docker as non-root user NOTE: Change USER to your own
+## Set Permissions
+
+> The next task is to set permissions. Change "USER" to your own
 ```bash
-$ sudo usermod -aG docker USER # Change USER to your own
+$ sudo chmod -R +x /mnt/cloudstorage && sudo chown -R USER:USER /mnt
 ```
-> You need to logout and log back in for your user to be added to Docker group
-```bash
-$ docker ps # After logging back in, no sudo required
-```
-> Change directory to "cloudstorage/install-scripts" located in your user home folder
-```
-$ cd /mnt/user/cloudstorage/install-scripts
-```
-> Install Docker-Compose
-```
-$ sudo sh install-docker-compose.sh
-```
-> Install Portainer
-```
-$ sudo sh install-portainer.sh
-```
-> Install Mergerfs NOTE: for Debian 9/10 and Ubuntu supported
 
-Install Mergerfs and its dependency Fusermount > install-mergerfs<i></i>.sh
-
-```
-$ sudo sh install-mergerfs.sh
-```
-> Install Rclone
-```
-$ sudo sh install-rclone.sh
-```
-## Create Data Folder
-
->The next task is to create a directory where you want to store your media and appdata for **Rclone** and **Docker Containers**. The logs folder is optional, if you want to output your rclone scripts to a log.
-```bash
-$ sudo mkdir /mnt/user/appdata      # Root directory for Appdata
-$ sudo mkdir /mnt/user/logs         # Root directory for Logs
-$ sudo chown -R user:user /mnt/user # Change owner to current user
-$ sudo chmod -R +x /mnt/user        # Change permissions to current user
-
-```
-> Change "user:user" with your username
 ## Change Fusermount Permission
 > You must edit  /etc/fuse.conf to use option "allow_other" by uncommenting "user_allow_other"
 If you do not set this, rclone-mount<i></i>.sh will throw an error.
 ```
 $ sudo nano /etc/fuse.conf
 ```
-## Video Guide
-View all these steps in a video example
-- [Install and Setup CloudStorage](https://youtu.be/XW_lkjJsB9I)
+
 # Configure Rclone
 
 > Create your rclone.conf
 ```bash
-$ rclone config --config="/mnt/user/appdata/rclonedata/rclone.conf"
+$ rclone config
 ```
 - I assume most use Google Drive so make sure you create your own client_id [INSTRUCTIONS HERE](https://rclone.org/drive/#making-your-own-client-id)
 - Watch Spaceinvador One video for more help [WATCH HERE](https://youtu.be/-b9Ow2iX2DQ)
@@ -131,7 +83,9 @@ View this step in a video example
 
 > Make sure you edited **fuse.conf** first [CLICK HERE TO GO BACK](##Change-Fusermount-Permission)
 
-> Configure the **rclone-mount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
+> Configure the **rclone-mount** script. You only need to modify the "CONFIGURE" section
+
+> Type "ID USER" replace USER with your own. This gives you UserID and GroupID
 
 ```bash
 $ cd /mnt/user/cloudstorage/rclone    # Change to rclone scripts directory
@@ -140,15 +94,17 @@ $ sh rclone-mount.sh                  # Run the script
 ```
 ```bash
 # CONFIGURE
-remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="media" # Local share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # Local share directory
+REMOTE="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
+MEDIA="media" # Local share name NOTE: The name you want to give your share mount
+MEDIAROOT="/mnt" # Local share directory
+USERID="1000" # Your user ID
+GROUPID="1000" # Your group ID
 ```
 
 ## Rclone Unmount Script
 ### This script unmounts your cloud storage
 
-> Configure the **rclone-unmount<i></i>.sh** script. You only need to modify the "CONFIGURE" section
+> Configure the **rclone-unmount** script. You only need to modify the "CONFIGURE" section
 
 ```bash
 $ cd /mnt/user/cloudstorage/rclone   # Change to rclone scripts directory
@@ -156,15 +112,15 @@ $ nano rclone-unmount.sh             # Edit the script
 $ sh rclone-unmount.sh               # Run the script
 ```
 ```bash
-# CONFIGURE
-media="media" # Local share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # Local share directory
+#### Configuration ####
+MEDIA="media" # Local share name NOTE: The name you want to give your share mount
+MEDIAROOT="/mnt" # Local share directory
 ```
 
 ## Rclone Upload Script
 ### This script uploads new files to your cloud storage
 
-> Configure the **rclone-upload<i></i>.sh** script. You only need to modify the "CONFIGURE" section
+> Configure the **rclone-upload** script. You only need to modify the "CONFIGURE" section
 
 ```bash
 $ cd /mnt/user/cloudstorage/rclone   # Change to rclone scripts directory
@@ -173,23 +129,31 @@ $ sh rclone-upload.sh                # Run the script
 ```
 ```bash
 # CONFIGURE
-remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="media" # Local share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # Local share directory
-uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
+REMOTE="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
+UPLOADREMOTE="googledrive_upload" # If you have a second remote created for uploads put it here. Otherwise use the same remote as REMOTE
+MEDIA="media" # Local share name NOTE: The name you want to give your share mount
+MEDIAROOT="/mnt" # Local share directory
+UPLOADLIMIT="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
+
+# SERVICE ACCOUNTS
+# Drop your .json files in your "appdata/rclonedata/service_accounts"
+# Name them "sa_account01.json" "sa_account02.json" etc.
+USESERVICEACCOUNT="N" # Y/N. Choose whether to use Service Accounts NOTE: Bypass Google 750GB upload limit
+SERVICEACCOUNTNUM="15" # Integer number of service accounts to use.
+
+# DISCORD NOTIFICATIONS
+DISCORD_WEBHOOK_URL="" # Enter your Discord Webhook URL for notifications. Otherwise leave empty to disable
+DISCORD_ICON_OVERRIDE="https://raw.githubusercontent.com/rclone/rclone/master/graphics/logo/logo_symbol/logo_symbol_color_256px.png" # The poster user image
+DISCORD_NAME_OVERRIDE="RCLONE" # The poster user name
 ```
 ## Testing
 After you have configured each script run them manually to check if they are working.
-Make sure you are in the correct directory before you try to run the scripts.
-Make sure they are executable, if not look up how in the [Installation](#installation) section
+The scripts are on PATH so you may run from any directory.
+Make sure they are executable, if not look up how in the [Set Permissions](#setpermissions) section
 ```
-$ sh rclone-mount.sh
+$ rclone-mount
 ```
-> Do one final permission sweep incase you missed a step
-```bash
-$ sudo chown -R user:user /mnt/user # Replace "user" with your own
-$ sudo chmod -R +x /mnt/user
-```
+
 ## Video Guide
 View how to configure and run these scripts in a video example
 - [Configure and run Rclone Scripts](https://youtu.be/BUUzEpF3XaM)
@@ -197,7 +161,7 @@ View how to configure and run these scripts in a video example
 ## Setup Cron Jobs
 
 ### Manual Entry
-> Recommended to add your own cron entry per script: **rclone-mount<i></i>.sh, rclone-unmount<i></i>.sh, rclone-upload<i></i>.sh**
+> Add each script to crontab: **rclone-mount, rclone-unmount, rclone-upload**
 
 > Example: 0 */1 * * * /mnt/user/cloudstorage/rclone/rclone-mount.sh > /mnt/user/logs/rclone-mount.log 2>&1
 ```
@@ -205,26 +169,12 @@ $ crontab -e
 ```
 ### Using Provided Script
 
-:warning: Script is experimental!
-
-> Configure **add-to-cron<i></i>.sh** script in "extras" folder. You only need to modify the "CONFIGURE" section
-
-> Type "crontab -e" if you would like to change script schedule
-
-> If you would like to reset your cron tasks type "crontab -r"
-```bash
-$ cd /mnt/user/cloudstorage/extras  # Change to extras scripts directory
-$ nano add-to-cron.sh               # Edit the script
-$ sh add-to-cron.sh                 # Run the script
 ```
-```bash
-# CONFIGURE
-media="media" # Local share name NOTE: The name you want to give your share mount
+$ cd /mnt/cloudstorage/extras
+$ sh add-to-cron.sh
 ```
+
 - [Crontab Calculator](https://corntab.com/)
-## Video Guide
-View how to setup scripts in a cron schedule
-- [Setup Rclone Scripts in Cron](https://youtu.be/osfKtjjHrfs)
 
 # Portainer
 
@@ -233,7 +183,7 @@ You can install and configure Dockers very easily using Portainer
 Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 - Letsencrypt
 - NZBget
-- ruTorrent
+- qBittorrent
 - Sonarr
 - Radarr
 
@@ -243,8 +193,16 @@ Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 
 ## Changelog
 
-- 2/29/2020 - v0.04 - All in one install script for Mergerfs
+### Rclone Scripts
+
+- 3/03/2020 - v0.05 - Discord notifications and Service Accounts
+- 2/29/2020 - v0.04 - Script Revision
 - 2/18/2020 - v0.03 - Initial release
+
+### Installer Script
+
+- 3/03/2020 - v0.2 - Added Watchtower
+- 3/02/2020 - v0.1 - Combine all install scripts into one
 
 ## Acknowledgments
 

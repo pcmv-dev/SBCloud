@@ -1,5 +1,5 @@
 [Unit]
-Description=Rclone Mount
+Description=Rclone Service
 Wants=network-online.target
 After=network-online.target
  
@@ -8,18 +8,18 @@ Type=notify
 Environment=RCLONE_CONFIG=/home/USER/.config/rclone/rclone.conf
  
 ExecStart=/usr/bin/rclone mount \
---log-level ERROR \
+--log-level INFO \
 --allow-other \
---buffer-size 128M \
+--buffer-size 64M \
 --dir-cache-time 720h \
 --drive-chunk-size 128M \
 --vfs-read-chunk-size 128M \
 --vfs-read-chunk-size-limit off \
 --vfs-cache-mode writes \
-REMOTE: /home/USER/appdata/rclonedata/rclone_mount
+YOUR_GOOGLE_DRIVE_REMOTE: /mnt/appdata/rclonedata/rclone_mount
 
-ExecStop=/bin/fusermount -uz /home/USER/appdata/rclonedata/rclone_mount
+ExecStop=/usr/bin/fusermount -uz /mnt/appdata/rclonedata/rclone_mount
 Restart=on-failure
  
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script will add a swap partition to your VPS
+# This script will add a swap partition
 
 # size of swapfile in megabytes
 swapsize=4

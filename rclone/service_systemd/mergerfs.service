@@ -1,16 +1,16 @@
 [Unit]
-Description=Mergerfs Mount
+Description=Mergerfs Service
 Requires=rclone.service
 After=rclone.service
-RequiresMountsFor=/home/USER/media
-RequiresMountsFor=/home/USER/appdata/rclonedata/rclone_mount
+RequiresMountsFor=/mnt/gdrive
+RequiresMountsFor=/mnt/appdata/rclonedata/rclone_mount
  
 [Service]
 Type=forking
-ExecStart=/usr/bin/mergerfs /home/USER/appdata/rclonedata/rclone_upload:/home/USER/appdata/rclonedata/rclone_mount /home/USER/media -o rw,async_read=false,use_ino,allow_other,func.getattr=newest,category.action=all,category.create=ff,cache.files=partial,dropcacheonclose=true
+ExecStart=/usr/bin/mergerfs /mnt/appdata/rclonedata/rclone_upload:/mnt/appdata/rclonedata/rclone_mount /mnt/gdrive -o rw,async_read=false,use_ino,allow_other,func.getattr=newest,category.action=all,category.create=ff,cache.files=partial,dropcacheonclose=true
 
-ExecStop=/usr/bin/fusermount -uz /home/USER/media
+ExecStop=/usr/bin/fusermount -uz /mnt/gdrive
 Restart=on-failure
  
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
