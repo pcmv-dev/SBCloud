@@ -130,9 +130,11 @@ if [ -f "$cloudstorage/.update" ]; then
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/extras/add-to-cron.sh -o $extras/add-to-cron.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/extras/watchtower-notification.sh -o $extras/watchtower-notification.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh
+        echo
+        echo "================================"
         echo "Scripts have been overwritten!"
         echo "You need to reconfigure your Rclone scripts"
-        echo "Don't forget to do a 'sudo chmod -R +x /mnt/cloudstorage'"
+        echo "Don't forget to do a 'sudo chmod -R +x /mnt/cloudstorage && sudo chown -R USER:USER /mnt', change 'USER' to your own"
         exit
     fi
 else
@@ -144,7 +146,6 @@ else
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/extras/add-to-cron.sh -o $extras/add-to-cron.sh
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/extras/watchtower-notification.sh -o $extras/watchtower-notification.sh
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh
-    echo "Rclone scripts have been added to Path. You can run them from any directory"
     ln $rclonescripts/rclone-mount /usr/local/bin && ln $rclonescripts/rclone-unmount /usr/local/bin && ln $rclonescripts/rclone-upload /usr/local/bin
 fi
 
@@ -156,6 +157,9 @@ rclone --version
 echo "================================"
 docker -v
 docker-compose --version
+echo
+echo "Rclone scripts have been added to Path. You can run them from any directory"
+echo "Run this script again to Update"
 echo
 echo "Install complete! Now do the following:"
 echo "[1] Run 'sudo usermod -aG docker USER' to run docker without root, change 'USER' to your own"
