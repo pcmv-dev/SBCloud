@@ -50,6 +50,7 @@ fi
 # Check if Rclone/Mergerfs mount created
 if [ -n "$(ls -A $MERGERFSMOUNT)" ]; then
     echo "$(date "+%d/%m/%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted, proceeding with upload"
+    rm -f $LOGFILE >/dev/null
 else
     echo "$(date "+%d/%m/%Y %T") ERROR: Check Failed! Your Cloud Drive is not mounted, please check your configuration"
     rm -f $LOCKFILE
