@@ -41,7 +41,7 @@ LOGFILE="$MEDIAROOT/logs/rclone-upload.log" # Log file for upload
 # Check if script is already running
 echo " ==== STARTING UPLOAD SCRIPT ===="
 if [ -f "$LOCKFILE" ]; then
-    echo "$(date "+%d.%m.%Y %T") WARN: Upload already in progress! Script will exit..."
+    echo "$(date "+%d/%m/%Y %T") WARN: Upload already in progress! Script will exit..."
     exit
 else
     touch $LOCKFILE
@@ -49,10 +49,10 @@ fi
 
 # Check if Rclone/Mergerfs mount created
 if [ -n "$(ls -A $MERGERFSMOUNT)" ]; then
-    echo "$(date "+%d.%m.%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted, proceeding with upload"
+    echo "$(date "+%d/%m/%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted, proceeding with upload"
 else
-    echo "$(date "+%d.%m.%Y %T") ERROR: Check Failed! Your Cloud Drive is not mounted, please check your configuration"
-    rm $APPDATA/upload_running
+    echo "$(date "+%d/%m/%Y %T") ERROR: Check Failed! Your Cloud Drive is not mounted, please check your configuration"
+    rm -f $LOCKFILE
     exit
 fi
 
@@ -62,23 +62,23 @@ if [ $USESERVICEACCOUNT == 'Y' ]; then
     COUNTERNUM=$(find -name 'counter*' | cut -c 11,12)
     CONTERCHECK="1"
     if [ "$COUNTERNUM" -ge "$CONTERCHECK" ];then
-        echo "$(date "+%d.%m.%Y %T") INFO: Counter file found for ${UPLOADREMOTE}."
+        echo "$(date "+%d/%m/%Y %T") INFO: Counter file found for ${UPLOADREMOTE}."
     else
-        echo "$(date "+%d.%m.%Y %T") INFO: No counter file found for ${UPLOADREMOTE}. Creating counter_1."
+        echo "$(date "+%d/%m/%Y %T") INFO: No counter file found for ${UPLOADREMOTE}. Creating counter_1."
         touch $APPDATA/counter_1
         COUNTERNUM="1"
     fi
     SERVICEACCOUNT="--drive-service-account-file=$SERVICEACCOUNTDIR/$SERVICEACCOUNTFILE$COUNTERNUM.json"
-    echo "$(date "+%d.%m.%Y %T") INFO: Adjusted Service Account file for upload remote ${UPLOADREMOTE} to ${SERVICEACCOUNTFILE}${COUNTERNUM}.json based on counter ${COUNTERNUM}."
+    echo "$(date "+%d/%m/%Y %T") INFO: Adjusted Service Account file for upload remote ${UPLOADREMOTE} to ${SERVICEACCOUNTFILE}${COUNTERNUM}.json based on counter ${COUNTERNUM}."
 else
-    echo "$(date "+%d.%m.%Y %T") INFO: Uploading using upload remote ${UPLOADREMOTE}"
+    echo "$(date "+%d/%m/%Y %T") INFO: Uploading using upload remote ${UPLOADREMOTE}"
     SERVICEACCOUNT=""
 fi
 
 # Rclone upload flags
 echo "==== RCLONE DEBUG ===="
 rclone_move() {
-    rclone_command=$(
+    RCLONE_COMMAND=$(
     rclone move $RCLONEUPLOAD/ $UPLOADREMOTE: $SERVICEACCOUNT -vP \
     --config=$RCLONECONF \
     --user-agent=$UPLOADREMOTE \
@@ -104,33 +104,33 @@ rclone_move() {
     --drive-stop-on-upload-limit \
     --min-age 10m
     )
-    echo "$rclone_command"
+    echo "$RCLONE_COMMAND"
 }
 echo "======================"
 rclone_move
 
 if [ "$DISCORD_WEBHOOK_URL" != "" ]; then
     
-    rclone_sani_command="$(echo $rclone_command | sed 's/\x1b\[[0-9;]*[a-zA-Z]//g')" # Remove all escape sequences
+    RCLONE_SANI_COMMAND="$(echo $RCLONE_COMMAND | sed 's/\x1b\[[0-9;]*[a-zA-Z]//g')" # Remove all escape sequences
     
     # Notifications assume following rclone ouput:
     # Transferred: 0 / 0 Bytes, -, 0 Bytes/s, ETA - Errors: 0 Checks: 0 / 0, - Transferred: 0 / 0, - Elapsed time: 0.0s
     
-    transferred_amount=${rclone_sani_command#*Transferred: }
-    transferred_amount=${transferred_amount%% /*}
+    TRANSFERRED_AMOUNT=${RCLONE_SANI_COMMAND#*Transferred: }
+    TRANSFERRED_AMOUNT=${TRANSFERRED_AMOUNT%% /*}
     
-    send_notification() {
-        output_transferred_main=${rclone_sani_command#*Transferred: }
-        output_transferred_main=${output_transferred_main% Errors*}
-        output_errors=${rclone_sani_command#*Errors: }
-        output_errors=${output_errors% Checks*}
-        output_checks=${rclone_sani_command#*Checks: }
-        output_checks=${output_checks% Transferred*}
-        output_transferred=${rclone_sani_command##*Transferred: }
-        output_transferred=${output_transferred% Elapsed*}
-        output_elapsed=${rclone_sani_command##*Elapsed time: }
+    SEND_NOTIFICATION() {
+        OUTPUT_TRANSFERRED_MAIN=${RCLONE_SANI_COMMAND#*Transferred: }
+        OUTPUT_TRANSFERRED_MAIN=${OUTPUT_TRANSFERRED_MAIN% Errors*}
+        OUTPUT_ERRORS=${RCLONE_SANI_COMMAND#*Errors: }
+        OUTPUT_ERRORS=${OUTPUT_ERRORS% Checks*}
+        OUTPUT_CHECKS=${RCLONE_SANI_COMMAND#*Checks: }
+        OUTPUT_CHECKS=${OUTPUT_CHECKS% Transferred*}
+        OUTPUT_TRANSFERRED=${RCLONE_SANI_COMMAND##*Transferred: }
+        OUTPUT_TRANSFERRED=${OUTPUT_TRANSFERRED% Elapsed*}
+        OUTPUT_ELAPSED=${RCLONE_SANI_COMMAND##*Elapsed time: }
         
-        notification_data='{
+        NOTIFICATION_DATA='{
             "username": "'"$DISCORD_NAME_OVERRIDE"'",
             "avatar_url": "'"$DISCORD_ICON_OVERRIDE"'",
             "content": null,
@@ -141,23 +141,23 @@ if [ "$DISCORD_WEBHOOK_URL" != "" ]; then
                     "fields": [
                         {
                             "name": "Transferred",
-                            "value": "'"$output_transferred_main"'"
+                            "value": "'"$OUTPUT_TRANSFERRED_MAIN"'"
                         },
                         {
                             "name": "Errors",
-                            "value": "'"$output_errors"'"
+                            "value": "'"$OUTPUT_ERRORS"'"
                         },
                         {
                             "name": "Checks",
-                            "value": "'"$output_checks"'"
+                            "value": "'"$OUTPUT_CHECKS"'"
                         },
                         {
                             "name": "Transferred",
-                            "value": "'"$output_transferred"'"
+                            "value": "'"$OUTPUT_TRANSFERRED"'"
                         },
                         {
                             "name": "Elapsed time",
-                            "value": "'"$output_elapsed"'"
+                            "value": "'"$OUTPUT_ELAPSED"'"
                         }
                     ],
                     "thumbnail": {
@@ -167,11 +167,11 @@ if [ "$DISCORD_WEBHOOK_URL" != "" ]; then
             ]
         }'
         
-        curl -H "Content-Type: application/json" -d "$notification_data" $DISCORD_WEBHOOK_URL
+        curl -H "Content-Type: application/json" -d "$NOTIFICATION_DATA" $DISCORD_WEBHOOK_URL
     }
     
-    if [ "$transferred_amount" != "0" ]; then
-        send_notification
+    if [ "$TRANSFERRED_AMOUNT" != "0" ]; then
+        SEND_NOTIFICATION
     fi
     
 fi
@@ -181,18 +181,18 @@ if [  $USESERVICEACCOUNT == 'Y' ]; then
     if [ "$COUNTERNUM" == "$SERVICEACCOUNTNUM" ];then
         rm $APPDATA/counter_*
         touch $APPDATA/counter_1
-        echo "$(date "+%d.%m.%Y %T") INFO: Final counter used - resetting loop and created counter_1."
+        echo "$(date "+%d/%m/%Y %T") INFO: Final counter used - resetting loop and created counter_1."
     else
         rm $APPDATA/counter_*
         COUNTERNUM=$((COUNTERNUM+1))
         touch $APPDATA/counter_$COUNTERNUM
-        echo "$(date "+%d.%m.%Y %T") INFO: Created counter_${COUNTERNUM} for next upload run."
+        echo "$(date "+%d/%m/%Y %T") INFO: Created counter_${COUNTERNUM} for next upload run."
     fi
 else
-    echo "$(date "+%d.%m.%Y %T") INFO: Not utilising service accounts."
+    echo "$(date "+%d/%m/%Y %T") INFO: Not utilising service accounts."
 fi
 
 # Remove tracking files
 rm -f $LOCKFILE
-echo "$(date "+%d.%m.%Y %T") SUCCESS: Upload Complete"
+echo "$(date "+%d/%m/%Y %T") SUCCESS: Upload Complete"
 exit

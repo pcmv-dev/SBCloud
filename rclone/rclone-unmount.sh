@@ -15,7 +15,7 @@ MEDIAROOT="/mnt" # Local share directory
 #########################################
 
 # Create location variables
-APPDATA="/mnt/appdata/rclonedata/$MEDIA" # Rclone data folder location NOTE: Best not to touch this or map anything here
+APPDATA="$MEDIAROOT/appdata/rclonedata/$MEDIA" # Rclone data folder location NOTE: Best not to touch this or map anything here
 RCLONEUPLOAD="$APPDATA/rclone_upload" # Staging folder of files to be uploaded
 RCLONEMOUNT="$APPDATA/rclone_mount" # Rclone mount folder
 MERGERFSMOUNT="$MEDIAROOT/$MEDIA" # Media share location
@@ -23,39 +23,39 @@ MERGERFSMOUNT="$MEDIAROOT/$MEDIA" # Media share location
 # Unmount Rclone/Mergerfs mount and remove lock file
 echo "==== STARTING UNMOUNT SCRIPT ===="
 if [ -f "$APPDATA/mount.lock" ]; then
-    echo "$(date "+%d.%m.%Y %T") INFO: Rclone mount detected"
+    echo "$(date "+%d/%m/%Y %T") INFO: Rclone mount detected"
     fusermount -uz $RCLONEMOUNT >/dev/null 2>&1
     fusermount -uz $MERGERFSMOUNT >/dev/null 2>&1
     rm -f $APPDATA/mount.lock >/dev/null 2>&1
 else
-    echo "$(date "+%d.%m.%Y %T") INFO: Rclone mount exited properly"
+    echo "$(date "+%d/%m/%Y %T") INFO: Rclone mount exited properly"
 fi
 
 # Remove upload lock file
 if [ -f "$APPDATA/upload.lock" ]; then
-    echo "$(date "+%d.%m.%Y %T") INFO: Rclone upload detected"
+    echo "$(date "+%d/%m/%Y %T") INFO: Rclone upload detected"
     rm -f $APPDATA/upload.lock >/dev/null 2>&1
 else
-    echo "$(date "+%d.%m.%Y %T") SUCCESS: Rclone upload exited properly"
+    echo "$(date "+%d/%m/%Y %T") SUCCESS: Rclone upload exited properly"
 fi
 
 # Remove empty folders
 if [ -n "$(ls -A $MERGERFSMOUNT)" ]; then
-    echo "$(date "+%d.%m.%Y %T") INFO: Removing your Cloud Drive empty folder"
+    echo "$(date "+%d/%m/%Y %T") INFO: Removing folders in Cloud Drive"
     rmdir $MERGERFSMOUNT
 else
-    echo "$(date "+%d.%m.%Y %T") WARN: Your Cloud Drive is not empty!"
+    echo "$(date "+%d/%m/%Y %T") WARN: Your Cloud Drive is not empty!"
 fi
 if [ -n "$(ls -A $RCLONEMOUNT)" ]; then
-    echo "$(date "+%d.%m.%Y %T") INFO: Removing Rclone mount empty folder"
+    echo "$(date "+%d/%m/%Y %T") INFO: Removing Rclone mount empty folder"
     rmdir $RCLONEMOUNT
 else
-    echo "$(date "+%d.%m.%Y %T") WARN: Rclone mount is not empty!"
+    echo "$(date "+%d/%m/%Y %T") WARN: Rclone mount is not empty!"
 fi
 if [ -n "$(ls -A $RCLONEUPLOAD)" ]; then
-    echo "$(date "+%d.%m.%Y %T") INFO: Removing Mergerfs local files folder"
+    echo "$(date "+%d/%m/%Y %T") INFO: Removing Mergerfs local files folder"
 else
-    echo "$(date "+%d.%m.%Y %T") INFO: There are files pending upload"
+    echo "$(date "+%d/%m/%Y %T") INFO: There are files pending upload"
 fi
 
 exit
