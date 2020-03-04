@@ -1,11 +1,18 @@
 #!/bin/bash
-# Checks if fusermount is installed, then proceeds to install Rclone
+# Checks if Fusermount/Rclone are installed
 
-if [ -f "/bin/fusermount" ]; then
+if [ -x "$(command -v fusermount)" ]; then
     echo "Fusermount already installed..."
+    fusermount -V
 else
     echo "Installing Fusermount..."
     sudo apt update && sudo apt install fuse -y
 fi
-curl https://rclone.org/install.sh | sudo bash -s beta
+if [ -x "$(command -v rclone)" ]; then
+    echo "Rclone already installed..."
+    rclone --version
+else
+    echo "Installing Rclone..."
+    curl https://rclone.org/install.sh | sudo bash -s beta
+fi
 exit

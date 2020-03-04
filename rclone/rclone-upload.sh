@@ -34,6 +34,7 @@ RCLONECONF="$APPDATA/rclone.conf" # Rclone config file location
 LOCKFILE="$APPDATA/upload.lock" # Rclone upload lock file
 SERVICEACCOUNTDIR="$APPDATA/service_accounts" # Path to your Service Account's .json files
 SERVICEACCOUNTFILE="sa_account" # Service Account file name without "00.json"
+LOGFILE="/mnt/logs/rclone-upload.log" # Log file for upload
 
 # Check if script is already running
 echo " ==== STARTING UPLOAD SCRIPT ===="
@@ -79,6 +80,7 @@ rclone_move() {
     rclone move $RCLONEUPLOAD/ $UPLOADREMOTE: $SERVICEACCOUNT -vP \
     --config=$RCLONECONF \
     --user-agent=$UPLOADREMOTE \
+    --log-file=$LOGFILE \
     --stats=9999m \
     --log-level INFO \
     --buffer-size 64M \
