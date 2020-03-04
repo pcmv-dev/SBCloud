@@ -54,7 +54,7 @@ if [ -x "$(command -v docker)" ]; then
 else
     mkdir -p /mnt/cloudstorage/install-scripts
     curl -fsSL https://get.docker.com -o /mnt/cloudstorage/install-scripts/install-docker.sh
-    sh /mnt/cloudstorage/install-scripts/install-docker.sh 2>&1
+    sh /mnt/cloudstorage/install-scripts/install-docker.sh >/dev/null
 fi
 
 # Install docker-compose
