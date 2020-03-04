@@ -2,7 +2,7 @@
 <center>
 <h1 align="center">CloudStorage</h1>
 <h4 align="center">Automate Uploads to Cloud Storage</h4>
-<h5 align="Center">02/29/2020 - Version 0.04
+<h5 align="Center">03/03/2020 - Version 0.05
 </center>
 
 # Info
@@ -22,66 +22,20 @@ This guide will help you get started and is by no means the best way of doing th
 > I am not responsible for anything that could go wrong. I am not responsible for any data loss that could potentialy happen. You agree to use these scripts at your own risk.
 
 # Installation
-- We will be working from the main directory "/mnt/user", you may change this if you prefer something else
+- We will be working from the main directory "/mnt", you may change this if you prefer something else, but you also have to change it in the scripts.
 - Scripts have only been tested on **Debian 9/10** and **Ubuntu 18.04**
 
-> Install git and curl
+> Install/Update script
 ```
-$ sudo apt update && sudo apt install git curl -y
-```
-> Download the scripts
-```
-$ sudo git clone https://github.com/SenpaiBox/CloudStorage.git /mnt/user/cloudstorage
+$ sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/install-scripts/quick-install.sh | sudo -H sh
 ```
 
-> Make them executable
-```
-$ sudo chmod -R +x /mnt/user/cloudstorage
-```
-> Install Docker using the provided script or the given command
-```
-$ curl -fsSL https://get.docker.com -o /mnt/user/cloudstorage/install-scripts/install-docker.sh 
-$ sh /mnt/user/cloudstorage/install-scripts/install-docker.sh
-```
-> Run this to use Docker as non-root user NOTE: Change USER to your own
-```bash
-$ sudo usermod -aG docker USER # Change USER to your own
-```
-> You need to logout and log back in for your user to be added to Docker group
-```bash
-$ docker ps # After logging back in, no sudo required
-```
-> Change directory to "cloudstorage/install-scripts" located in your user home folder
-```
-$ cd /mnt/user/cloudstorage/install-scripts
-```
-> Install Docker-Compose
-```
-$ sudo sh install-docker-compose.sh
-```
-> Install Portainer
-```
-$ sudo sh install-portainer.sh
-```
-> Install Mergerfs NOTE: for Debian 9/10 and Ubuntu supported
-
-Install Mergerfs and its dependency Fusermount > install-mergerfs<i></i>.sh
-
-```
-$ sudo sh install-mergerfs.sh
-```
-> Install Rclone
-```
-$ sudo sh install-rclone.sh
-```
 ## Create Data Folder
 
 >The next task is to create a directory where you want to store your media and appdata for **Rclone** and **Docker Containers**. The logs folder is optional, if you want to output your rclone scripts to a log.
 ```bash
-$ sudo mkdir /mnt/user/appdata      # Root directory for Appdata
-$ sudo mkdir /mnt/user/logs         # Root directory for Logs
-$ sudo chown -R user:user /mnt/user # Change owner to current user
-$ sudo chmod -R +x /mnt/user        # Change permissions to current user
+$ sudo chown -R user:user /mnt # Change owner to current user
+$ sudo chmod -R +x /mnt/cloudstorage        # Change permissions to current user
 
 ```
 > Change "user:user" with your username
