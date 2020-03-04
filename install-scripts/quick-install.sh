@@ -112,10 +112,6 @@ cloudstorage="/mnt/cloudstorage"
 rclonescripts="/mnt/cloudstorage/rclone"
 installscripts="/mnt/cloudstorage/install-scripts"
 extras="/mnt/cloudstorage/extras"
-mkdir -p $cloudstorage
-mkdir -p $rclonescripts
-mkdir -p $installscripts
-mkdir -p $extras
 if [ -f "$cloudstorage/.update" ]; then
     echo
     echo "CloudStorage scripts already installed"
@@ -123,6 +119,10 @@ if [ -f "$cloudstorage/.update" ]; then
     read answer
     if [ "$answer" != "${answer#[Yy]}" ]; then
         rm -rf $cloudstorage/*
+        mkdir -p $cloudstorage
+        mkdir -p $rclonescripts
+        mkdir -p $installscripts
+        mkdir -p $extras
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload
