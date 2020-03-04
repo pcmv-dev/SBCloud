@@ -25,7 +25,7 @@ This guide will help you get started and is by no means the best way of doing th
 - We will be working from the main directory "/mnt"
 - Script has only been tested on **Debian 9/10** and **Ubuntu 18.04**
 
-:warning: Script is still in experimental!
+:warning: Script is still experimental!
 
 > Install/Update script
 ```

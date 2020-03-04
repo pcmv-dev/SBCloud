@@ -42,13 +42,13 @@ fi
 # Remove empty folders
 if [ -n "$(ls -A $MERGERFSMOUNT)" ]; then
     echo "$(date "+%d/%m/%Y %T") INFO: Removing folders in Cloud Drive"
-    rmdir $MERGERFSMOUNT
+    rmdir $MERGERFSMOUNT >/dev/null
 else
     echo "$(date "+%d/%m/%Y %T") WARN: Your Cloud Drive is not empty!"
 fi
 if [ -n "$(ls -A $RCLONEMOUNT)" ]; then
     echo "$(date "+%d/%m/%Y %T") INFO: Removing Rclone mount empty folder"
-    rmdir $RCLONEMOUNT
+    rmdir $RCLONEMOUNT >/dev/null
 else
     echo "$(date "+%d/%m/%Y %T") WARN: Rclone mount is not empty!"
 fi
