@@ -29,7 +29,7 @@ This guide will help you get started and is by no means the best way of doing th
 
 > Install/Update script
 ```
-sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/install-scripts/quick-install.sh | sudo bash
+sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/install-scripts/install.sh | sudo bash
 ```
 
 ## Set Permissions
