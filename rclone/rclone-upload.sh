@@ -84,7 +84,6 @@ rclone_move() {
     --user-agent=$UPLOADREMOTE \
     --log-file=$LOGFILE \
     --stats=9999m \
-    --log-level INFO \
     --buffer-size 64M \
     --drive-chunk-size 128M \
     --use-mmap \
