@@ -20,8 +20,8 @@ if [ `whoami` = root ]; then
     echo "Do not run as sudo/root! Will now exit..."
     exit
 fi
+APPDATA="/mnt/cloudstorage/rclone" # Location of your Rclone scripts
 read -p 'Type a Number | Press [ENTER]: ' typed </dev/tty
-APPDATA="/mnt/appdata/rclonedata"
 if [ "$typed" == "1" ]; then
     (crontab -l 2>/dev/null; echo "") | crontab -
     (crontab -l 2>/dev/null; echo "# Rclone scripts") | crontab -

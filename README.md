@@ -22,32 +22,28 @@ This guide will help you get started and is by no means the best way of doing th
 > I am not responsible for anything that could go wrong. I am not responsible for any data loss that could potentialy happen. You agree to use these scripts at your own risk.
 
 # Installation
-- We will be working from the main directory "/mnt", you may change this if you prefer something else, but you also have to change it in the scripts.
-- Scripts have only been tested on **Debian 9/10** and **Ubuntu 18.04**
+- We will be working from the main directory "/mnt"
+- Script has only been tested on **Debian 9/10** and **Ubuntu 18.04**
 
 > Install/Update script
 ```
-$ sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/install-scripts/quick-install.sh | sudo -H sh
+sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/install-scripts/quick-install.sh | sudo bash
 ```
 
-## Create Data Folder
+## Set Permissions
 
->The next task is to create a directory where you want to store your media and appdata for **Rclone** and **Docker Containers**. The logs folder is optional, if you want to output your rclone scripts to a log.
+> The next task is to set permissions. Change "USER" to your own
 ```bash
-$ sudo chown -R user:user /mnt # Change owner to current user
-$ sudo chmod -R +x /mnt/cloudstorage        # Change permissions to current user
-
+$ sudo chmod -R +x /mnt/cloudstorage && sudo chown -R USER:USER /mnt
 ```
-> Change "user:user" with your username
+
 ## Change Fusermount Permission
 > You must edit  /etc/fuse.conf to use option "allow_other" by uncommenting "user_allow_other"
 If you do not set this, rclone-mount<i></i>.sh will throw an error.
 ```
 $ sudo nano /etc/fuse.conf
 ```
-## Video Guide
-View all these steps in a video example
-- [Install and Setup CloudStorage](https://youtu.be/XW_lkjJsB9I)
+
 # Configure Rclone
 
 > Create your rclone.conf
@@ -94,9 +90,11 @@ $ sh rclone-mount.sh                  # Run the script
 ```
 ```bash
 # CONFIGURE
-remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="media" # Local share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # Local share directory
+REMOTE="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
+MEDIA="media" # Local share name NOTE: The name you want to give your share mount
+MEDIAROOT="/mnt" # Local share directory
+USERID="1000" # Your user ID
+GROUPID="1000" # Your group ID
 ```
 
 ## Rclone Unmount Script
@@ -110,9 +108,9 @@ $ nano rclone-unmount.sh             # Edit the script
 $ sh rclone-unmount.sh               # Run the script
 ```
 ```bash
-# CONFIGURE
-media="media" # Local share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # Local share directory
+#### Configuration ####
+MEDIA="media" # Local share name NOTE: The name you want to give your share mount
+MEDIAROOT="/mnt" # Local share directory
 ```
 
 ## Rclone Upload Script
@@ -127,23 +125,31 @@ $ sh rclone-upload.sh                # Run the script
 ```
 ```bash
 # CONFIGURE
-remote="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-media="media" # Local share name NOTE: The name you want to give your share mount
-mediaroot="/mnt/user" # Local share directory
-uploadlimit="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
+REMOTE="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
+UPLOADREMOTE="googledrive_upload" # If you have a second remote created for uploads put it here. Otherwise use the same remote as REMOTE
+MEDIA="media" # Local share name NOTE: The name you want to give your share mount
+MEDIAROOT="/mnt" # Local share directory
+UPLOADLIMIT="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
+
+# SERVICE ACCOUNTS
+# Drop your .json files in your "appdata/rclonedata/service_accounts"
+# Name them "sa_account01.json" "sa_account02.json" etc.
+USESERVICEACCOUNT="N" # Y/N. Choose whether to use Service Accounts NOTE: Bypass Google 750GB upload limit
+SERVICEACCOUNTNUM="15" # Integer number of service accounts to use.
+
+# DISCORD NOTIFICATIONS
+DISCORD_WEBHOOK_URL="" # Enter your Discord Webhook URL for notifications. Otherwise leave empty to disable
+DISCORD_ICON_OVERRIDE="https://raw.githubusercontent.com/rclone/rclone/master/graphics/logo/logo_symbol/logo_symbol_color_256px.png" # The poster user image
+DISCORD_NAME_OVERRIDE="RCLONE" # The poster user name
 ```
 ## Testing
 After you have configured each script run them manually to check if they are working.
-Make sure you are in the correct directory before you try to run the scripts.
-Make sure they are executable, if not look up how in the [Installation](#installation) section
+The scripts are on PATH so you may run from any directory.
+Make sure they are executable, if not look up how in the [Set Permissions](#setpermissions) section
 ```
 $ sh rclone-mount.sh
 ```
-> Do one final permission sweep incase you missed a step
-```bash
-$ sudo chown -R user:user /mnt/user # Replace "user" with your own
-$ sudo chmod -R +x /mnt/user
-```
+
 ## Video Guide
 View how to configure and run these scripts in a video example
 - [Configure and run Rclone Scripts](https://youtu.be/BUUzEpF3XaM)
@@ -151,7 +157,7 @@ View how to configure and run these scripts in a video example
 ## Setup Cron Jobs
 
 ### Manual Entry
-> Recommended to add your own cron entry per script: **rclone-mount<i></i>.sh, rclone-unmount<i></i>.sh, rclone-upload<i></i>.sh**
+> Add each script to crontab: **rclone-mount<i></i>.sh, rclone-unmount<i></i>.sh, rclone-upload<i></i>.sh**
 
 > Example: 0 */1 * * * /mnt/user/cloudstorage/rclone/rclone-mount.sh > /mnt/user/logs/rclone-mount.log 2>&1
 ```

@@ -14,27 +14,29 @@ MEDIAROOT="/mnt" # Local share directory
 UPLOADLIMIT="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 
 # SERVICE ACCOUNTS
+# Drop your .json files in your "appdata/rclonedata/service_accounts"
+# Name them "sa_account01.json" "sa_account02.json" etc.
 USESERVICEACCOUNT="N" # Y/N. Choose whether to use Service Accounts NOTE: Bypass Google 750GB upload limit
 SERVICEACCOUNTNUM="15" # Integer number of service accounts to use.
 
 # DISCORD NOTIFICATIONS
 DISCORD_WEBHOOK_URL="" # Enter your Discord Webhook URL for notifications. Otherwise leave empty to disable
-DISCORD_ICON_OVERRIDE="https://raw.githubusercontent.com/rclone/rclone/master/graphics/logo/logo_symbol/logo_symbol_color_256px.png"
-DISCORD_NAME_OVERRIDE="RCLONE"
+DISCORD_ICON_OVERRIDE="https://raw.githubusercontent.com/rclone/rclone/master/graphics/logo/logo_symbol/logo_symbol_color_256px.png" # The poster user image
+DISCORD_NAME_OVERRIDE="RCLONE" # The poster user name
 
 #########################################
 #### DO NOT EDIT ANYTHING BELOW THIS ####
 #########################################
 # Create location variables
-APPDATA="/mnt/appdata/rclonedata/$MEDIA" # Rclone data folder location
+APPDATA="$MEDIAROOT/appdata/rclonedata/$MEDIA" # Rclone data folder location
 RCLONEUPLOAD="$APPDATA/rclone_upload" # Staging folder of files to be uploaded NOTE: Local files
 RCLONEMOUNT="$APPDATA/rclone_mount" # Rclone mount folder NOTE: Do not drop files here, it is unreliable
 MERGERFSMOUNT="$MEDIAROOT/$MEDIA" # Local share location NOTE: This is where your files go
 RCLONECONF="$APPDATA/rclone.conf" # Rclone config file location
 LOCKFILE="$APPDATA/upload.lock" # Rclone upload lock file
-SERVICEACCOUNTDIR="$APPDATA/service_accounts" # Path to your Service Account's .json files
+SERVICEACCOUNTDIR="$MEDIAROOT/appdata/rclonedata/service_accounts" # Path to your Service Account's .json files
 SERVICEACCOUNTFILE="sa_account" # Service Account file name without "00.json"
-LOGFILE="/mnt/logs/rclone-upload.log" # Log file for upload
+LOGFILE="$MEDIAROOT/logs/rclone-upload.log" # Log file for upload
 
 # Check if script is already running
 echo " ==== STARTING UPLOAD SCRIPT ===="

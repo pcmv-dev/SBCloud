@@ -3,7 +3,7 @@
 # Autosetup of "CloudStorage"
 
 # Install needed packages
-apt update && apt install git p7zip-full fuse -y
+apt update && apt install git p7zip-full fuse man -y
 
 # Install Rclone
 if [ -x "$(command -v rclone)" ]; then
@@ -150,6 +150,8 @@ else
 fi
 
 # Install complete
+echo
+echo "======= INSTALL COMPLETE ======="
 echo "================================"
 mergerfs -v
 echo "================================"
