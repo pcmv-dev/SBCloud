@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# SCRIPT NOT UPDATED! DO NOT USE!
 # Install needed packages
 apt update && apt install git p7zip-full fuse -y
 
