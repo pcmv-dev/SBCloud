@@ -77,7 +77,6 @@ fi
 if [ -n "$(ls -A $MERGERFSMOUNT)" ]; then
     echo "$(date "+%d.%m.%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted"
 else
-    
     # Check if mergerfs is installed
     if command -v mergerfs 2>/dev/null; then
         echo "$(date "+%d.%m.%Y %T") INFO: Mergerfs found, Proceeding..."

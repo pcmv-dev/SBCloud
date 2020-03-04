@@ -47,11 +47,11 @@ fi
 
 # Check if Rclone/Mergerfs mount created
 if [ -n "$(ls -A $MERGERFSMOUNT)" ]; then
-    echo "$(date "+%d.%m.%Y %T") ERROR: Check Failed! Rclone is not mounted, please check your configuration"
+    echo "$(date "+%d.%m.%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted, proceeding with upload"
+else
+    echo "$(date "+%d.%m.%Y %T") ERROR: Check Failed! Your Cloud Drive is not mounted, please check your configuration"
     rm $APPDATA/upload_running
     exit
-else
-    echo "$(date "+%d.%m.%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted, proceeding with upload"
 fi
 
 # Rotating serviceaccount.json file if using Service Accounts
