@@ -112,17 +112,17 @@ cloudstorage="/mnt/cloudstorage"
 rclonescripts="/mnt/cloudstorage/rclone"
 installscripts="/mnt/cloudstorage/install-scripts"
 extras="/mnt/cloudstorage/extras"
+mkdir -p $cloudstorage
+mkdir -p $rclonescripts
+mkdir -p $installscripts
+mkdir -p $extras
 if [ -f "$cloudstorage/.update" ]; then
     echo
     echo "CloudStorage scripts already installed"
     echo -n "Overwrite/Update current scripts (y/n)? "
     read answer
     if [ "$answer" != "${answer#[Yy]}" ]; then
-        rm -rf $cloudstorage/*
-        mkdir -p $cloudstorage
-        mkdir -p $rclonescripts
-        mkdir -p $installscripts
-        mkdir -p $extras
+        rm -rf $rclonescripts/* & rm -rf $installscripts/* & rm -rf $extras/*
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload
@@ -136,7 +136,6 @@ if [ -f "$cloudstorage/.update" ]; then
         exit
     fi
 else
-    mkdir -p $rclonescripts
     touch $cloudstorage/.update
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/Development/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount
