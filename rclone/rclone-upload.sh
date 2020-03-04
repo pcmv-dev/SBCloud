@@ -192,7 +192,7 @@ else
     echo "$(date "+%d/%m/%Y %T") INFO: Not utilising service accounts."
 fi
 
-# Remove tracking files
+# Remove lock file
 rm -f $LOCKFILE
 echo "$(date "+%d/%m/%Y %T") SUCCESS: Upload Complete"
 exit
