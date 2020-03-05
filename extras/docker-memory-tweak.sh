@@ -7,7 +7,7 @@
 
 vmswap="$(grep -oP '[0-9]' /proc/sys/vm/swappiness | tr -d '"')"
 vmover="$(grep -oP '[0-9]' /proc/sys/vm/overcommit_memory | tr -d '"')"
-if [ $vmswap -ne 0 ] | [ $vmover -ne 1 ]; then
+if [ $vmswap != "0" ] | [ $vmover != "1" ]; then
     sudo sysctl vm.swappiness=0
     sudo sysctl vm.overcommit_memory=1
     echo '' >> /etc/sysctl.conf
