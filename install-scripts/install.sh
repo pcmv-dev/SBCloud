@@ -103,9 +103,9 @@ else
     echo "Installing WatchTower..."
     docker run -d \
     --name=watchtower \
-    --cleanup --schedule "0 */6 * * *" \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    containrrr/watchtower
+    containrrr/watchtower \
+    --cleanup --schedule "0 */6 * * *"
 fi
 
 # Install Rclone Scripts and create directories
