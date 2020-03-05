@@ -11,21 +11,22 @@ if [ `whoami` = root ]; then
 fi
 tee <<-EOF
 
-Add Rclone scripts to crontab
+---Rclone Scripts---
 
 [1] Add Rclone scripts to crontab
 [2] Reset crontab
 
-[3] Exit
+[3] Cancel/Exit
 
 EOF
-read -p 'Enter your Rclone Remote name: ' remote </dev/tty
 read -p 'Type a Number | Press [ENTER]: ' typed </dev/tty
 if [ "$typed" -eq "1" ]; then
+    read -p 'Enter your Rclone Remote name: ' remote </dev/tty
+    read -p 'Enter how long to wait between uploads [1-59]: ' minute </dev/tty
     (crontab -l 2>/dev/null; echo "") | crontab -
     (crontab -l 2>/dev/null; echo "# Rclone scripts") | crontab -
     (crontab -l 2>/dev/null; echo "@hourly /mnt/cloudstorage/rclone/rclone-mount > /mnt/logs/${remote}/rclone-mount.log 2>&1") | crontab -
-    (crontab -l 2>/dev/null; echo "*/15 * * * * /mnt/cloudstorage/rclone/rclone-upload 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "*/${minute} * * * * /mnt/cloudstorage/rclone/rclone-upload 2>&1") | crontab -
     (crontab -l 2>/dev/null; echo "@reboot /mnt/cloudstorage/rclone/rclone-unmount > /mnt/logs/${remote}/rclone-unmount.log 2>&1") | crontab -
     echo
     crontab -l
