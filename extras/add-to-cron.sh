@@ -19,14 +19,14 @@ Add Rclone scripts to crontab
 [3] Exit
 
 EOF
-
+read -p 'Enter your Rclone Remote name: ' remote </dev/tty
 read -p 'Type a Number | Press [ENTER]: ' typed </dev/tty
 if [ "$typed" -eq "1" ]; then
     (crontab -l 2>/dev/null; echo "") | crontab -
     (crontab -l 2>/dev/null; echo "# Rclone scripts") | crontab -
-    (crontab -l 2>/dev/null; echo "@hourly /mnt/cloudstorage/rclone/rclone-mount > /mnt/logs/rclone-mount.log 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "@hourly /mnt/cloudstorage/rclone/rclone-mount > /mnt/logs/${remote}/rclone-mount.log 2>&1") | crontab -
     (crontab -l 2>/dev/null; echo "*/15 * * * * /mnt/cloudstorage/rclone/rclone-upload 2>&1") | crontab -
-    (crontab -l 2>/dev/null; echo "@reboot /mnt/cloudstorage/rclone/rclone-unmount > /mnt/logs/rclone-unmount.log 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "@reboot /mnt/cloudstorage/rclone/rclone-unmount > /mnt/logs/${remote}/rclone-unmount.log 2>&1") | crontab -
     echo
     crontab -l
     /etc/init.d/cron reload

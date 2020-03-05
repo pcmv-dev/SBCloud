@@ -10,7 +10,6 @@
 REMOTE="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 UPLOADREMOTE="googledrive_upload" # If you have a second remote created for uploads put it here. Otherwise use the same remote as REMOTE
 MEDIA="media" # Local share name NOTE: The name you want to give your share mount
-MEDIAROOT="/mnt" # Local share directory
 UPLOADLIMIT="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 
 # SERVICE ACCOUNTS
@@ -27,7 +26,9 @@ DISCORD_NAME_OVERRIDE="RCLONE" # The poster user name
 #########################################
 #### DO NOT EDIT ANYTHING BELOW THIS ####
 #########################################
-# Create location variables
+
+# Advanced Settings, Edit only if you know what you are doing
+MEDIAROOT="/mnt" # Your root directory. The directory where you want everything saved to EX: "/mnt/media" "/mnt/appdata"
 APPDATA="$MEDIAROOT/appdata/rclonedata/$MEDIA" # Rclone data folder location
 RCLONEUPLOAD="$APPDATA/rclone_upload" # Staging folder of files to be uploaded NOTE: Local files
 RCLONEMOUNT="$APPDATA/rclone_mount" # Rclone mount folder NOTE: Do not drop files here, it is unreliable
@@ -36,7 +37,7 @@ RCLONECONF="$HOME/.config/rclone/rclone.conf" # Rclone config file location
 LOCKFILE="$APPDATA/upload.lock" # Rclone upload lock file
 SERVICEACCOUNTDIR="$MEDIAROOT/appdata/rclonedata/service_accounts" # Path to your Service Account's .json files
 SERVICEACCOUNTFILE="sa_account" # Service Account file name without "00.json"
-LOGFILE="$MEDIAROOT/logs/rclone-upload.log" # Log file for upload
+LOGFILE="$MEDIAROOT/logs/$REMOTE/rclone-upload.log" # Log file for upload
 
 # Check if script is already running
 echo " ==== STARTING UPLOAD SCRIPT ===="
@@ -48,9 +49,9 @@ else
 fi
 
 # Check if Rclone/Mergerfs mount created
-if [ -n "$(ls -A $MERGERFSMOUNT)" ]; then
+if [ -n "$(ls -A $MERGERFSMOUNT 2>/dev/null)" ]; then
     echo "$(date "+%d/%m/%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted, proceeding with upload"
-    rm -f $LOGFILE >/dev/null
+    rm -f $LOGFILE 2>/dev/null
 else
     echo "$(date "+%d/%m/%Y %T") ERROR: Check Failed! Your Cloud Drive is not mounted, please check your configuration"
     rm -f $LOCKFILE
@@ -63,22 +64,21 @@ if [ $USESERVICEACCOUNT == 'Y' ]; then
     COUNTERNUM=$(find -name 'counter*' | cut -c 11,12)
     CONTERCHECK="1"
     if [ "$COUNTERNUM" -ge "$CONTERCHECK" ];then
-        echo "$(date "+%d/%m/%Y %T") INFO: Counter file found for ${UPLOADREMOTE}."
+        echo "$(date "+%d/%m/%Y %T") INFO: Counter file found for ${UPLOADREMOTE}"
     else
-        echo "$(date "+%d/%m/%Y %T") INFO: No counter file found for ${UPLOADREMOTE}. Creating counter_1."
+        echo "$(date "+%d/%m/%Y %T") INFO: No counter file found for ${UPLOADREMOTE}. Creating counter_1"
         touch $APPDATA/counter_1
         COUNTERNUM="1"
     fi
     SERVICEACCOUNT="--drive-service-account-file=$SERVICEACCOUNTDIR/$SERVICEACCOUNTFILE$COUNTERNUM.json"
-    echo "$(date "+%d/%m/%Y %T") INFO: Adjusted Service Account file for upload remote ${UPLOADREMOTE} to ${SERVICEACCOUNTFILE}${COUNTERNUM}.json based on counter ${COUNTERNUM}."
+    echo "$(date "+%d/%m/%Y %T") INFO: Adjusted Service Account file for upload remote ${UPLOADREMOTE} to ${SERVICEACCOUNTFILE}${COUNTERNUM}.json based on counter ${COUNTERNUM}"
 else
-    echo "$(date "+%d/%m/%Y %T") INFO: Uploading using upload remote ${UPLOADREMOTE}"
+    echo "$(date "+%d/%m/%Y %T") INFO: Uploading using ${UPLOADREMOTE} remote"
     SERVICEACCOUNT=""
 fi
 
 # Rclone upload flags
-echo "==== RCLONE DEBUG ===="
-rclone_move() {
+RCLONE_MOVE() {
     RCLONE_COMMAND=$(
     rclone move $RCLONEUPLOAD/ $UPLOADREMOTE: $SERVICEACCOUNT -vP \
     --config=$RCLONECONF \
@@ -104,10 +104,11 @@ rclone_move() {
     --drive-stop-on-upload-limit \
     --min-age 10m
     )
+    echo "==== RCLONE DEBUG ===="
     echo "$RCLONE_COMMAND"
+    echo "======================"
 }
-echo "======================"
-rclone_move
+RCLONE_MOVE
 
 if [ "$DISCORD_WEBHOOK_URL" != "" ]; then
     
@@ -181,18 +182,18 @@ if [  $USESERVICEACCOUNT == 'Y' ]; then
     if [ "$COUNTERNUM" == "$SERVICEACCOUNTNUM" ];then
         rm $APPDATA/counter_*
         touch $APPDATA/counter_1
-        echo "$(date "+%d/%m/%Y %T") INFO: Final counter used - resetting loop and created counter_1."
+        echo "$(date "+%d/%m/%Y %T") INFO: Final counter used - resetting loop and created counter_1"
     else
         rm $APPDATA/counter_*
         COUNTERNUM=$((COUNTERNUM+1))
         touch $APPDATA/counter_$COUNTERNUM
-        echo "$(date "+%d/%m/%Y %T") INFO: Created counter_${COUNTERNUM} for next upload run."
+        echo "$(date "+%d/%m/%Y %T") INFO: Created counter_${COUNTERNUM} for next upload run"
     fi
 else
-    echo "$(date "+%d/%m/%Y %T") INFO: Not utilising service accounts."
+    echo "$(date "+%d/%m/%Y %T") INFO: Not utilising service accounts"
 fi
 
-# Remove lock file
+# Remove lock file and exit
 rm -f $LOCKFILE
 echo "$(date "+%d/%m/%Y %T") SUCCESS: Upload Complete"
 exit

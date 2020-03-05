@@ -8,8 +8,7 @@
 
 # CONFIGURE
 REMOTE="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-MEDIA="media" # Local share name NOTE: The name you want to give your share mount
-MEDIAROOT="/mnt" # Local share directory
+MEDIA="media" # Local share name NOTE: This is the directory you share to "Radarr,Sonarr,Plex,etc" EX: "/mnt/media"
 USERID="1000" # Your user ID
 GROUPID="1000" # Your group ID
 
@@ -17,8 +16,9 @@ GROUPID="1000" # Your group ID
 #### DO NOT EDIT ANYTHING BELOW THIS ####
 #########################################
 
-# Create variables
-APPDATA="$MEDIAROOT/appdata/rclonedata/$MEDIA" # Rclone data folder location NOTE: Best not to touch this or map anything here
+# Advanced Settings, Edit only if you know what you are doing
+MEDIAROOT="/mnt" # Your root directory. The directory where you want everything saved to EX: "/mnt/media" "/mnt/appdata"
+APPDATA="$MEDIAROOT/appdata/rclonedata/$MEDIA" # Rclone appdata folder location
 RCLONEUPLOAD="$APPDATA/rclone_upload" # Staging folder of files to be uploaded
 RCLONEMOUNT="$APPDATA/rclone_mount" # Rclone mount folder
 MERGERFSMOUNT="$MEDIAROOT/$MEDIA" # Media share location
@@ -43,7 +43,7 @@ else
 fi
 
 # Check if rclone mount already created
-if [ -n "$(ls -A $RCLONEMOUNT)" ]; then
+if [ -n "$(ls -A $RCLONEMOUNT 2>/dev/null)" ]; then
     echo "$(date "+%d/%m/%Y %T") WARN: Rclone is mounted"
 else
     echo "$(date "+%d/%m/%Y %T") INFO: Mounting Rclone, please wait..."
@@ -64,17 +64,18 @@ else
     echo "$(date "+%d/%m/%Y %T") INFO: Mount in progress please wait..."
     sleep 5
     echo "$(date "+%d/%m/%Y %T") INFO: Proceeding..."
-    if [ "$(ls -A $RCLONEMOUNT)" ]; then
+    if [ "$(ls -A $RCLONEMOUNT 2>/dev/null)" ]; then
         echo "$(date "+%d/%m/%Y %T") SUCCESS: Check Passed! remote mounted"
     else
         echo "$(date "+%d/%m/%Y %T") ERROR: Check Failed! please check your configuration"
         rm -f "$LOCKFILE"
+        rmdir $APPDATA $RCLONEUPLOAD $RCLONEMOUNT $MERGERFSMOUNT 2>/dev/null
         exit
     fi
 fi
 
 # Check media share mount
-if [ -n "$(ls -A $MERGERFSMOUNT)" ]; then
+if [ -n "$(ls -A $MERGERFSMOUNT 2>/dev/null)" ]; then
     echo "$(date "+%d/%m/%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted"
 else
     # Check if mergerfs is installed
@@ -84,14 +85,15 @@ else
         echo "$(date "+%d/%m/%Y %T") ERROR: Please install Mergerfs first"
         fusermount -uz $RCLONEMOUNT
         rm -f $LOCKFILE
+        rmdir $APPDATA $RCLONEUPLOAD $RCLONEMOUNT $MERGERFSMOUNT 2>/dev/null
         exit
     fi
     
     # Create mergerfs mount
-    mergerfs $RCLONEUPLOAD:$RCLONEMOUNT $MERGERFSMOUNT -o $MERGERFSOPTIONS > /dev/null 2>&1
+    mergerfs $RCLONEUPLOAD:$RCLONEMOUNT $MERGERFSMOUNT -o $MERGERFSOPTIONS
     
     # Check if mergerfs mounted correctly
-    if [ -n "$(ls -A $MERGERFSMOUNT)" ]; then
+    if [ -n "$(ls -A $MERGERFSMOUNT 2>/dev/null)" ]; then
         echo "$(date "+%d/%m/%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted"
         echo "==== REMOTE DIRECTORIES ===="
         rclone lsd $REMOTE: --config $RCLONECONF
@@ -100,6 +102,7 @@ else
         echo "$(date "+%d/%m/%Y %T") ERROR: Check Failed! Your Cloud Drive failed to mount, please check your configuration"
         fusermount -uz $RCLONEMOUNT
         rm -f $LOCKFILE
+        rmdir $APPDATA $RCLONEUPLOAD $RCLONEMOUNT $MERGERFSMOUNT 2>/dev/null
         echo
         exit
     fi

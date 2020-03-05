@@ -95,8 +95,7 @@ $ sh rclone-mount.sh                  # Run the script
 ```bash
 # CONFIGURE
 REMOTE="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
-MEDIA="media" # Local share name NOTE: The name you want to give your share mount
-MEDIAROOT="/mnt" # Local share directory
+MEDIA="media" # Local share name NOTE: This is the directory you share to "Radarr,Sonarr,Plex,etc" EX: "/mnt/media"
 USERID="1000" # Your user ID
 GROUPID="1000" # Your group ID
 ```
@@ -112,9 +111,8 @@ $ nano rclone-unmount.sh             # Edit the script
 $ sh rclone-unmount.sh               # Run the script
 ```
 ```bash
-#### Configuration ####
-MEDIA="media" # Local share name NOTE: The name you want to give your share mount
-MEDIAROOT="/mnt" # Local share directory
+# CONFIGURE
+MEDIA="media" # Local share name NOTE: This is the directory you share to "Radarr,Sonarr,Plex,etc" EX: "/mnt/media"
 ```
 
 ## Rclone Upload Script
@@ -132,7 +130,6 @@ $ sh rclone-upload.sh                # Run the script
 REMOTE="googledrive" # Name of rclone remote mount NOTE: Choose your encrypted remote for sensitive data
 UPLOADREMOTE="googledrive_upload" # If you have a second remote created for uploads put it here. Otherwise use the same remote as REMOTE
 MEDIA="media" # Local share name NOTE: The name you want to give your share mount
-MEDIAROOT="/mnt" # Local share directory
 UPLOADLIMIT="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 
 # SERVICE ACCOUNTS
