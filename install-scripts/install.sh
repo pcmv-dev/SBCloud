@@ -7,7 +7,7 @@
 ######################
 
 # Install needed packages
-apt update && apt install git p7zip-full fuse man -y
+apt update && apt install curl git zip unzip fuse man -y
 
 # Install Rclone
 if [ -x "$(command -v rclone)" ]; then
@@ -25,40 +25,39 @@ url="https://github.com/trapexit/mergerfs/releases/download/$mergerfs_latest/mer
 if [ -x "$(command -v mergerfs)" ]; then
     echo
     echo "Mergerfs already installed..."
-    echo -n "Install/Update anyway (y/n)? "
-    read answer
+    read -p "Install/Update anyway (y/n)? " answer </dev/tty
     if [ "$answer" != "${answer#[Yy]}" ]; then
         rm -rf /usr/bin/mergerfs
         curl -fsSL $url -o $mergerfs
-        sudo chmod +x $mergerfs
-        sudo dpkg -i $mergerfs
-        sudo chown root /usr/bin/mergerfs
-        sudo chmod u+s /usr/bin/mergerfs
+        chmod +x $mergerfs
+        dpkg -i $mergerfs
+        chown root /usr/bin/mergerfs
+        chmod u+s /usr/bin/mergerfs
     fi
 else
     curl -fsSL $url -o $mergerfs
-    sudo chmod +x $mergerfs
-    sudo dpkg -i $mergerfs
-    sudo chown root /usr/bin/mergerfs
-    sudo chmod u+s /usr/bin/mergerfs
+    chmod +x $mergerfs
+    dpkg -i $mergerfs
+    chown root /usr/bin/mergerfs
+    chmod u+s /usr/bin/mergerfs
 fi
-rm $mergerfs >/dev/null 2>&1
+rm $mergerfs 2>/dev/null
 
 # Install Docker
 if [ -x "$(command -v docker)" ]; then
     echo
     echo "Docker already installed..."
-    echo -n "Run anyway (y/n)? "
-    read answer
+    read -p "Run anyway (y/n)? " answer </dev/tty
     if [ "$answer" != "${answer#[Yy]}" ]; then
         rm -f /mnt/cloudstorage/install-scripts/install-docker.sh
         curl -fsSL https://get.docker.com -o /mnt/cloudstorage/install-scripts/install-docker.sh
-        sudo sh /mnt/cloudstorage/install-scripts/install-docker.sh
+        sh /mnt/cloudstorage/install-scripts/install-docker.sh
     fi
 else
     mkdir -p /mnt/cloudstorage/install-scripts
     curl -fsSL https://get.docker.com -o /mnt/cloudstorage/install-scripts/install-docker.sh
-    sudo sh /mnt/cloudstorage/install-scripts/install-docker.sh >/dev/null
+    sh /mnt/cloudstorage/install-scripts/install-docker.sh 2>/dev/null
+    echo "Installing Docker, please wait..."
 fi
 
 # Install docker-compose
@@ -68,17 +67,16 @@ compose_url="https://github.com/docker/compose/releases/download/$compose_ver/do
 if [ -f "$dockercompose" ]; then
     echo
     echo "docker-compose already installed..."
-    echo -n "Install/Update anyway (y/n)? "
-    read answer
+    read -p "Install/Update anyway (y/n)? " answer </dev/tty
     if [ "$answer" != "${answer#[Yy]}" ]; then
         rm -rf $dockercompose
         curl -L $compose_url -o $dockercompose
-        sudo chmod +x $dockercompose
+        chmod +x $dockercompose
         docker-compose --version
     fi
 else
     curl -L $compose_url -o $dockercompose
-    sudo chmod +x $dockercompose
+    chmod +x $dockercompose
 fi
 
 # Install Portainer
@@ -105,7 +103,7 @@ if docker ps -a --format '{{.Names}}' | grep -Eq "^${watchtowercheck}\$"; then
 else
     echo "Installing WatchTower..."
     docker run -d \
-    --name watchtower \
+    --name=watchtower \
     -v /var/run/docker.sock:/var/run/docker.sock \
     containrrr/watchtower \
     --cleanup --schedule "0 */6 * * *"
@@ -116,17 +114,15 @@ cloudstorage="/mnt/cloudstorage"
 rclonescripts="/mnt/cloudstorage/rclone"
 installscripts="/mnt/cloudstorage/install-scripts"
 extras="/mnt/cloudstorage/extras"
-mkdir -p $cloudstorage
-mkdir -p $rclonescripts
-mkdir -p $installscripts
-mkdir -p $extras
+bin="/usr/local/bin"
+mkdir -p $cloudstorage $rclonescripts $installscripts $extras
 if [ -f "$cloudstorage/.update" ]; then
     echo
     echo "CloudStorage scripts already installed"
-    echo -n "Overwrite/Update current scripts (y/n)? "
-    read answer
+    read -p "Overwrite/Update current scripts (y/n)? " answer </dev/tty
     if [ "$answer" != "${answer#[Yy]}" ]; then
-        rm -rf $rclonescripts/* & rm -rf $installscripts/* & rm -rf $extras/*
+        rm $bin/rclone-mount $bin/rclone-unmount $bin/rclone-upload
+        rm -rf $rclonescripts/* $installscripts/* $extras/*
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload
@@ -134,12 +130,13 @@ if [ -f "$cloudstorage/.update" ]; then
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/add-to-cron.sh -o $extras/add-to-cron.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/watchtower-notification.sh -o $extras/watchtower-notification.sh
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh
+        ln $rclonescripts/rclone-mount $rclonescripts/rclone-unmount $rclonescripts/rclone-upload /usr/local/bin
+        
         echo
         echo "================================"
         echo "Scripts have been overwritten!"
         echo "You need to reconfigure your Rclone scripts"
-        echo "Don't forget to do a 'sudo chmod -R +x /mnt/cloudstorage && sudo chown -R USER:USER /mnt', change 'USER' to your own"
-        exit
+        echo
     fi
 else
     touch $cloudstorage/.update
@@ -150,25 +147,35 @@ else
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/add-to-cron.sh -o $extras/add-to-cron.sh
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/watchtower-notification.sh -o $extras/watchtower-notification.sh
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh
-    ln $rclonescripts/rclone-mount /usr/local/bin && ln $rclonescripts/rclone-unmount /usr/local/bin && ln $rclonescripts/rclone-upload /usr/local/bin
+    ln $rclonescripts/rclone-mount $rclonescripts/rclone-unmount $rclonescripts/rclone-upload /usr/local/bin
 fi
 
+# Apply permissions
+currentuser=$(who | awk '{print $1}')}
+chmod -R 775 /mnt
+chown -R $currentuser:$currentuser /mnt
+
 # Install complete
-echo
-echo "======= INSTALL COMPLETE ======="
-echo "================================"
+tee <<-EOF
+
+======= INSTALL COMPLETE =======
+================================
+EOF
 mergerfs -v
-echo "================================"
+printf "================================"
 rclone --version
-echo "================================"
+printf "================================"
 docker -v
 docker-compose --version
-echo
-echo "Rclone scripts have been added to Path. You can run them from any directory"
-echo "Run this script again to Update"
-echo
-echo "Install complete! Now do the following:"
-echo "[1] Run 'sudo usermod -aG docker USER' to run docker without root, change 'USER' to your own"
-echo "[2] Run 'sudo chmod -R +x /mnt && sudo chown -R USER:USER /mnt', change 'USER' to your own"
-echo "[3] Relog"
+tee <<-EOF
+
+NOTE: First time install
+    To run Docker without root do the following:
+    [1] "usermod -aG docker $USER"
+    [2] Relog afterwards
+
+Rclone scripts have been added to Path. You can run them from any directory.
+For updates please visit: https://github.com/SenpaiBox/CloudStorage
+
+EOF
 exit
