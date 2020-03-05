@@ -27,10 +27,7 @@ LOCKFILE="$APPDATA/mount.lock" # Rclone mount lock file
 MERGERFSOPTIONS="rw,async_read=false,use_ino,allow_other,func.getattr=newest,category.action=all,category.create=ff,cache.files=partial,dropcacheonclose=true" # Mergerfs mount options
 
 # Create directories
-mkdir -p $APPDATA
-mkdir -p $RCLONEUPLOAD
-mkdir -p $RCLONEMOUNT
-mkdir -p $MERGERFSMOUNT
+mkdir -p $APPDATA $RCLONEUPLOAD $RCLONEMOUNT $MERGERFSMOUNT
 
 # Check if script is already running
 echo "==== STARTING MOUNT SCRIPT ===="

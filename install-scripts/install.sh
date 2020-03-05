@@ -7,7 +7,7 @@
 ######################
 
 # Install needed packages
-apt update && apt install curl git zip unzip fuse man -y
+apt update && apt install curl git p7zip-full fuse man -y
 
 # Install Rclone
 if [ -x "$(command -v rclone)" ]; then
@@ -21,7 +21,7 @@ id="$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')"
 version_codename="$(grep -oP '(?<=^VERSION_CODENAME=).+' /etc/os-release | tr -d '"')"
 mergerfs="/tmp/mergerfs.deb"
 mergerfs_latest="$(curl -s -o /dev/null -I -w "%{redirect_url}\n" https://github.com/trapexit/mergerfs/releases/latest | grep -oP "[0-9]+(\.[0-9]+)+$")"
-url="https://github.com/trapexit/mergerfs/releases/download/$mergerfs_latest/mergerfs_$mergerfs_latest.$id-${version_codename}_amd64.deb"
+url="https://github.com/trapexit/mergerfs/releases/download/${mergerfs_latest}/mergerfs_${mergerfs_latest}.${id}-${version_codename}_amd64.deb"
 if [ -x "$(command -v mergerfs)" ]; then
     echo
     echo "Mergerfs already installed..."
@@ -134,7 +134,6 @@ if [ -f "$cloudstorage/.update" ]; then
         echo "================================"
         echo "Scripts have been overwritten!"
         echo "You need to reconfigure your Rclone scripts"
-        echo
     fi
 else
     touch $cloudstorage/.update
@@ -149,7 +148,7 @@ else
 fi
 
 # Apply permissions
-currentuser=$(who | awk '{print $1}')}
+currentuser="$(who | awk '{print $1}')"
 chmod -R 775 /mnt 2>/dev/null
 chown -R ${currentuser}:${currentuser} /mnt 2>/dev/null
 
