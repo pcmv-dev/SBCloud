@@ -57,13 +57,12 @@ else
     mkdir -p /mnt/cloudstorage/install-scripts
     curl -fsSL https://get.docker.com -o /mnt/cloudstorage/install-scripts/install-docker.sh
     sh /mnt/cloudstorage/install-scripts/install-docker.sh 2>/dev/null
-    echo "Installing Docker, please wait..."
 fi
 
 # Install docker-compose
 dockercompose="/usr/local/bin/docker-compose"
 compose_ver="$(curl -s -o /dev/null -I -w "%{redirect_url}\n" https://github.com/docker/compose/releases/latest | grep -oP "[0-9]+(\.[0-9]+)+$")"
-compose_url="https://github.com/docker/compose/releases/download/$compose_ver/docker-compose-$(uname -s)-$(uname -m)"
+compose_url="https://github.com/docker/compose/releases/download/${compose_ver}/docker-compose-$(uname -s)-$(uname -m)"
 if [ -f "$dockercompose" ]; then
     echo
     echo "docker-compose already installed..."
@@ -104,9 +103,9 @@ else
     echo "Installing WatchTower..."
     docker run -d \
     --name=watchtower \
+    --cleanup --schedule "0 */6 * * *" \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    containrrr/watchtower \
-    --cleanup --schedule "0 */6 * * *"
+    containrrr/watchtower
 fi
 
 # Install Rclone Scripts and create directories
@@ -121,17 +120,16 @@ if [ -f "$cloudstorage/.update" ]; then
     echo "CloudStorage scripts already installed"
     read -p "Overwrite/Update current scripts (y/n)? " answer </dev/tty
     if [ "$answer" != "${answer#[Yy]}" ]; then
-        rm $bin/rclone-mount $bin/rclone-unmount $bin/rclone-upload
-        rm -rf $rclonescripts/* $installscripts/* $extras/*
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/install-scripts/install.sh -o $installscripts/install.sh
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/add-to-cron.sh -o $extras/add-to-cron.sh
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/watchtower-notification.sh -o $extras/watchtower-notification.sh
-        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh
-        ln $rclonescripts/rclone-mount $rclonescripts/rclone-unmount $rclonescripts/rclone-upload /usr/local/bin
-        
+        rm $bin/rclone-mount $bin/rclone-unmount $bin/rclone-upload 2>/dev/null
+        rm -rf $rclonescripts/* $installscripts/* $extras/* 2>/dev/null
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount 2>/dev/null
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount 2>/dev/null
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload 2>/dev/null
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/install-scripts/install.sh -o $installscripts/install.sh 2>/dev/null
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/add-to-cron.sh -o $extras/add-to-cron.sh 2>/dev/null
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/watchtower-notification.sh -o $extras/watchtower-notification.sh 2>/dev/null
+        curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh 2>/dev/null
+        ln $rclonescripts/rclone-mount $rclonescripts/rclone-unmount $rclonescripts/rclone-upload /usr/local/bin 2>/dev/null
         echo
         echo "================================"
         echo "Scripts have been overwritten!"
@@ -140,20 +138,20 @@ if [ -f "$cloudstorage/.update" ]; then
     fi
 else
     touch $cloudstorage/.update
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/install-scripts/install.sh -o $installscripts/install.sh
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/add-to-cron.sh -o $extras/add-to-cron.sh
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/watchtower-notification.sh -o $extras/watchtower-notification.sh
-    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh
-    ln $rclonescripts/rclone-mount $rclonescripts/rclone-unmount $rclonescripts/rclone-upload /usr/local/bin
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount 2>/dev/null
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount 2>/dev/null
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload 2>/dev/null
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/install-scripts/install.sh -o $installscripts/install.sh 2>/dev/null
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/add-to-cron.sh -o $extras/add-to-cron.sh 2>/dev/null
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/watchtower-notification.sh -o $extras/watchtower-notification.sh 2>/dev/null
+    curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh 2>/dev/null
+    ln $rclonescripts/rclone-mount $rclonescripts/rclone-unmount $rclonescripts/rclone-upload /usr/local/bin 2>/dev/null
 fi
 
 # Apply permissions
 currentuser=$(who | awk '{print $1}')}
-chmod -R 775 /mnt
-chown -R $currentuser:$currentuser /mnt
+chmod -R 775 /mnt 2>/dev/null
+chown -R ${currentuser}:${currentuser} /mnt 2>/dev/null
 
 # Install complete
 tee <<-EOF
@@ -162,9 +160,13 @@ tee <<-EOF
 ================================
 EOF
 mergerfs -v
-printf "================================"
+tee <<-EOF
+================================
+EOF
 rclone --version
-printf "================================"
+tee <<-EOF
+================================
+EOF
 docker -v
 docker-compose --version
 tee <<-EOF
