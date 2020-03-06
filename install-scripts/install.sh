@@ -1,22 +1,74 @@
 #!/bin/bash
 
-######################
-####  INSTALLER   ####
-######################
-#### Version 0.02 ####
-######################
+# Author: SenpaiBox
+# URL:    https://github.com/SenpaiBox/CloudStorage
+# Start installer
 
-# Install needed packages
+tee <<-NOTICE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTALLER: CloudStorage v0.03
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DISCLAIMER:
+I am not responsible for anything that could go wrong.
+I am not responsible for any data loss that could potentialy happen.
+You agree to use these scripts at your own risk.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NOTICE
+sleep 3
+
+tee <<-EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[1] Run Installer
+[2] Reset CloudStorage scripts and Run Installer
+
+[3] Exit
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+read -p "Type a Number | Press [ENTER]: " answer </dev/tty
+if [ "$answer" == "1" ]; then
+    echo "Continue with install.."
+
+elif [ "$answer" == "2" ]; then
+    sleep 3
+    echo "Uninstalling Rclone, Docker-CE, Docker-Compose, and resetting CloudStorage Scripts..."
+    apt purge docker-ce -y && apt autoremove -y
+    rm -rf /usr/local/bin/docker-compose \
+    /usr/bin/mergerfs \
+    /usr/bin/rclone \
+    /mnt/CloudStorage 2>/dev/null
+elif [ "$answer" == "3" ]; then
+    exit
+fi
+
+tee <<-EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Installing prerequesites...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
 apt update && apt install curl git p7zip-full fuse man -y
 
-# Install Rclone
+tee <<-EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Installing Rclone...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+sleep 3
 if [ -x "$(command -v rclone)" ]; then
     echo "Rclone already installed..."
 else
     curl https://rclone.org/install.sh |  bash -s beta
 fi
 
-# Install Mergerfs
+tee <<-EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Install MergerFS...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+sleep 3
 id="$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')"
 version_codename="$(grep -oP '(?<=^VERSION_CODENAME=).+' /etc/os-release | tr -d '"')"
 mergerfs="/tmp/mergerfs.deb"
@@ -42,8 +94,21 @@ else
     chmod u+s /usr/bin/mergerfs
 fi
 rm $mergerfs 2>/dev/null
+find="$(cat /etc/fuse.conf | grep -c "#user_allow_other")"
+if [ $find != 0 ]; then
+    echo "Modifiying /etc/fuse.conf to user_allow_other"
+    sed -i "s/#user_allow_other/user_allow_other/g" /etc/fuse.conf
+else
+    echo "Fuse is already set to user_allow_other"
+fi
 
-# Install Docker
+tee <<-EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Install Docker-CE...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+sleep 3
 if [ -x "$(command -v docker)" ]; then
     echo
     echo "Docker already installed..."
@@ -59,7 +124,13 @@ else
     sh /mnt/cloudstorage/install-scripts/install-docker.sh 2>/dev/null
 fi
 
-# Install docker-compose
+tee <<-EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Install docker-compose...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+sleep 3
 dockercompose="/usr/local/bin/docker-compose"
 compose_ver="$(curl -s -o /dev/null -I -w "%{redirect_url}\n" https://github.com/docker/compose/releases/latest | grep -oP "[0-9]+(\.[0-9]+)+$")"
 compose_url="https://github.com/docker/compose/releases/download/${compose_ver}/docker-compose-$(uname -s)-$(uname -m)"
@@ -78,7 +149,13 @@ else
     chmod +x $dockercompose
 fi
 
-# Install Portainer
+tee <<-EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Install Portainer...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+sleep 3
 portainercheck="portainer"
 if  docker ps -a --format '{{.Names}}' | grep -Eq "^${portainercheck}\$"; then
     echo
@@ -94,7 +171,13 @@ else
     portainer/portainer
 fi
 
-# Install WatchTower
+tee <<-EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Install Watchtower...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+sleep 3
 watchtowercheck="watchtower"
 if docker ps -a --format '{{.Names}}' | grep -Eq "^${watchtowercheck}\$"; then
     echo
@@ -108,7 +191,13 @@ else
     --cleanup --schedule "0 */6 * * *"
 fi
 
-# Install Rclone Scripts and create directories
+tee <<-EOF
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Setup CloudStorage...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EOF
+sleep 3
 cloudstorage="/mnt/cloudstorage"
 rclonescripts="/mnt/cloudstorage/rclone"
 installscripts="/mnt/cloudstorage/install-scripts"
@@ -131,11 +220,14 @@ if [ -f "$cloudstorage/.update" ]; then
         curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh 2>/dev/null
         ln $rclonescripts/rclone-mount $rclonescripts/rclone-unmount $rclonescripts/rclone-upload /usr/local/bin 2>/dev/null
         echo
-        echo "================================"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo "Scripts have been overwritten!"
         echo "You need to reconfigure your Rclone scripts"
     fi
 else
+    echo "Downloading and installing Rclone scripts..."
+    sleep 2
+    echo "Applying hardlinks to Rclone Scripts..."
     touch $cloudstorage/.update
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount 2>/dev/null
     curl -fsSL https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount 2>/dev/null
@@ -152,19 +244,19 @@ currentuser="$(who | awk '{print $1}')"
 chmod -R 775 /mnt 2>/dev/null
 chown -R ${currentuser}:${currentuser} /mnt 2>/dev/null
 
-# Install complete
 tee <<-EOF
 
-======= INSTALL COMPLETE =======
-================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTALL COMPLETE!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
 mergerfs -v
 tee <<-EOF
-================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
 rclone --version
 tee <<-EOF
-================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
 docker -v
 docker-compose --version
