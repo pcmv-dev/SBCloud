@@ -34,14 +34,16 @@ sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercon
 
 ## Set Permissions
 
-> The next task is to set permissions. Change "USER" to your own
+> The install script should set your permissions but if not you can run the following manually
 ```bash
-$ sudo chmod -R +x /mnt/cloudstorage && sudo chown -R USER:USER /mnt
+$ sudo chmod -R +x /mnt && sudo chown -R $USER:$USER /mnt
 ```
 
 ## Change Fusermount Permission
+
+> If the script fails to modify fuse.conf you can do this manually
+
 > You must edit  /etc/fuse.conf to use option "allow_other" by uncommenting "user_allow_other"
-If you do not set this, rclone-mount<i></i>.sh will throw an error.
 ```
 $ sudo nano /etc/fuse.conf
 ```
