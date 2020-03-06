@@ -78,7 +78,7 @@ else
 fi
 
 # Rclone upload flags
-mkdir -p $LOGFILE 2>/dev/null
+mkdir -p $MEDIAROOT/logs/$REMOTE 2>/dev/null
 RCLONE_MOVE() {
     RCLONE_COMMAND=$(
     rclone move $RCLONEUPLOAD/ $UPLOADREMOTE: $SERVICEACCOUNT -vP \
