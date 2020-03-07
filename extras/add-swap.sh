@@ -1,22 +1,23 @@
 #!/bin/bash
 # This script will add a swap partition
 
-# size of swapfile in megabytes
-swapsize=4
+# Size of Swapfile
+swapsize="512M"
 
 # does the swap file already exist?
 grep -q "swapfile" /etc/fstab
 
 # if not then create it
 if [ $? -ne 0 ]; then
-  echo 'swapfile not found. Adding swapfile.'
-  fallocate -l ${swapsize}G /swapfile
+  echo "Swapfile not found. Adding swapfile"
+  fallocate -l ${swapsize} /swapfile
+  dd if=/dev/zer of=/swapfile bs=1024 count=1048576
   chmod 600 /swapfile
   mkswap /swapfile
   swapon /swapfile
-  echo '/swapfile none swap defaults 0 0' >> /etc/fstab
+  echo "/swapfile none swap defaults 0 0" >> /etc/fstab
 else
-  echo 'swapfile found. No changes made.'
+  echo "Swap found. No changes made"
 fi
 
 # output results to terminal
