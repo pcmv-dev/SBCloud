@@ -87,7 +87,7 @@ RCLONE_MOVE() {
     --log-file=$LOGFILE \
     --stats=9999m \
     --buffer-size 64M \
-    --drive-chunk-size 128M \
+    --drive-chunk-size 64M \
     --use-mmap \
     --tpslimit 4 \
     --checkers 4 \
