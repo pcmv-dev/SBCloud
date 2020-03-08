@@ -200,7 +200,7 @@ Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 
 ### Installer Script
 
-- 3/05/20202 - v0.4 - Script factory resets and simple UI script
+- 3/05/2020 - v0.4 - Script factory resets and simple UI script
 - 3/04/2020 - v0.3 - Script modifies fuse.conf
 - 3/03/2020 - v0.2 - Added Watchtower
 - 3/02/2020 - v0.1 - Combine all install scripts into one
