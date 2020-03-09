@@ -57,6 +57,7 @@ Installing Rclone...
 EOF
 sleep 3
 if [ -x "$(command -v rclone)" ]; then
+    echo
     echo "Rclone already installed..."
 else
     curl https://rclone.org/install.sh |  bash -s beta
@@ -225,6 +226,7 @@ if [ -f "$cloudstorage/.update" ]; then
         echo "You need to reconfigure your Rclone scripts"
     fi
 else
+    echo
     echo "Downloading and installing Rclone scripts..."
     sleep 2
     echo "Applying hardlinks to Rclone Scripts..."
@@ -264,7 +266,7 @@ tee <<-EOF
 
 NOTE: First time install
     To run Docker without root do the following:
-    [1] "usermod -aG docker $USER"
+    [1] "usermod -aG docker ${currentuser}"
     [2] Relog afterwards
 
 Rclone scripts have been added to Path. You can run them from any directory.
