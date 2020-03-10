@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # By default, Docker recommends using a value of vm.swappiness=0 for Docker environments, which prevents swapping except
 # in the case of an OOM (OutOfMemory) condition. All nodes must set vm.overcommit_memory=1, which tells the kernel to always
 # allow memory allocations until there is no truly memory.
