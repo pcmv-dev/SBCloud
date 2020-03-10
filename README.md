@@ -136,7 +136,7 @@ UPLOADLIMIT="75M" # Set your upload speed Ex. 10Mbps is 1.25M (Megabytes/s)
 
 # SERVICE ACCOUNTS
 # Drop your .json files in your "appdata/rclonedata/service_accounts"
-# Name them "sa_account01.json" "sa_account02.json" etc.
+# Name them "sa_account1.json" "sa_account2.json" etc.
 USESERVICEACCOUNT="N" # Y/N. Choose whether to use Service Accounts NOTE: Bypass Google 750GB upload limit
 SERVICEACCOUNTNUM="15" # Integer number of service accounts to use.
 
