@@ -91,8 +91,8 @@ View this step in a video example
 
 ```bash
 $ cd /mnt/cloudstorage/rclone    # Change to rclone scripts directory
-$ nano rclone-mount.sh                # Edit the script
-$ sh rclone-mount.sh                  # Run the script
+$ nano rclone-mount.sh           # Edit the script
+$ sh rclone-mount.sh             # Run the script
 ```
 ```bash
 # CONFIGURE
@@ -124,8 +124,8 @@ MEDIA="media" # Local share name NOTE: This is the directory you share to "Radar
 
 ```bash
 $ cd /mnt/cloudstorage/rclone   # Change to rclone scripts directory
-$ nano rclone-upload.sh              # Edit the script
-$ sh rclone-upload.sh                # Run the script
+$ nano rclone-upload.sh         # Edit the script
+$ sh rclone-upload.sh           # Run the script
 ```
 ```bash
 # CONFIGURE
