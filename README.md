@@ -26,7 +26,7 @@ This guide will help you get started and is by no means the best way of doing th
 - Script has only been tested on **Debian 9/10** and **Ubuntu 18.04**
 
 :warning: Script is still experimental!
-
+## Method 1
 > Install/Update script
 ```
 sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/install-scripts/install.sh | sudo bash
@@ -90,7 +90,7 @@ View this step in a video example
 > Type "ID USER" replace USER with your own. This gives you UserID and GroupID
 
 ```bash
-$ cd /mnt/user/cloudstorage/rclone    # Change to rclone scripts directory
+$ cd /mnt/cloudstorage/rclone    # Change to rclone scripts directory
 $ nano rclone-mount.sh                # Edit the script
 $ sh rclone-mount.sh                  # Run the script
 ```
@@ -108,9 +108,9 @@ GROUPID="1000" # Your group ID
 > Configure the **rclone-unmount** script. You only need to modify the "CONFIGURE" section
 
 ```bash
-$ cd /mnt/user/cloudstorage/rclone   # Change to rclone scripts directory
-$ nano rclone-unmount.sh             # Edit the script
-$ sh rclone-unmount.sh               # Run the script
+$ cd /mnt/cloudstorage/rclone   # Change to rclone scripts directory
+$ nano rclone-unmount.sh        # Edit the script
+$ sh rclone-unmount.sh          # Run the script
 ```
 ```bash
 # CONFIGURE
@@ -123,7 +123,7 @@ MEDIA="media" # Local share name NOTE: This is the directory you share to "Radar
 > Configure the **rclone-upload** script. You only need to modify the "CONFIGURE" section
 
 ```bash
-$ cd /mnt/user/cloudstorage/rclone   # Change to rclone scripts directory
+$ cd /mnt/cloudstorage/rclone   # Change to rclone scripts directory
 $ nano rclone-upload.sh              # Edit the script
 $ sh rclone-upload.sh                # Run the script
 ```
@@ -162,7 +162,7 @@ View how to configure and run these scripts in a video example
 ### Manual Entry
 > Add each script to crontab: **rclone-mount, rclone-unmount, rclone-upload**
 
-> Example: 0 */1 * * * /mnt/user/cloudstorage/rclone/rclone-mount.sh > /mnt/user/logs/rclone-mount.log 2>&1
+> Example: 0 */1 * * * /mnt/cloudstorage/rclone/rclone-mount.sh > /mnt/logs/rclone-mount.log 2>&1
 ```
 $ crontab -e
 ```
@@ -181,10 +181,14 @@ You can install and configure Dockers very easily using Portainer
 
 Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 - Letsencrypt
-- NZBget
-- qBittorrent
-- Sonarr
-- Radarr
+- Nzbget
+- Medusa
+- Watcher3
+- Watchtower
+- Heimdall
+- Syncthing
+
+Advanced Users: You can use the provided script configure/modify it. *CloudStorage/install-scripts/install-dockers.sh*
 
 ## Video Guides
 
