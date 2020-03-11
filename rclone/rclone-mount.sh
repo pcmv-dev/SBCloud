@@ -24,7 +24,7 @@ RCLONEMOUNT="$APPDATA/rclone_mount" # Rclone mount folder
 MERGERFSMOUNT="$MEDIAROOT/$MEDIA" # Media share location
 RCLONECONF="$HOME/.config/rclone/rclone.conf" # Rclone config file location
 LOCKFILE="$APPDATA/mount.lock" # Rclone mount lock file
-MERGERFSOPTIONS="rw,async_read=true,use_ino,allow_other,func.getattr=newest,category.action=all,category.create=ff,cache.files=off" # Mergerfs mount options
+MERGERFSOPTIONS="rw,async_read=flase,use_ino,allow_other,func.getattr=newest,category.action=all,category.create=ff,cache.files=off" # Mergerfs mount options
 
 # Create directories
 mkdir -p $APPDATA $RCLONEUPLOAD $RCLONEMOUNT $MERGERFSMOUNT
