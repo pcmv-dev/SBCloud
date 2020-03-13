@@ -1,7 +1,11 @@
 #!/bin/bash
 
 # Installs Portainer,Watchtower,Watcher,Medusa,Nzbget,Syncthing
-BACKUP_DIR="/mnt/backup"
+# You must configure each container with your desired paths and settings.
+# The script can also backup container appdata, all containers will be stopped and
+# restarted when finished. 7zip must be installed for backups.
+
+BACKUP_DIR="/mnt/backup" # Location of Docker Backups
 tee <<-EOF
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -17,7 +21,7 @@ if [ "$answer" == "1" ]; then
 elif [ "$answer" == "2" ]; then
     sleep 2
     echo "Backup Dockers appdata..."
-    docker stop $(docker ps -a -q) &
+    docker stop $(docker ps -a -q) &&
     mkdir -p $BACKUP_DIR 2>/dev/null
     7z a -t7z $BACKUP_DIR/appdata.7z /mnt/appdata -xr'!rclonedata' && docker start $(docker ps -a -q -f status=exited)
     currentuser="$(who | awk '{print $1}')"
