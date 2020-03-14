@@ -25,6 +25,9 @@ tee <<-EOF
 EOF
 read -p "Type a Number | Press [ENTER]: " ANSWER </dev/tty
 
+BACKUP_CONTAINERS="$(docker ps | awk '{if(NR>1) print $NF}')"
+APPDATA_DIR="/mnt/appdata" # Location of container appdata
+BACKUP_DIR="/mnt/backups" # Location of backup directory
 if [ "$ANSWER" == "1" ]; then
 tee <<-EOF
 
@@ -32,9 +35,6 @@ tee <<-EOF
 Starting backup...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
-    BACKUP_CONTAINERS="$(docker ps | awk '{if(NR>1) print $NF}')"
-    APPDATA_DIR="/mnt/appdata" # Location of container appdata
-    BACKUP_DIR="/mnt/backups" # Location of backup directory
     command -v 7z >/dev/null 2>&1
     if [ "$?" != "0" ]; then
         echo "7zip not detected, installing please wait..."
@@ -58,9 +58,10 @@ tee <<-EOF
 Stopping all containers...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
-    docker stop $(docker ps -a -q)
+    docker ps | awk '{if(NR>1) print $NF}'
+    docker stop $(docker ps -a -q) >/dev/null 2>&1
     sleep 3
-    echo 1>&2 "All containers have been stopped, now exiting..."
+    echo 1>&2 "All containers have been stopped"
     exit
     elif [ "$ANSWER" == "3" ]; then
 tee <<-EOF
@@ -70,9 +71,10 @@ Starting all containers...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
     echo 1>&2 "Starting all stopped containers..."
-    docker start $(docker ps -a -q -f status=exited)
+    docker start $(docker ps -a -q -f status=exited) >/dev/null 2>&1
+    docker ps | awk '{if(NR>1) print $NF}'
     sleep 3
-    echo 1>&2 "All stopped containers have been restarted, now exiting..."
+    echo 1>&2 "All stopped containers have been restarted"
     exit
     elif [ "$ANSWER" == "4" ]; then
     exit
