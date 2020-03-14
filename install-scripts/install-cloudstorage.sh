@@ -244,7 +244,7 @@ if [ -f "$cloudstorage/.update" ]; then
         curl -fsSL $github/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount 2>/dev/null
         curl -fsSL $github/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload 2>/dev/null
         curl -fsSL $github/install-scripts/install-cloudstorage.sh -o $installscripts/install-cloudstorage 2>/dev/null
-        curl -fsSL $github/extras/add-to-cron.sh -o $extras/rclone-cron 2>/dev/null
+        curl -fsSL $github/extras/rclone-cron.sh -o $extras/rclone-cron 2>/dev/null
         curl -fsSL $github/extras/docker-manager.sh -o $extras/docker-manager 2>/dev/null
         curl -fsSL $github/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh 2>/dev/null
         echo "Applying hardlinks to rclone-mount, rclone-unmount, rclone-upload..."
@@ -266,9 +266,9 @@ else
     curl -fsSL $github/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount 2>/dev/null
     curl -fsSL $github/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount 2>/dev/null
     curl -fsSL $github/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload 2>/dev/null
-    curl -fsSL $github/install-scripts/install.sh -o $installscripts/install.sh 2>/dev/null
-    curl -fsSL $github/extras/add-to-cron.sh -o $extras/add-to-cron.sh 2>/dev/null
-    curl -fsSL $github/extras/watchtower-notification.sh -o $extras/watchtower-notification.sh 2>/dev/null
+    curl -fsSL $github/install-scripts/install-cloudstorage.sh -o $installscripts/install-cloudstorage 2>/dev/null
+    curl -fsSL $github/extras/rclone-cron.sh -o $extras/rclone-cron 2>/dev/null
+    curl -fsSL $github/extras/docker-manager.sh -o $extras/docker-manager 2>/dev/null
     curl -fsSL $github/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh 2>/dev/null
     echo "Applying hardlinks to rclone-mount, rclone-unmount, rclone-upload..."
     ln $rclonescripts/rclone-mount $rclonescripts/rclone-unmount $rclonescripts/rclone-upload $localbin 2>/dev/null
