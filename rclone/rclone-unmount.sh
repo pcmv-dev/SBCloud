@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 ########################
 #### Unmount Script ####
@@ -12,6 +12,12 @@ MEDIA="media" # Local share name NOTE: This is the directory you share to "Radar
 #########################################
 #### DO NOT EDIT ANYTHING BELOW THIS ####
 #########################################
+
+# Make sure we are not running as root
+if [ `whoami` == root ]; then
+    echo "Do not run as sudo/root!"
+    exit
+fi
 
 # Advanced Settings, Edit only if you know what you are doing
 MEDIAROOT="/mnt" # Your root directory. The directory where you want everything saved to EX: "/mnt/media" "/mnt/appdata"

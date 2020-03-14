@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 #######################
 #### Upload Script ####
@@ -26,6 +26,12 @@ DISCORD_NAME_OVERRIDE="RCLONE" # The bot user name
 #########################################
 #### DO NOT EDIT ANYTHING BELOW THIS ####
 #########################################
+
+# Make sure we are not running as root
+if [ `whoami` == root ]; then
+    echo "Do not run as sudo/root!"
+    exit
+fi
 
 # Advanced Settings, Edit only if you know what you are doing
 MEDIAROOT="/mnt" # Your root directory. The directory where you want everything saved to EX: "/mnt/media" "/mnt/appdata"
