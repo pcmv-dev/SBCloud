@@ -1,10 +1,17 @@
-#!/usr/bin/env bash
-# By default, Docker recommends using a value of vm.swappiness=0 for Docker environments, which prevents swapping except
+#!/bin/bash
+# Author: SenpaiBox
+# URL: https://github.com/SenpaiBox/CloudStorage
+# Description: By default, Docker recommends using a value of vm.swappiness=0 for Docker environments, which prevents swapping except
 # in the case of an OOM (OutOfMemory) condition. All nodes must set vm.overcommit_memory=1, which tells the kernel to always
 # allow memory allocations until there is no truly memory.
 # If vm.swappiness is set to a value higher than 0, you might notice that only swap memory is being used on the node even
 # though host memory was available.
 
+if [ `whoami` != root ]; then
+    echo "Warning! Please run as sudo/root"
+    echo "Ex: sudo sh docker-memory-tweak.sh"
+    exit
+fi
 vmswap="$(grep -oP '[0-9]' /proc/sys/vm/swappiness | tr -d '"')"
 vmover="$(grep -oP '[0-9]' /proc/sys/vm/overcommit_memory | tr -d '"')"
 if [ $vmswap != "0" ] | [ $vmover != "1" ]; then
