@@ -20,8 +20,8 @@ SERVICEACCOUNTNUM="15" # Integer number of service accounts to use.
 
 # DISCORD NOTIFICATIONS
 DISCORD_WEBHOOK_URL="" # Enter your Discord Webhook URL for notifications. Otherwise leave empty to disable
-DISCORD_ICON_OVERRIDE="https://raw.githubusercontent.com/rclone/rclone/master/graphics/logo/logo_symbol/logo_symbol_color_256px.png" # The poster user image
-DISCORD_NAME_OVERRIDE="RCLONE" # The poster user name
+DISCORD_ICON_OVERRIDE="https://raw.githubusercontent.com/rclone/rclone/master/graphics/logo/logo_symbol/logo_symbol_color_256px.png" # The bot user image
+DISCORD_NAME_OVERRIDE="RCLONE" # The bot user name
 
 #########################################
 #### DO NOT EDIT ANYTHING BELOW THIS ####
