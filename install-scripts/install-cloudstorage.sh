@@ -60,8 +60,8 @@ if [ "$answer" == "1" ]; then
         echo
         echo "Uninstalling Rclone, Docker-CE, Docker-Compose, and CloudStorage scripts..."
         sleep 2
-        docker stop $(docker ps -a -q) 2>/dev/null &&
-        docker rm $(docker ps -a -q) 2>/dev/null &&
+        docker stop $(docker ps -a -q) 2>/dev/null &
+        docker rm $(docker ps -a -q) 2>/dev/null &
         apt purge docker-ce -y && apt purge mergerfs -y && apt autoremove -y
         rm -rf $localbin/docker-compose /usr/bin/rclone /mnt/cloudstorage /mnt/logs 2>/dev/null
         rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/install-cloudstorage 2>/dev/null
