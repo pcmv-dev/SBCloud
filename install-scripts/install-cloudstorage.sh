@@ -37,20 +37,24 @@ localbin="/usr/local/bin"
 read -p "Type a Number | Press [ENTER]: " answer </dev/tty
 if [ "$answer" == "1" ]; then
     echo "Continue with install.."
-    
     elif [ "$answer" == "2" ]; then
+    echo
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Reinstall/Reset..."
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "Uninstalling Rclone, Docker-CE, Docker-Compose, and resetting CloudStorage scripts..."
     sleep 2
+    docker stop $(docker ps -a -q) 2>/dev/null &&
+    docker rm $(docker ps -a -q) 2>/dev/null &&
     apt purge docker-ce -y && apt purge mergerfs -y && apt autoremove -y
-    rm -rf $localbin/docker-compose \
-    /usr/bin/rclone \
-    /mnt/cloudstorage 2>/dev/null
+    rm -rf $localbin/docker-compose /usr/bin/rclone /mnt/cloudstorage /mnt/logs 2>/dev/null
+    rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/install-cloudstorage 2>/dev/null
     elif [ "$answer" == "3" ]; then
-tee <<-EOF
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Uninstall/Remove all...
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-EOF
+    echo
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Uninstall/Remove all..."
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo
     read -p "Are you sure you want to Uninstall (y/n)? " answer </dev/tty
     if [ "$answer" != "${answer#[Yy]}" ]; then
         echo
@@ -61,7 +65,9 @@ EOF
         apt purge docker-ce -y && apt purge mergerfs -y && apt autoremove -y
         rm -rf $localbin/docker-compose /usr/bin/rclone /mnt/cloudstorage /mnt/logs 2>/dev/null
         rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/install-cloudstorage 2>/dev/null
-        echo "All has been removed except your backups and appdata"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "UNINSTALL COMPLETE"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         exit
     else
         exit
