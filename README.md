@@ -26,10 +26,10 @@ This guide will help you get started and is by no means the best way of doing th
 - Script has only been tested on **Debian 9/10** and **Ubuntu 18.04**
 
 :warning: Script is still experimental!
-## Method 1
+
 > Install/Update script
 ```
-sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/install-scripts/install.sh | sudo bash
+sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/install-scripts/install-cloudstorage.sh | sudo bash
 ```
 
 ## Set Permissions
@@ -142,8 +142,8 @@ SERVICEACCOUNTNUM="15" # Integer number of service accounts to use.
 
 # DISCORD NOTIFICATIONS
 DISCORD_WEBHOOK_URL="" # Enter your Discord Webhook URL for notifications. Otherwise leave empty to disable
-DISCORD_ICON_OVERRIDE="https://raw.githubusercontent.com/rclone/rclone/master/graphics/logo/logo_symbol/logo_symbol_color_256px.png" # The poster user image
-DISCORD_NAME_OVERRIDE="RCLONE" # The poster user name
+DISCORD_ICON_OVERRIDE="https://raw.githubusercontent.com/rclone/rclone/master/graphics/logo/logo_symbol/logo_symbol_color_256px.png" # The bot user image
+DISCORD_NAME_OVERRIDE="RCLONE" # The bot user name
 ```
 ## Testing
 After you have configured each script run them manually to check if they are working.
@@ -188,7 +188,7 @@ Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 - Heimdall
 - Syncthing
 
-Advanced Users: You can use the provided script configure/modify it. *CloudStorage/install-scripts/install-dockers.sh*
+Advanced Users: You can use the provided script configure/modify it. *CloudStorage/extras/install-dockers.sh*
 
 ## Video Guides
 
@@ -204,6 +204,7 @@ Advanced Users: You can use the provided script configure/modify it. *CloudStora
 
 ### Installer Script
 
+- 3/13/2020 - v0.5 - Added Uninstaller
 - 3/05/2020 - v0.4 - Script factory resets and simple UI script
 - 3/04/2020 - v0.3 - Script modifies fuse.conf
 - 3/03/2020 - v0.2 - Added Watchtower
@@ -211,6 +212,5 @@ Advanced Users: You can use the provided script configure/modify it. *CloudStora
 
 ## Acknowledgments
 
-You can view the original Rclone scripts [BinsonBuzz/unraid_rclone_mount](https://github.com/BinsonBuzz/unraid_rclone_mount)
-
-* BinsonBuzz for his super useful scripts :clap:
+* BinsonBuzz for his super useful scripts
+* no5tyle for Discord notifications
