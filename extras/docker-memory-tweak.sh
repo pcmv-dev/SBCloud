@@ -9,7 +9,7 @@
 
 if [ `whoami` != root ]; then
     echo "Warning! Please run as sudo/root"
-    echo "Ex: sudo ./docker-memory-tweak.sh"
+    echo "Ex: sudo sh docker-memory-tweak.sh"
     exit
 fi
 vmswap="$(grep -oP '[0-9]' /proc/sys/vm/swappiness | tr -d '"')"
