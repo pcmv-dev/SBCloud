@@ -2,7 +2,7 @@
 <center>
 <h1 align="center">CloudStorage</h1>
 <h4 align="center">Automate Uploads to Cloud Storage</h4>
-<h5 align="Center">03/03/2020 - Script Version 0.05  ~ Installer Version 0.04
+<h5 align="Center">03/13/2020 - Script Version 0.05  ~ Installer Version 0.05
 </center>
 
 # Info
