@@ -5,6 +5,10 @@
 # Sonarr, Radarr, and streaming to Plex/Emby. Automate uploading from a local or
 # remote machine running Ubuntu 18.04 or Debian 9/10.
 
+if [ `whoami` != root ]; then
+    echo "Warning! Please run as sudo/root"
+    exit
+fi
 tee <<-NOTICE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 INSTALLER: CloudStorage v0.05
