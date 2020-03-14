@@ -60,6 +60,7 @@ EOF
         rm -rf $localbin/docker-compose /usr/bin/rclone /mnt/cloudstorage /mnt/logs 2>/dev/null
         rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/install-cloudstorage 2>/dev/null
         echo "All has been removed except your backups and appdata"
+        exit
     else
         exit
     fi
