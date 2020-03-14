@@ -1,15 +1,19 @@
 #!/bin/bash
-# This script will add a swap partition
+# Author: SenpaiBox
+# URL: https://github.com/SenpaiBox/CloudStorage
+# Description: This script will add a swap partition
 
-# Size of Swapfile
-swapsize="512M"
-
-# does the swap file already exist?
+if [ `whoami` != root ]; then
+    echo "Warning! Please run as sudo/root"
+    echo "Ex: sudo sh add-swap.sh"
+    exit
+fi
 grep -q "swapfile" /etc/fstab
-
-# if not then create it
+grep -q "swap.img" /etc/fstab
 if [ $? -ne 0 ]; then
-  echo "Swapfile not found. Adding swapfile"
+  echo "Swapfile not found."
+  echo "Enter in M|G ex: 512M or 2G"
+  read -p "Enter your Swapfile size: " swapsize </dev/tty
   fallocate -l ${swapsize} /swapfile
   chmod 600 /swapfile
   mkswap /swapfile
@@ -19,7 +23,6 @@ else
   echo "Swap found. No changes made"
 fi
 
-# output results to terminal
 df -h
 cat /proc/swaps
 cat /proc/meminfo | grep Swap
