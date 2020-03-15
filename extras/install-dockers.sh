@@ -2,7 +2,7 @@
 
 # Author: SenpaiBox
 # URL: https://github.com/SenpaiBox/CloudStorage
-# Description: Installs Portainer,Watchtower,Watcher,Medusa,Nzbget,Syncthing
+# Description: Installs Portainer,Watchtower,Watcher,Sonarr,Nzbget,Syncthing
 # These are lightweight containers perfect for low powered machines.
 # You must configure each container with your desired paths and settings.
 # The script can also backup container appdata, all containers will be stopped and
@@ -158,27 +158,27 @@ fi
 tee <<-EOF
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Install Medusa - TV/Anime PVR...
+Install Sonarr - TV/Anime PVR...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
 sleep 2
-medusacheck="medusa"
-if docker ps -a --format '{{.Names}}' | grep -Eq "^${medusacheck}\$"; then
+sonarrcheck="sonarr"
+if docker ps -a --format '{{.Names}}' | grep -Eq "^${sonarrcheck}\$"; then
     echo
-    echo "Medusa already installed..."
+    echo "Sonarr already installed..."
 else
     docker create \
-    --name=medusa \
+    --name=sonarr \
     --network=proxynet \
     -e PUID=1000 \
     -e PGID=1000 \
     -e TZ=Europe/London \
-    -p 8081:8081 \
+    -p 8989:8989 \
     -v path to data:/config \
     -v path to downloads:/downloads \
     -v path to tv shows:/tv \
     --restart no \
-    linuxserver/medusa
+    linuxserver/sonarr:latest
 fi
 tee <<-EOF
 
