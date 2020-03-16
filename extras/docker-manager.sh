@@ -391,7 +391,7 @@ EOF
 tee <<-EOF
 Your External IP: $extip
 You can configure installed containers with Portainer:
-LOCAL >> http://loclalhost:9000
+LOCAL >> http://localhost:9000
 EXTERNAL >> http://$extip:9000
 EOF
 exit
