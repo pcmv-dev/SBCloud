@@ -1,8 +1,8 @@
 
 <center>
-<h1 align="center">CloudStorage</h1>
+<h1 align="center">SBCloud</h1>
 <h4 align="center">Automate Uploads to Cloud Storage</h4>
-<h5 align="Center">03/13/2020 - Script Version 0.05  ~ Installer Version 0.05
+<h5 align="Center">03/16/2020 - Script Version 0.05  ~ Installer Version 0.06
 </center>
 
 # Info
@@ -12,9 +12,8 @@ Automate uploading to your cloud storage. This uses "Mergerfs" for compatiabilit
 This guide will help you get started and is by no means the best way of doing things... this is what works for me. I created this repo for my own reference.
 
 ## Guides Included
-- Installing Docker with Portainer frontend
-- Setup Rclone and config
-- Creating dockers using Portainer
+- Setup SBCloud scripts
+- Setup Rclone config
 - Using cron to schedule Rclone scripts
 
 # Disclaimer
@@ -26,15 +25,30 @@ This guide will help you get started and is by no means the best way of doing th
 - Script has only been tested on **Debian 9/10** and **Ubuntu 18.04**
 
 :warning: Script is still experimental!
-
+## Method 1 - SBCloud Lite with DockSTARTer
 > Install/Update script
 ```
-sudo apt update && sudo apt install curl -y && curl -s https://raw.githubusercontent.com/SenpaiBox/CloudStorage/master/install-scripts/install-cloudstorage.sh | sudo bash
+sudo apt update && sudo apt install curl git -y && curl -s https://raw.githubusercontent.com/SenpaiBox/SBCloud/master/install-scripts/sbcloud.sh | sudo bash
 ```
+> Install DockSTARTer
 
+> Reboot afterwards
+```bash
+$ bash -c "$(curl -fsSL https://get.dockstarter.com)"
+$ sudo reboot
+```
+## Method 2 - SBCloud Full
+> Install/Update script
+
+> Reboot afterwards
+```
+sudo apt update && sudo apt install curl git -y && curl -s https://raw.githubusercontent.com/SenpaiBox/SBCloud/master/install-scripts/sbcloud-docker.sh | sudo bash
+```
 ## Set Permissions
 
 > The install script should set your permissions but if not you can run the following manually
+
+> DockSTARTer also helps set permissions, check the configuration
 ```bash
 $ sudo chmod -R +x /mnt && sudo chown -R $USER:$USER /mnt
 ```
@@ -54,8 +68,9 @@ $ sudo nano /etc/fuse.conf
 ```bash
 $ rclone config
 ```
-- I assume most use Google Drive so make sure you create your own client_id [INSTRUCTIONS HERE](https://rclone.org/drive/#making-your-own-client-id)
-- Watch Spaceinvador One video for more help [WATCH HERE](https://youtu.be/-b9Ow2iX2DQ)
+> I assume most use Google Drive so make sure you create your own client_id 
+
+- [INSTRUCTIONS HERE](https://rclone.org/drive/#making-your-own-client-id)
 
 ```bash
 [googledrive]
@@ -79,7 +94,8 @@ View this step in a video example
 - [How to Create An Rclone Remote](https://youtu.be/tVN3v8OHkeM)
 
 # Rclone Scripts
-### Do not run these scripts as sudo unless you are running everything as root or you will have permission problems
+### Do not run these scripts as sudo/root unless you are running everything as root or you will have permission problems
+### If you used either **sbcloud** or **sbcloud-docker** then these scripts should be on system PATH
 ## Rclone Mount Script
 ### This script mounts your cloud storage to your local machine
 
@@ -87,12 +103,12 @@ View this step in a video example
 
 > Configure the **rclone-mount** script. You only need to modify the "CONFIGURE" section
 
-> Type "ID USER" replace USER with your own. This gives you UserID and GroupID
+> Type "id $USER" This gives you UserID and GroupID >> PUID PGID
 
 ```bash
-$ cd /mnt/cloudstorage/rclone    # Change to rclone scripts directory
-$ nano rclone-mount.sh           # Edit the script
-$ sh rclone-mount.sh             # Run the script
+$ cd /mnt/sbcloud/rclone        # Change to rclone scripts directory
+$ nano rclone-mount             # Edit the script
+$ rclone-mount                  # Run the script
 ```
 ```bash
 # CONFIGURE
@@ -108,9 +124,9 @@ GROUPID="1000" # Your group ID
 > Configure the **rclone-unmount** script. You only need to modify the "CONFIGURE" section
 
 ```bash
-$ cd /mnt/cloudstorage/rclone   # Change to rclone scripts directory
-$ nano rclone-unmount.sh        # Edit the script
-$ sh rclone-unmount.sh          # Run the script
+$ cd /mnt/sbcloud/rclone        # Change to rclone scripts directory
+$ nano rclone-unmount           # Edit the script
+$ rclone-unmount                # Run the script
 ```
 ```bash
 # CONFIGURE
@@ -123,9 +139,9 @@ MEDIA="media" # Local share name NOTE: This is the directory you share to "Radar
 > Configure the **rclone-upload** script. You only need to modify the "CONFIGURE" section
 
 ```bash
-$ cd /mnt/cloudstorage/rclone   # Change to rclone scripts directory
-$ nano rclone-upload.sh         # Edit the script
-$ sh rclone-upload.sh           # Run the script
+$ cd /mnt/sbcloud/rclone        # Change to rclone scripts directory
+$ nano rclone-upload            # Edit the script
+$ rclone-upload                 # Run the script
 ```
 ```bash
 # CONFIGURE
@@ -162,33 +178,32 @@ View how to configure and run these scripts in a video example
 ### Manual Entry
 > Add each script to crontab: **rclone-mount, rclone-unmount, rclone-upload**
 
-> Example: 0 */1 * * * /mnt/cloudstorage/rclone/rclone-mount.sh > /mnt/logs/rclone-mount.log 2>&1
+> Example: 0 */1 * * * /mnt/sbcloud/rclone/rclone-mount > /mnt/logs/rclone-mount.log 2>&1
 ```
 $ crontab -e
 ```
 ### Using Provided Script
 
 ```
-$ cd /mnt/cloudstorage/extras
-$ sh add-to-cron.sh
+$ rclone-cron
 ```
 
 - [Crontab Calculator](https://corntab.com/)
 
-# Portainer
+# Docker & DockSTARTer
 
-You can install and configure Dockers very easily using Portainer
+I recommend if your just starting with Docker to use DockSTARTer as it will help you manage and get started in an easy way.
+
+You can install and configure Docker Containers very easily using Portainer.
+The **docker-manager** script can also help you get started.
 
 Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 - Letsencrypt
 - Nzbget
-- Medusa
-- Watcher3
-- Watchtower
+- Sonarr
+- Radarr
+- Ouroboros
 - Heimdall
-- Syncthing
-
-Advanced Users: You can use the provided script configure/modify it. *CloudStorage/extras/install-dockers.sh*
 
 ## Video Guides
 
@@ -204,13 +219,16 @@ Advanced Users: You can use the provided script configure/modify it. *CloudStora
 
 ### Installer Script
 
-- 3/13/2020 - v0.5 - Added Uninstaller
-- 3/05/2020 - v0.4 - Script factory resets and simple UI script
-- 3/04/2020 - v0.3 - Script modifies fuse.conf
-- 3/03/2020 - v0.2 - Added Watchtower
-- 3/02/2020 - v0.1 - Combine all install scripts into one
+- 3/16/2020 - v0.06 - Lite version added with name update
+- 3/13/2020 - v0.05 - Added Uninstaller
+- 3/05/2020 - v0.04 - Script factory resets and simple UI script
+- 3/04/2020 - v0.03 - Script modifies fuse.conf
+- 3/03/2020 - v0.02 - Added Watchtower
+- 3/02/2020 - v0.01 - Combine all install scripts into one
 
-## Acknowledgments
+## Credits
+This project makes use of, integrates with, or was inspired by the following projects:
 
-* BinsonBuzz for his super useful scripts
-* no5tyle for Discord notifications
+* [BinsonBuzz](https://github.com/BinsonBuzz/unraid_rclone_mount) Original Rclone Scripts
+* [no5tyle](https://github.com/no5tyle/UltraSeedbox-Scripts) for Discord notifications
+* [DockSTARTer](https://github.com/GhostWriters/DockSTARTer) Docker system manager
