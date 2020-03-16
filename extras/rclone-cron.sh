@@ -11,7 +11,13 @@ if [ `whoami` == root ]; then
 fi
 tee <<-EOF
 
----Rclone Scripts---
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RCLONE CRONTAB
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ This will add rclone scripts to crontab
+ To view your cronjobs type in terminal "crontab -l"
+ If you need to edit the schedule type in terminal "crontab -e"
+ Logs are located in "/mnt/logs"
 
 [1] Add Rclone scripts to crontab
 [2] Reset crontab
