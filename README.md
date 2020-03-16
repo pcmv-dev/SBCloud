@@ -28,7 +28,7 @@ This guide will help you get started and is by no means the best way of doing th
 ## Method 1 - SBCloud Lite with DockSTARTer
 > Install/Update script
 ```
-sudo apt update && sudo apt install curl git -y && curl -s https://raw.githubusercontent.com/SenpaiBox/SBCloud/master/install-scripts/sbcloud.sh | sudo bash
+sudo apt update && sudo apt install curl git -y && curl -fsSL http://get.sbcloud.tk | sudo bash
 ```
 > Install DockSTARTer
 
@@ -42,7 +42,7 @@ $ sudo reboot
 
 > Reboot afterwards
 ```
-sudo apt update && sudo apt install curl git -y && curl -s https://raw.githubusercontent.com/SenpaiBox/SBCloud/master/install-scripts/sbcloud-docker.sh | sudo bash
+sudo apt update && sudo apt install curl git -y && curl -fsSL http://getfull.sbcloud.tk | sudo bash
 ```
 ## Set Permissions
 
