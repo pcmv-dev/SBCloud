@@ -64,6 +64,11 @@ $ sudo nano /etc/fuse.conf
 
 # Configure Rclone
 
+The install script should set your permissions for your **rclone.conf** but if not run the following.
+If you don't set permissions rclone will complain that it is needs sudo/root to run, which we do not want.
+```
+$ sudo chown -R $USER:$USER $HOME/.config/rclone
+```
 > Create your rclone.conf
 ```bash
 $ rclone config
