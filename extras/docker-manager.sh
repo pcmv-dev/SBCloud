@@ -51,7 +51,7 @@ EOF
     docker start $(docker ps -a -q -f status=exited)
     currentuser="$(who | awk '{print $1}')"
     chown -R $currentuser:$currentuser $BACKUP_DIR 2>/dev/null
-    elif [ "$ANSWER" == "2" ]; then
+elif [ "$ANSWER" == "2" ]; then
 tee <<-EOF
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -71,12 +71,13 @@ Starting all containers...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
     echo 1>&2 "Starting all stopped containers..."
+    docker start $(docker ps -a -q -f status=created) >/dev/null 2>&1
     docker start $(docker ps -a -q -f status=exited) >/dev/null 2>&1
     docker ps | awk '{if(NR>1) print $NF}'
     sleep 3
     echo 1>&2 "All stopped containers have been restarted"
     exit
-    elif [ "$ANSWER" == "4" ]; then
+elif [ "$ANSWER" == "4" ]; then
     exit
 fi
 tee <<-EOF

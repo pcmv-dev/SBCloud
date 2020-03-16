@@ -61,10 +61,10 @@ if [ "$answer" == "1" ]; then
     read -p "Are you sure you want to Uninstall (y/n)? " answer </dev/tty
     if [ "$answer" != "${answer#[Yy]}" ]; then
         echo
-        echo "Uninstalling Rclone, Docker-CE, Docker-Compose, and CloudStorage scripts..."
+        echo "Uninstalling Rclone, Docker-CE, Docker-Compose, Docker containers, and CloudStorage scripts..."
         sleep 2
         docker stop $(docker ps -a -q) >/dev/null 2>&1
-        docker rm $(docker ps -a -q) >/dev/null 2>&1
+        docker stop $(docker ps -a -q) >/dev/null 2>&1 && docker system prune -a -f >/dev/null 2>&1
         apt purge docker-ce -y && apt purge mergerfs -y && apt autoremove -y
         rm -rf $localbin/docker-compose /usr/bin/rclone /mnt/cloudstorage /mnt/logs 2>/dev/null
         rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/install-cloudstorage 2>/dev/null
@@ -211,26 +211,6 @@ else
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v portainer_data:/data \
     portainer/portainer
-fi
-
-tee <<-EOF
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Install Watchtower...
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-EOF
-sleep 2
-watchtowercheck="watchtower"
-if docker ps -a --format '{{.Names}}' | grep -Eq "^${watchtowercheck}\$"; then
-    echo
-    echo "WatchTower already installed..."
-else
-    echo "Installing WatchTower..."
-    docker run -d \
-    --name=watchtower \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    containrrr/watchtower \
-    --cleanup --schedule "0 */6 * * *"
 fi
 
 tee <<-EOF
