@@ -24,11 +24,14 @@ sleep 3
 tee <<-EOF
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INFO: Docker, Docker-Compose, Rclone-Beta, MergerFS, and SBCloud scripts
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [1] Install/Update
-[2] Reinstall - Remove and reset
-[3] Uninstall - Remove all
+[2] Update - Rclone Scripts Only
+[3] Reinstall - Remove and reset
+[4] Uninstall - Remove all
 
-[4] Exit
+[5] Exit
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
 
@@ -38,11 +41,36 @@ installscripts="/mnt/sbcloud/install-scripts"
 extras="/mnt/sbcloud/extras"
 localbin="/usr/local/bin"
 currentuser="$(who | awk '{print $1}')"
+github="https://raw.githubusercontent.com/SenpaiBox/SBCloud/master"
 
 read -p "Type a Number | Press [ENTER]: " answer </dev/tty
 if [ "$answer" == "1" ]; then
     echo "Continue with install.."
     elif [ "$answer" == "2" ]; then
+    echo
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Downloading and installing Rclone scripts..."
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo
+    mkdir -p $rclonescripts
+    read -p "Overwrite/Update current scripts (y/n)? " answer </dev/tty
+    if [ "$answer" != "${answer#[Yy]}" ]; then
+        rm -rf $rclonescripts/*
+        rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload 2>/dev/null
+        curl -fsSL $github/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount 2>/dev/null
+        curl -fsSL $github/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount 2>/dev/null
+        curl -fsSL $github/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload 2>/dev/null
+        chmod -R 755 /mnt 2>/dev/null
+        chown -R ${currentuser}:${currentuser} /mnt 2>/dev/null
+        echo "Applying hardlinks to rclone-mount, rclone-unmount, rclone-upload..."
+        ln $rclonescripts/rclone-mount $rclonescripts/rclone-unmount $rclonescripts/rclone-upload $localbin 2>/dev/null
+    fi
+    echo
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "Rclone Scripts updated"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    exit
+    elif [ "$answer" == "3" ]; then
     echo
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "Reinstall/Reset..."
@@ -53,7 +81,7 @@ if [ "$answer" == "1" ]; then
     apt purge docker-ce -y && apt purge mergerfs -y && apt autoremove -y
     rm -rf $localbin/docker-compose /usr/bin/rclone /mnt/sbcloud /mnt/logs 2>/dev/null
     rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/sbcloud-docker 2>/dev/null
-    elif [ "$answer" == "3" ]; then
+    elif [ "$answer" == "4" ]; then
     echo
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "Uninstall/Remove all..."
@@ -76,7 +104,7 @@ if [ "$answer" == "1" ]; then
     else
         exit
     fi
-    elif [ "$answer" == "4" ]; then
+    elif [ "$answer" == "5" ]; then
     exit
 fi
 
@@ -223,36 +251,29 @@ Setup SBCloud...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
 sleep 2
-github="https://raw.githubusercontent.com/SenpaiBox/SBCloud/master"
-mkdir -p $sbcloud $rclonescripts $installscripts $extras
+mkdir -p $sbcloud $installscripts $extras
 if [ -f "$sbcloud/.update" ]; then
     echo
     echo "SBCloud scripts already installed"
     read -p "Overwrite/Update current scripts (y/n)? " answer </dev/tty
     if [ "$answer" != "${answer#[Yy]}" ]; then
-        rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/sbcloud-docker 2>/dev/null
-        rm -rf $rclonescripts/* $installscripts/* $extras/* 2>/dev/null
-        curl -fsSL $github/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount 2>/dev/null
-        curl -fsSL $github/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount 2>/dev/null
-        curl -fsSL $github/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload 2>/dev/null
+        rm $localbin/docker-manager $localbin/rclone-cron $localbin/sbcloud-docker 2>/dev/null
+        rm -rf $installscripts/* $extras/* 2>/dev/null
         curl -fsSL $github/install-scripts/sbcloud-docker.sh -o $installscripts/sbcloud-docker 2>/dev/null
         curl -fsSL $github/extras/rclone-cron.sh -o $extras/rclone-cron 2>/dev/null
         curl -fsSL $github/extras/docker-manager.sh -o $extras/docker-manager 2>/dev/null
         curl -fsSL $github/extras/docker-memory-tweak.sh -o $extras/docker-memory-tweak.sh 2>/dev/null
-        echo "Applying hardlinks to rclone-mount, rclone-unmount, rclone-upload..."
-        ln $rclonescripts/rclone-mount $rclonescripts/rclone-unmount $rclonescripts/rclone-upload $localbin 2>/dev/null
         echo "Applying hardlinks to docker-manager, rclone-cron"
         ln $extras/docker-manager $extras/rclone-cron $localbin 2>/dev/null
         echo "Applying hardlinks to sbcloud-docker"
         ln $installscripts/sbcloud-docker $localbin 2>/dev/null
         echo
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        echo "Scripts have been overwritten!"
-        echo "You need to reconfigure rclone-mount, rclone-unmount, and rclone-upload"
+        echo "SBCloud scripts updated!"
     fi
 else
     echo
-    echo "Downloading and installing Rclone scripts..."
+    echo "Downloading and installing SBCloud Scripts..."
     sleep 2
     touch $sbcloud/.update
     curl -fsSL $github/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount 2>/dev/null
