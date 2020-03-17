@@ -11,7 +11,7 @@ if [ `whoami` != root ]; then
 fi
 tee <<-NOTICE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INSTALLER: SBCloud v0.06-Lite
+INSTALLER: SBCloud v0.07-Lite
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DISCLAIMER:
 I am not responsible for anything that could go wrong.
