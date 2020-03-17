@@ -224,6 +224,7 @@ Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 
 ### Installer Script
 
+- 3/17/2020 - v0.07 - Update Rclone scripts specificly
 - 3/16/2020 - v0.06 - Lite version added with name update
 - 3/13/2020 - v0.05 - Added Uninstaller
 - 3/05/2020 - v0.04 - Script factory resets and simple UI script
