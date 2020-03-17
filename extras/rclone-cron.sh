@@ -31,9 +31,9 @@ if [ "$typed" == "1" ]; then
     read -p "Enter how long to wait between uploads [1-59]: " minute </dev/tty
     (crontab -l 2>/dev/null; echo "") | crontab -
     (crontab -l 2>/dev/null; echo "# Rclone scripts") | crontab -
-    (crontab -l 2>/dev/null; echo "*/${minute} * * * * /mnt/cloudstorage/rclone/rclone-upload 2>&1") | crontab -
-    (crontab -l 2>/dev/null; echo "@hourly /mnt/cloudstorage/rclone/rclone-mount > /mnt/logs/${remote}/rclone-mount.log 2>&1") | crontab -
-    (crontab -l 2>/dev/null; echo "@reboot /mnt/cloudstorage/rclone/rclone-unmount > /mnt/logs/${remote}/rclone-unmount.log 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "*/${minute} * * * * /mnt/sbcloud/rclone/rclone-upload 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "@hourly /mnt/sbcloud/rclone/rclone-mount > /mnt/logs/${remote}/rclone-mount.log 2>&1") | crontab -
+    (crontab -l 2>/dev/null; echo "@reboot /mnt/sbcloud/rclone/rclone-unmount > /mnt/logs/${remote}/rclone-unmount.log 2>&1") | crontab -
     echo
     crontab -l
     /etc/init.d/cron reload
