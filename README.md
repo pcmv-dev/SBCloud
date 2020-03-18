@@ -6,7 +6,7 @@
 </center>
 
 # Info
-Automate uploading to your cloud storage. This uses "Mergerfs" for compatiability with Sonarr, Radarr, and streaming to Plex/Emby. Automate uploading from a local or remote machine running Ubuntu 18.04 or Debian 9/10.
+Automate uploading to your cloud storage. This uses "Mergerfs" for compatibility with Sonarr, Radarr, and streaming to Plex/Emby. Automate uploading from a local or remote machine running Ubuntu 18.04 or Debian 9/10.
 
 # About
 This guide will help you get started and is by no means the best way of doing things... this is what works for me. I created this repo for my own reference.
