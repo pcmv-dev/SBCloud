@@ -199,6 +199,7 @@ Checking if Portainer is installed...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
 sleep 1
+curl -fsSL https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Template/template.json -o /mnt/appdata/portainer/templates.json 2>/dev/null
 portainercheck="portainer"
 if  docker ps -a --format '{{.Names}}' | grep -Eq "^${portainercheck}\$"; then
     echo
@@ -210,6 +211,7 @@ else
     docker run -d \
     -p 8000:8000 -p 9000:9000 \
     --name=portainer --restart=unless-stopped --network=proxynet \
+    -v /mnt/appdata/portainer/templates.json:/templates.json \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v portainer_data:/data \
     portainer/portainer
