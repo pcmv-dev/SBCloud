@@ -92,8 +92,8 @@ RCLONE_MOVE() {
     --user-agent=$UPLOADREMOTE \
     --log-file=$LOGFILE \
     --stats=9999m \
-    --buffer-size 64M \
-    --drive-chunk-size 64M \
+    --buffer-size 512M \
+    --drive-chunk-size 512M \
     --use-mmap \
     --tpslimit 4 \
     --checkers 4 \
