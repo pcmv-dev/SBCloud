@@ -122,18 +122,22 @@ if [ "$DISCORD_WEBHOOK_URL" != "" ]; then
     RCLONE_SANI_COMMAND="$(echo $RCLONE_COMMAND | sed 's/\x1b\[[0-9;]*[a-zA-Z]//g')" # Remove all escape sequences
     
     # Notifications assume following rclone ouput:
-    # Transferred: 0 / 0 Bytes, -, 0 Bytes/s, ETA - Errors: 0 Checks: 0 / 0, - Transferred: 0 / 0, - Elapsed time: 0.0s
+    # Transferred: 0 / 0 Bytes, -, 0 Bytes/s, ETA
+    # Checks: 0 / 0
+    # Deleted: 0
+    # Transferred: 0 / 0,
+    # Elapsed time: 0.0s
     
     TRANSFERRED_AMOUNT=${RCLONE_SANI_COMMAND#*Transferred: }
     TRANSFERRED_AMOUNT=${TRANSFERRED_AMOUNT%% /*}
     
     SEND_NOTIFICATION() {
         OUTPUT_TRANSFERRED_MAIN=${RCLONE_SANI_COMMAND#*Transferred: }
-        OUTPUT_TRANSFERRED_MAIN=${OUTPUT_TRANSFERRED_MAIN% Errors*}
-        OUTPUT_ERRORS=${RCLONE_SANI_COMMAND#*Errors: }
-        OUTPUT_ERRORS=${OUTPUT_ERRORS% Checks*}
+        OUTPUT_TRANSFERRED_MAIN=${OUTPUT_TRANSFERRED_MAIN% Checks*}
         OUTPUT_CHECKS=${RCLONE_SANI_COMMAND#*Checks: }
-        OUTPUT_CHECKS=${OUTPUT_CHECKS% Transferred*}
+        OUTPUT_CHECKS=${OUTPUT_CHECKS% Deleted*}
+        OUTPUT_DELETED=${RCLONE_SANI_COMMAND#*Deleted: }
+        OUTPUT_DELETED=${OUTPUT_DELETED% Transferred*}
         OUTPUT_TRANSFERRED=${RCLONE_SANI_COMMAND##*Transferred: }
         OUTPUT_TRANSFERRED=${OUTPUT_TRANSFERRED% Elapsed*}
         OUTPUT_ELAPSED=${RCLONE_SANI_COMMAND##*Elapsed time: }
@@ -152,12 +156,12 @@ if [ "$DISCORD_WEBHOOK_URL" != "" ]; then
                             "value": "'"$OUTPUT_TRANSFERRED_MAIN"'"
                         },
                         {
-                            "name": "Errors",
-                            "value": "'"$OUTPUT_ERRORS"'"
-                        },
-                        {
                             "name": "Checks",
                             "value": "'"$OUTPUT_CHECKS"'"
+                        },
+                        {
+                            "name": "Deleted",
+                            "value": "'"$OUTPUT_DELETED"'"
                         },
                         {
                             "name": "Transferred",
