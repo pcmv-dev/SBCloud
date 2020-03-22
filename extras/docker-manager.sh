@@ -20,7 +20,7 @@ tee <<-EOF
 DOCKER MANAGER v0.02
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 INFO: Helps manage core containers
-CONTAINERS: Portainer, Ouroboros, Letsencrypt, Heimdall, Sonarr, Radarr, Nzbget
+CONTAINERS: Portainer, Watchtower, Letsencrypt, Heimdall, Sonarr, Radarr, Nzbget
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 [1] Install Containers
 [2] Backup Docker Containers appdata
@@ -219,28 +219,29 @@ fi
 tee <<-EOF
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Install Ouroboros...
+Install Watchtower...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
 sleep 1
-ouroboroscheck="ouroboros"
-if docker ps -a --format '{{.Names}}' | grep -Eq "^${ouroboroscheck}\$"; then
+watchtowercheck="watchtower"
+if docker ps -a --format '{{.Names}}' | grep -Eq "^${watchtowercheck}\$"; then
     echo
-    echo "ouroboros already installed..."
+    echo "Watchtower already installed..."
 else
     echo
-    echo "Installing Ouroboros..."
+    echo "Installing Watchtower..."
     docker run -d \
-    --name=ouroboros \
+    --name=watchtower \
     --restart=unless-stopped \
-    -e TZ=America/Chicago \
-    -e LOG_LEVEL=info \
-    -e NOTIFIERS="" \
-    -e CRON="0 */6 * * *" \
-    -e CLEANUP=true \
+    #-e WATCHTOWER_NOTIFICATIONS=slack \
+    #-e WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL="" \
+    #-e WATCHTOWER_NOTIFICATION_SLACK_CHANNEL=#my-custom-channel \
+    #-e WATCHTOWER_NOTIFICATION_SLACK_ICON_URL=<icon url> \
+    -e WATCHTOWER_CLEANUP=true \
+    -e WATCHTOWER_SCHEDULE="0 */6 * * *" \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /etc/localtime:/etc/localtime:ro \
-    pyouroboros/ouroboros
+    containrrr/watchtower
 fi
 tee <<-EOF
 
