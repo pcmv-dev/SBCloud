@@ -233,10 +233,10 @@ else
     docker run -d \
     --name=watchtower \
     --restart=unless-stopped \
-    #-e WATCHTOWER_NOTIFICATIONS=slack \
-    #-e WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL="" \
-    #-e WATCHTOWER_NOTIFICATION_SLACK_CHANNEL=#my-custom-channel \
-    #-e WATCHTOWER_NOTIFICATION_SLACK_ICON_URL=<icon url> \
+    -e WATCHTOWER_NOTIFICATIONS="" \
+    -e WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL="" \
+    -e WATCHTOWER_NOTIFICATION_SLACK_CHANNEL="" \
+    -e WATCHTOWER_NOTIFICATION_SLACK_ICON_URL="" \
     -e WATCHTOWER_CLEANUP=true \
     -e WATCHTOWER_SCHEDULE="0 */6 * * *" \
     -v /var/run/docker.sock:/var/run/docker.sock \
