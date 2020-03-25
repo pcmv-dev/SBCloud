@@ -11,7 +11,7 @@ if [ `whoami` != root ]; then
 fi
 tee <<-NOTICE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INSTALLER: SBCloud-Docker v0.07-Full
+INSTALLER: SBCloud-Docker v0.07.1-Full
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DISCLAIMER:
 I am not responsible for anything that could go wrong.
@@ -60,8 +60,8 @@ if [ "$answer" == "1" ]; then
         curl -fsSL $github/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount 2>/dev/null
         curl -fsSL $github/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount 2>/dev/null
         curl -fsSL $github/rclone/rclone-upload.sh -o $rclonescripts/rclone-upload 2>/dev/null
-        chmod -R 755 /mnt 2>/dev/null
-        chown -R ${currentuser}:${currentuser} /mnt 2>/dev/null
+        chmod -R 755 $sbcloud 2>/dev/null
+        chown -R ${currentuser}:${currentuser} $sbcloud 2>/dev/null
         echo "Applying hardlinks to rclone-mount, rclone-unmount, rclone-upload..."
         ln $rclonescripts/rclone-mount $rclonescripts/rclone-unmount $rclonescripts/rclone-upload $localbin 2>/dev/null
     fi
@@ -79,7 +79,7 @@ if [ "$answer" == "1" ]; then
     sleep 2
     docker stop $(docker ps -a -q) >/dev/null 2>&1
     apt purge docker-ce -y && apt purge mergerfs -y && apt autoremove -y
-    rm -rf $localbin/docker-compose /usr/bin/rclone /mnt/sbcloud /mnt/logs 2>/dev/null
+    rm -rf $localbin/docker-compose /usr/bin/rclone $sbcloud /mnt/logs 2>/dev/null
     rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/sbcloud-docker 2>/dev/null
     elif [ "$answer" == "4" ]; then
     echo
@@ -95,7 +95,7 @@ if [ "$answer" == "1" ]; then
         docker stop $(docker ps -a -q) >/dev/null 2>&1
         docker stop $(docker ps -a -q) >/dev/null 2>&1 && docker system prune -a -f >/dev/null 2>&1
         apt purge docker-ce -y && apt purge mergerfs -y && apt autoremove -y
-        rm -rf $localbin/docker-compose /usr/bin/rclone /mnt/sbcloud /mnt/logs 2>/dev/null
+        rm -rf $localbin/docker-compose /usr/bin/rclone $sbcloud /mnt/logs 2>/dev/null
         rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/sbcloud-docker 2>/dev/null
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo "UNINSTALL COMPLETE"
@@ -275,6 +275,7 @@ else
     echo
     echo "Downloading and installing SBCloud Scripts..."
     sleep 2
+    mkdir -p $sbcloud $installscripts $extras $rclonescripts
     touch $sbcloud/.update
     curl -fsSL $github/rclone/rclone-mount.sh -o $rclonescripts/rclone-mount 2>/dev/null
     curl -fsSL $github/rclone/rclone-unmount.sh -o $rclonescripts/rclone-unmount 2>/dev/null
@@ -292,8 +293,8 @@ else
 fi
 
 # Apply permissions
-chmod -R 755 /mnt 2>/dev/null
-chown -R ${currentuser}:${currentuser} /mnt 2>/dev/null
+chmod -R 755 $sbcloud 2>/dev/null
+chown -R ${currentuser}:${currentuser} $sbcloud 2>/dev/null
 chown -R ${currentuser}:${currentuser} $HOME/.config/rclone 2>/dev/null
 
 tee <<-EOF
