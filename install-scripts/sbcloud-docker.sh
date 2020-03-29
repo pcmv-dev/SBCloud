@@ -11,7 +11,7 @@ if [ `whoami` != root ]; then
 fi
 tee <<-NOTICE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INSTALLER: SBCloud-Docker v0.07.1-Full
+INSTALLER: SBCloud-Docker v0.07.2-Full
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DISCLAIMER:
 I am not responsible for anything that could go wrong.
@@ -114,18 +114,23 @@ tee <<-EOF
 Installing prerequesites...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
-apt update && apt install curl git p7zip-full fuse man -y
+apt update && apt upgrade -y && apt install curl git p7zip-full fuse man -y
 
 tee <<-EOF
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Installing Rclone...
+Installing Rclone-Beta...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
 sleep 2
 if [ -x "$(command -v rclone)" ]; then
     echo
     echo "Rclone already installed..."
+    read -p "Install/Update anyway (y/n)? " answer </dev/tty
+    if [ "$answer" != "${answer#[Yy]}" ]; then
+        rm -rf /usr/bin/rclone &&
+        curl https://rclone.org/install.sh | bash -s beta
+    fi
 else
     curl https://rclone.org/install.sh |  bash -s beta
     touch $HOME/.config/rclone/rclone.conf
@@ -220,28 +225,6 @@ if [ -f "$dockercompose" ]; then
 else
     curl -L $compose_url -o $dockercompose
     chmod +x $dockercompose
-fi
-
-tee <<-EOF
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Install Portainer...
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-EOF
-sleep 2
-portainercheck="portainer"
-if  docker ps -a --format '{{.Names}}' | grep -Eq "^${portainercheck}\$"; then
-    echo
-    echo "Portainer already installed..."
-else
-    echo "Installing Portainer..."
-    docker volume create portainer_data
-    docker run -d \
-    -p 8000:8000 -p 9000:9000 \
-    --name=portainer --restart=always \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -v portainer_data:/data \
-    portainer/portainer
 fi
 
 tee <<-EOF

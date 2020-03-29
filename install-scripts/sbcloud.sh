@@ -11,7 +11,7 @@ if [ `whoami` != root ]; then
 fi
 tee <<-NOTICE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INSTALLER: SBCloud v0.07.1-Lite
+INSTALLER: SBCloud v0.07.2-Lite
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DISCLAIMER:
 I am not responsible for anything that could go wrong.
@@ -111,18 +111,23 @@ tee <<-EOF
 Installing prerequesites...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
-apt update && apt install curl git p7zip-full fuse man -y
+apt update && apt upgrade -y && apt install curl git p7zip-full fuse man -y 
 
 tee <<-EOF
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Installing Rclone...
+Installing Rclone-Beta...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
 sleep 2
 if [ -x "$(command -v rclone)" ]; then
     echo
     echo "Rclone already installed..."
+    read -p "Install/Update anyway (y/n)? " answer </dev/tty
+    if [ "$answer" != "${answer#[Yy]}" ]; then
+        rm -rf /usr/bin/rclone
+        curl https://rclone.org/install.sh | bash -s beta
+    fi
 else
     curl https://rclone.org/install.sh |  bash -s beta
     touch $HOME/.config/rclone/rclone.conf
