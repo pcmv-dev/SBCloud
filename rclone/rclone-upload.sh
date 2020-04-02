@@ -28,7 +28,7 @@ DISCORD_NAME_OVERRIDE="RCLONE" # The bot user name
 #########################################
 
 # Make sure we are not running as root
-if [ `whoami` == root ]; then
+if [[ `whoami` == root ]]; then
     echo "Do not run as sudo/root!"
     exit
 fi
@@ -47,7 +47,7 @@ LOGFILE="$MEDIAROOT/logs/$REMOTE/rclone-upload.log" # Log file for upload
 
 # Check if script is already running
 echo " ==== STARTING UPLOAD SCRIPT ===="
-if [ -f "$LOCKFILE" ]; then
+if [[ -f "$LOCKFILE" ]]; then
     echo "$(date "+%d/%m/%Y %T") WARN: Upload already in progress! Script will exit..."
     exit
 else
@@ -55,7 +55,7 @@ else
 fi
 
 # Check if Rclone/Mergerfs mount created
-if [ -n "$(ls -A $MERGERFSMOUNT 2>/dev/null)" ]; then
+if [[ -n "$(ls -A $MERGERFSMOUNT 2>/dev/null)" ]]; then
     echo "$(date "+%d/%m/%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted, proceeding with upload"
     rm -f $LOGFILE 2>/dev/null
 else
@@ -65,11 +65,11 @@ else
 fi
 
 # Rotating serviceaccount.json file if using Service Accounts
-if [ $USESERVICEACCOUNT == 'Y' ]; then
+if [[ $USESERVICEACCOUNT == 'Y' ]]; then
     cd $APPDATA
     COUNTERNUM=$(find -name 'counter*' | cut -c 11,12)
     CONTERCHECK="1"
-    if [ "$COUNTERNUM" -ge "$CONTERCHECK" ];then
+    if [[ "$COUNTERNUM" -ge "$CONTERCHECK" ]];then
         echo "$(date "+%d/%m/%Y %T") INFO: Counter file found for ${UPLOADREMOTE}"
     else
         echo "$(date "+%d/%m/%Y %T") INFO: No counter file found for ${UPLOADREMOTE}. Creating counter_1"
@@ -117,7 +117,7 @@ RCLONE_MOVE() {
 }
 RCLONE_MOVE
 
-if [ "$DISCORD_WEBHOOK_URL" != "" ]; then
+if [[ "$DISCORD_WEBHOOK_URL" != "" ]]; then
     
     RCLONE_SANI_COMMAND="$(echo $RCLONE_COMMAND | sed 's/\x1b\[[0-9;]*[a-zA-Z]//g')" # Remove all escape sequences
     
@@ -182,14 +182,14 @@ if [ "$DISCORD_WEBHOOK_URL" != "" ]; then
         curl -H "Content-Type: application/json" -d "$NOTIFICATION_DATA" $DISCORD_WEBHOOK_URL
     }
     
-    if [ "$TRANSFERRED_AMOUNT" != "0" ]; then
+    if [[ "$TRANSFERRED_AMOUNT" != "0" ]]; then
         SEND_NOTIFICATION
     fi
     
 fi
 
 # Update Service Account counter
-if [  $USESERVICEACCOUNT == 'Y' ]; then
+if [[  $USESERVICEACCOUNT == 'Y' ]]; then
     if [ "$COUNTERNUM" == "$SERVICEACCOUNTNUM" ];then
         rm $APPDATA/counter_*
         touch $APPDATA/counter_1
