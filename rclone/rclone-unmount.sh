@@ -30,8 +30,8 @@ MERGERFSMOUNT="$MEDIAROOT/$MEDIA" # Media share location
 echo "==== STARTING UNMOUNT SCRIPT ===="
 if [ -f "$APPDATA/mount.lock" ]; then
     echo "$(date "+%d/%m/%Y %T") INFO: Rclone mount detected"
-    fusermount -uz $RCLONEMOUNT 2>/dev/null
-    fusermount -uz $MERGERFSMOUNT 2>/dev/null
+    fusermount -uz $RCLONEMOUNT && rm -rf $RCLONEMOUNT 2>/dev/null
+    fusermount -uz $MERGERFSMOUNT && rm -rf $MERGERFSMOUNT 2>/dev/null
     rm -f $APPDATA/mount.lock 2>/dev/null
 else
     echo "$(date "+%d/%m/%Y %T") INFO: Rclone mount exited properly"
@@ -46,18 +46,6 @@ else
 fi
 
 # Remove empty folders
-if [ -n "$(ls -A $MERGERFSMOUNT 2>/dev/null)" ]; then
-    echo "$(date "+%d/%m/%Y %T") ERROR: Your Cloud Drive failed to unmount!"
-else
-    echo "$(date "+%d/%m/%Y %T") INFO: Removing folders in Cloud Drive"
-    rmdir $MERGERFSMOUNT 2>/dev/null
-fi
-if [ -n "$(ls -A $RCLONEMOUNT 2>/dev/null)" ]; then
-    echo "$(date "+%d/%m/%Y %T") WARN: Rclone mount is not empty!"
-else
-    echo "$(date "+%d/%m/%Y %T") INFO: Removing Rclone mount empty folder"
-    rmdir $RCLONEMOUNT 2>/dev/null
-fi
 if [ -n "$(ls -A $RCLONEUPLOAD 2>/dev/null)" ]; then
     echo "$(date "+%d/%m/%Y %T") INFO: There are files pending upload"
 else
