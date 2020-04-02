@@ -3,7 +3,7 @@
 ######################
 #### Mount Script ####
 ######################
-#### Version 0.05 ####
+#### Version 0.06 ####
 ######################
 
 # CONFIGURE
@@ -17,7 +17,7 @@ GROUPID="1000" # Your group ID
 #########################################
 
 # Make sure we are not running as root
-if [ `whoami` == root ]; then
+if [[ `whoami` == root ]]; then
     echo "Do not run as sudo/root!"
     exit
 fi
@@ -38,7 +38,7 @@ mkdir -p $APPDATA $RCLONEUPLOAD $RCLONEMOUNT $MERGERFSMOUNT
 # Check if script is already running
 echo "==== STARTING MOUNT SCRIPT ===="
 echo "$(date "+%d/%m/%Y %T") INFO: Checking if script is already running"
-if [ -f "$LOCKFILE" ]; then
+if [[ -f "$LOCKFILE" ]]; then
     echo "SUCCESS: $(date "+%d/%m/%Y %T") - Check Passed! Your Cloud Drive is already mounted"
     exit
 else
@@ -46,7 +46,7 @@ else
 fi
 
 # Check if rclone mount already created
-if [ -n "$(ls -A $RCLONEMOUNT 2>/dev/null)" ]; then
+if [[ -n "$(ls -A $RCLONEMOUNT 2>/dev/null)" ]]; then
     echo "$(date "+%d/%m/%Y %T") WARN: Rclone is mounted"
 else
     echo "$(date "+%d/%m/%Y %T") INFO: Mounting Rclone, please wait..."
@@ -57,7 +57,8 @@ else
     --log-level ERROR \
     --allow-other \
     --dir-cache-time 1000h \
-    --buffer-size 64M \
+    --buffer-size 256M \
+    --drive-chunk-size 512M \
     --vfs-read-chunk-size 128M \
     --vfs-read-chunk-size-limit off \
     --vfs-cache-mode writes \
@@ -67,7 +68,7 @@ else
     echo "$(date "+%d/%m/%Y %T") INFO: Mount in progress please wait..."
     sleep 5
     echo "$(date "+%d/%m/%Y %T") INFO: Proceeding..."
-    if [ "$(ls -A $RCLONEMOUNT 2>/dev/null)" ]; then
+    if [[ "$(ls -A $RCLONEMOUNT 2>/dev/null)" ]]; then
         echo "$(date "+%d/%m/%Y %T") SUCCESS: Check Passed! remote mounted"
     else
         echo "$(date "+%d/%m/%Y %T") ERROR: Check Failed! please check your configuration"
@@ -78,11 +79,11 @@ else
 fi
 
 # Check media share mount
-if [ -n "$(ls -A $MERGERFSMOUNT 2>/dev/null)" ]; then
+if [[ -n "$(ls -A $MERGERFSMOUNT 2>/dev/null)" ]]; then
     echo "$(date "+%d/%m/%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted"
 else
     # Check if mergerfs is installed
-    if [ -x "$(command -v mergerfs)" ]; then
+    if [[ -x "$(command -v mergerfs)" ]]; then
         echo "$(date "+%d/%m/%Y %T") INFO: Mergerfs found, Proceeding..."
     else
         echo "$(date "+%d/%m/%Y %T") ERROR: Please install Mergerfs first"
@@ -96,7 +97,7 @@ else
     mergerfs $RCLONEUPLOAD:$RCLONEMOUNT $MERGERFSMOUNT -o $MERGERFSOPTIONS
     
     # Check if mergerfs mounted correctly
-    if [ -n "$(ls -A $MERGERFSMOUNT 2>/dev/null)" ]; then
+    if [[ -n "$(ls -A $MERGERFSMOUNT 2>/dev/null)" ]]; then
         echo "$(date "+%d/%m/%Y %T") SUCCESS: Check Passed! Your Cloud Drive is mounted"
         echo "==== REMOTE DIRECTORIES ===="
         rclone lsd $REMOTE: --config $RCLONECONF

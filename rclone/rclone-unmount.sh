@@ -3,7 +3,7 @@
 ########################
 #### Unmount Script ####
 ########################
-####  Version 0.05  ####
+####  Version 0.06  ####
 ########################
 
 # CONFIGURE
@@ -14,7 +14,7 @@ MEDIA="media" # Local share name NOTE: This is the directory you share to "Radar
 #########################################
 
 # Make sure we are not running as root
-if [ `whoami` == root ]; then
+if [[ `whoami` == root ]]; then
     echo "Do not run as sudo/root!"
     exit
 fi
@@ -28,7 +28,7 @@ MERGERFSMOUNT="$MEDIAROOT/$MEDIA" # Media share location
 
 # Unmount Rclone/Mergerfs mount and remove lock file
 echo "==== STARTING UNMOUNT SCRIPT ===="
-if [ -f "$APPDATA/mount.lock" ]; then
+if [[ -f "$APPDATA/mount.lock" ]]; then
     echo "$(date "+%d/%m/%Y %T") INFO: Rclone mount detected"
     fusermount -uz $RCLONEMOUNT && rm -rf $RCLONEMOUNT 2>/dev/null
     fusermount -uz $MERGERFSMOUNT && rm -rf $MERGERFSMOUNT 2>/dev/null
@@ -38,7 +38,7 @@ else
 fi
 
 # Remove upload lock file
-if [ -f "$APPDATA/upload.lock" ]; then
+if [[ -f "$APPDATA/upload.lock" ]]; then
     echo "$(date "+%d/%m/%Y %T") INFO: Rclone upload detected"
     rm -f $APPDATA/upload.lock 2>/dev/null
 else
@@ -46,7 +46,7 @@ else
 fi
 
 # Remove empty folders
-if [ -n "$(ls -A $RCLONEUPLOAD 2>/dev/null)" ]; then
+if [[ -n "$(ls -A $RCLONEUPLOAD 2>/dev/null)" ]]; then
     echo "$(date "+%d/%m/%Y %T") INFO: There are files pending upload"
 else
     echo "$(date "+%d/%m/%Y %T") INFO: Removing Mergerfs local files folder"
