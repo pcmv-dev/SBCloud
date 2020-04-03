@@ -11,7 +11,7 @@ if [ `whoami` != root ]; then
 fi
 tee <<-NOTICE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INSTALLER: SBCloud-Docker v0.07.2-Full
+INSTALLER: SBCloud-Docker v0.07.3-Full
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DISCLAIMER:
 I am not responsible for anything that could go wrong.
@@ -78,7 +78,7 @@ if [ "$answer" == "1" ]; then
     echo "Uninstalling Rclone, Docker-CE, Docker-Compose, and resetting SBCloud scripts..."
     sleep 2
     docker stop $(docker ps -a -q) >/dev/null 2>&1
-    apt purge docker-ce -y && apt purge mergerfs -y && apt autoremove -y
+    apt-get purge docker-ce -y && apt-get purge mergerfs -y && apt-get autoremove -y
     rm -rf $localbin/docker-compose /usr/bin/rclone $sbcloud /mnt/logs 2>/dev/null
     rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/sbcloud-docker 2>/dev/null
     elif [ "$answer" == "4" ]; then
@@ -94,8 +94,8 @@ if [ "$answer" == "1" ]; then
         sleep 2
         docker stop $(docker ps -a -q) >/dev/null 2>&1
         docker stop $(docker ps -a -q) >/dev/null 2>&1 && docker system prune -a -f >/dev/null 2>&1
-        apt purge docker-ce -y && apt purge mergerfs -y && apt autoremove -y
-        rm -rf $localbin/docker-compose /usr/bin/rclone $sbcloud /mnt/logs 2>/dev/null
+        apt-get purge docker-ce -y && apt-get purge mergerfs -y && apt-get autoremove -y
+        rm -rf $localbin/docker-compose /usr/bin/rclone $sbcloud 2>/dev/null
         rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/sbcloud-docker 2>/dev/null
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo "UNINSTALL COMPLETE"
@@ -114,7 +114,7 @@ tee <<-EOF
 Installing prerequesites...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
-apt update && apt upgrade -y && apt install curl git p7zip-full fuse man -y
+apt-get update && apt-get -y upgrade && apt-get -y install curl git p7zip-full fuse man-db
 
 tee <<-EOF
 
@@ -277,6 +277,7 @@ fi
 
 # Apply permissions
 chmod -R 755 $sbcloud 2>/dev/null
+chmod ${currentuser}:${currentuser} /mnt 2>/dev/null
 chown -R ${currentuser}:${currentuser} $sbcloud 2>/dev/null
 chown -R ${currentuser}:${currentuser} $HOME/.config/rclone 2>/dev/null
 

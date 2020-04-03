@@ -1,7 +1,6 @@
 ==== Run As A Service ====
 
 This is not finished yet but you can use this as a hint. You put both rclone.service and mergerfs.service
-into a systemd folder either in home folder ~/.config/systemd/user or /etc/systemd/system. You then
-put the upload script in a cronjob.
+into a systemd folder /etc/systemd/system. You then put the upload script in a cronjob.
 
 Things to note about this is that you have to use absolute paths for excutables

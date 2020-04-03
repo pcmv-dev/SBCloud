@@ -11,7 +11,7 @@ if [ `whoami` != root ]; then
 fi
 tee <<-NOTICE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INSTALLER: SBCloud v0.07.2-Lite
+INSTALLER: SBCloud v0.07.3-Lite
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DISCLAIMER:
 I am not responsible for anything that could go wrong.
@@ -77,8 +77,8 @@ if [ "$answer" == "1" ]; then
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "Uninstalling Rclone, MergerFS, and resetting SBCloud scripts..."
     sleep 2
-    apt purge mergerfs -y && apt autoremove -y
-    rm -rf $localbin/docker-compose /usr/bin/rclone $sbcloud /mnt/logs 2>/dev/null
+    apt-get purge mergerfs -y && apt-get autoremove -y
+    rm -rf $localbin/docker-compose /usr/bin/rclone $sbcloud 2>/dev/null
     rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/sbcloud 2>/dev/null
     elif [ "$answer" == "4" ]; then
     echo
@@ -91,8 +91,8 @@ if [ "$answer" == "1" ]; then
         echo
         echo "Uninstalling Rclone, MergerFS, SBCloud scripts..."
         sleep 2
-        rm -rf /usr/bin/rclone $sbcloud /mnt/logs 2>/dev/null
-        apt purge mergerfs -y && apt autoremove -y
+        rm -rf /usr/bin/rclone $sbcloud 2>/dev/null
+        apt-get purge mergerfs -y && apt-get autoremove -y
         rm $localbin/rclone-mount $localbin/rclone-unmount $localbin/rclone-upload $localbin/docker-manager $localbin/rclone-cron $localbin/sbcloud 2>/dev/null
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo "UNINSTALL COMPLETE"
@@ -111,7 +111,7 @@ tee <<-EOF
 Installing prerequesites...
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOF
-apt update && apt upgrade -y && apt install curl git p7zip-full fuse man -y 
+apt-get update && apt-get upgrade -y && apt-get install curl git p7zip-full fuse man-db -y
 
 tee <<-EOF
 
@@ -227,6 +227,7 @@ fi
 
 # Apply permissions
 chmod -R 755 $sbcloud 2>/dev/null
+chmod ${currentuser}:${currentuser} /mnt 2>/dev/null
 chown -R ${currentuser}:${currentuser} $sbcloud 2>/dev/null
 chown -R ${currentuser}:${currentuser} $HOME/.config/rclone 2>/dev/null
 
