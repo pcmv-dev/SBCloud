@@ -2,7 +2,7 @@
 <center>
 <h1 align="center">SBCloud</h1>
 <h4 align="center">Automate Uploads to Cloud Storage</h4>
-<h5 align="Center">03/16/2020 - Script Version 0.05  ~ Installer Version 0.06
+<h5 align="Center">03/16/2020 - Script Version 0.06  ~ Installer Version 0.07.3
 </center>
 
 # Info
@@ -218,6 +218,7 @@ Recommended Dockers from [Linuxserver](https://www.linuxserver.io/)
 
 ### Rclone Scripts
 
+- 4/03/2020 - v0.06 - Script compatability and Unmount Script simplified
 - 3/03/2020 - v0.05 - Discord notifications and Service Accounts
 - 2/29/2020 - v0.04 - Script Revision
 - 2/18/2020 - v0.03 - Initial release
