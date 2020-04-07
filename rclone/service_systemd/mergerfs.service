@@ -1,3 +1,4 @@
+# Place in /etc/systemd/system/mergerfs.service
 [Unit]
 Description=Mergerfs Service
 Requires=rclone.service
@@ -7,10 +8,13 @@ RequiresMountsFor=/mnt/appdata/rclonedata/rclone_mount
  
 [Service]
 Type=forking
-ExecStart=/usr/bin/mergerfs /mnt/appdata/rclonedata/rclone_upload:/mnt/appdata/rclonedata/rclone_mount /mnt/gdrive -o rw,async_read=false,use_ino,allow_other,func.getattr=newest,category.action=all,category.create=ff,cache.files=partial,dropcacheonclose=true
 
-ExecStop=/usr/bin/fusermount -uz /mnt/gdrive
+# Mergerfs mount arguments
+ExecStart=/usr/bin/mergerfs /mnt/appdata/rclonedata/rclone_upload:/mnt/appdata/rclonedata/rclone_mount /mnt/media \ # Enter your Rclone upload/mount folders and Mergerfs mount folder
+-o rw,async_read=false,use_ino,allow_other,func.getattr=newest,category.action=all,category.create=ff,cache.files=off
+
+KillMode=process
 Restart=on-failure
  
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
