@@ -11,7 +11,7 @@ if [ `whoami` != root ]; then
 fi
 tee <<-NOTICE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INSTALLER: SBCloud-Docker v0.07.3-Full
+INSTALLER: SBCloud-Docker v0.07.4-Full
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DISCLAIMER:
 I am not responsible for anything that could go wrong.
@@ -130,9 +130,13 @@ if [ -x "$(command -v rclone)" ]; then
     if [ "$answer" != "${answer#[Yy]}" ]; then
         rm -rf /usr/bin/rclone &&
         curl https://rclone.org/install.sh | bash -s beta
+        mkdir -p $HOME/.config/rclone
+        touch $HOME/.config/rclone/rclone.conf
+        chown -R ${currentuser}:${currentuser} $HOME/.config/rclone 2>/dev/null
     fi
 else
     curl https://rclone.org/install.sh |  bash -s beta
+    mkdir -p $HOME/.config/rclone
     touch $HOME/.config/rclone/rclone.conf
     chown -R ${currentuser}:${currentuser} $HOME/.config/rclone 2>/dev/null
 fi
