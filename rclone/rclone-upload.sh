@@ -35,7 +35,7 @@ fi
 
 # Advanced Settings, Edit only if you know what you are doing
 MEDIAROOT="/mnt" # Your root directory. The directory where you want everything saved to EX: "/mnt/media" "/mnt/appdata"
-APPDATA="$MEDIAROOT/appdata/rclonedata/$MEDIA" # Rclone data folder location
+APPDATA="$MEDIAROOT/rclonedata" # Rclone data folder location
 RCLONEUPLOAD="$APPDATA/rclone_upload" # Staging folder of files to be uploaded NOTE: Local files
 RCLONEMOUNT="$APPDATA/rclone_mount" # Rclone mount folder NOTE: Do not drop files here, it is unreliable
 MERGERFSMOUNT="$MEDIAROOT/$MEDIA" # Local share location NOTE: This is where your files go

@@ -11,7 +11,7 @@ if [ `whoami` != root ]; then
 fi
 tee <<-NOTICE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INSTALLER: SBCloud v0.07.4-Lite
+INSTALLER: SBCloud v0.07.5-Lite
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DISCLAIMER:
 I am not responsible for anything that could go wrong.
@@ -231,7 +231,7 @@ fi
 
 # Apply permissions
 chmod -R 755 $sbcloud 2>/dev/null
-chmod ${currentuser}:${currentuser} /mnt 2>/dev/null
+chown ${currentuser}:${currentuser} /mnt 2>/dev/null
 chown -R ${currentuser}:${currentuser} $sbcloud 2>/dev/null
 chown -R ${currentuser}:${currentuser} $HOME/.config/rclone 2>/dev/null
 

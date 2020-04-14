@@ -281,7 +281,7 @@ fi
 
 # Apply permissions
 chmod -R 755 $sbcloud 2>/dev/null
-chmod ${currentuser}:${currentuser} /mnt 2>/dev/null
+chown ${currentuser}:${currentuser} /mnt 2>/dev/null
 chown -R ${currentuser}:${currentuser} $sbcloud 2>/dev/null
 chown -R ${currentuser}:${currentuser} $HOME/.config/rclone 2>/dev/null
 
