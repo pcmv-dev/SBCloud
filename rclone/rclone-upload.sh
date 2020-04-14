@@ -41,9 +41,9 @@ RCLONEMOUNT="$APPDATA/rclone_mount" # Rclone mount folder NOTE: Do not drop file
 MERGERFSMOUNT="$MEDIAROOT/$MEDIA" # Local share location NOTE: This is where your files go
 RCLONECONF="$HOME/.config/rclone/rclone.conf" # Rclone config file location
 LOCKFILE="$APPDATA/upload.lock" # Rclone upload lock file
-SERVICEACCOUNTDIR="$MEDIAROOT/appdata/rclonedata/service_accounts" # Path to your Service Account's .json files
+SERVICEACCOUNTDIR="$APPDATA/service_accounts" # Path to your Service Account's .json files
 SERVICEACCOUNTFILE="sa_account" # Service Account file name without "00.json"
-LOGFILE="$MEDIAROOT/logs/$REMOTE/rclone-upload.log" # Log file for upload
+LOGFILE="/mnt/logs/rclone-upload.log" # Log file for upload
 
 # Check if script is already running
 echo " ==== STARTING UPLOAD SCRIPT ===="
@@ -95,8 +95,8 @@ RCLONE_MOVE() {
     --buffer-size 512M \
     --drive-chunk-size 512M \
     --use-mmap \
-    --tpslimit 4 \
-    --checkers 4 \
+    --tpslimit 8 \
+    --checkers 8 \
     --transfers 4 \
     --order-by modtime,ascending \
     --exclude downloads/** \
