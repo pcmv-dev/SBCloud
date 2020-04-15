@@ -4,13 +4,13 @@ Description=Mergerfs Service
 Requires=rclone.service
 After=rclone.service
 RequiresMountsFor=/mnt/gdrive
-RequiresMountsFor=/mnt/appdata/rclonedata/rclone_mount
+RequiresMountsFor=/mnt/rclonedata/rclone_mount
  
 [Service]
 Type=forking
 
 # Mergerfs mount arguments
-ExecStart=/usr/bin/mergerfs /mnt/appdata/rclonedata/rclone_upload:/mnt/appdata/rclonedata/rclone_mount /mnt/media \ # Enter your Rclone upload/mount folders and Mergerfs mount folder
+ExecStart=/usr/bin/mergerfs /mnt/rclonedata/rclone_upload:/mnt/rclonedata/rclone_mount /mnt/media \ # Enter your Rclone upload/mount folders and Mergerfs mount folder
 -o rw,async_read=false,use_ino,allow_other,func.getattr=newest,category.action=all,category.create=ff,cache.files=off
 
 KillMode=process

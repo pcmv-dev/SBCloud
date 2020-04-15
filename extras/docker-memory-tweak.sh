@@ -7,14 +7,14 @@
 # If vm.swappiness is set to a value higher than 0, you might notice that only swap memory is being used on the node even
 # though host memory was available.
 
-if [ `whoami` != root ]; then
+if [[ `whoami` != root ]]; then
     echo "Warning! Please run as sudo/root"
     echo "Ex: sudo sh docker-memory-tweak.sh"
     exit
 fi
 vmswap="$(grep -oP '[0-9]' /proc/sys/vm/swappiness | tr -d '"')"
 vmover="$(grep -oP '[0-9]' /proc/sys/vm/overcommit_memory | tr -d '"')"
-if [ $vmswap != "0" ] | [ $vmover != "1" ]; then
+if [[ $vmswap != "0" ]] | [[ $vmover != "1" ]]; then
     sudo sysctl vm.swappiness=0
     sudo sysctl vm.overcommit_memory=1
     echo '' >> /etc/sysctl.conf

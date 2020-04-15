@@ -1,0 +1,16 @@
+# Place in '/etc/systemd/system'
+# Change User and Group to your own
+[Unit]
+Description=SBCloud Scripts
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=1000
+Group=1000
+RemainAfterExit=yes
+ExecStart=/mnt/sbcloud/rclone/rclone-mount
+ExecStop=/mnt/sbcloud/rclone/rclone-unmount
+
+[Install]
+WantedBy=multi-user.target

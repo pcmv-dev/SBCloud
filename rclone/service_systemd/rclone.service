@@ -6,8 +6,8 @@ After=network-online.target
  
 [Service]
 Type=notify
-User=1000 # Your user ID
-Group=1000 # Your group ID
+User=1000
+Group=1000
 
 # Rclone Arguments
 ExecStart=/usr/bin/rclone mount \
@@ -21,12 +21,12 @@ ExecStart=/usr/bin/rclone mount \
 --vfs-read-chunk-size 128M \
 --vfs-read-chunk-size-limit off \
 --vfs-cache-mode writes \
-YOUR_GOOGLE_DRIVE_REMOTE: /mnt/appdata/rclonedata/rclone_mount # Enter your Rclone remote and location of Rclone mount
+YOUR_GOOGLE_DRIVE_REMOTE: /mnt/rclonedata/rclone_mount
 
-ExecStop=/usr/bin/fusermount -uz /mnt/appdata/rclonedata/rclone_mount # Rclone mount location
+ExecStop=/usr/bin/fusermount -uz /mnt/rclonedata/rclone_mount
 Restart=on-failure
 RestartSec=10
 KillMode=none
  
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
