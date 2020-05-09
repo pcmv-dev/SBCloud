@@ -1,6 +1,9 @@
 ==== Run As A Service ====
 
-This is not finished yet but you can use this as a hint. You put both rclone.service and mergerfs.service
+This is the recommended way to mount GoogleDrive on Ubuntu/Debian distros. You put both rclone.service and mergerfs.service
 into a systemd folder /etc/systemd/system. You then put the upload script in a cronjob.
 
-Things to note about this is that you have to use absolute paths for excutables
+$ sudo cp /mnt/sbcloud/service_systemd/* /etc/systemd/system/
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable rclone.service && sudo systemctl enable mergerfs.service && sudo systemctl enable rclone-cache.service
+$ sudo systemctl start rclone.service && sudo systemctl start mergerfs.service && sudo systemctl start rclone-cache.service
