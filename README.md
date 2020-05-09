@@ -101,6 +101,7 @@ View this step in a video example
 # Rclone Scripts
 ### Do not run these scripts as sudo/root unless you are running everything as root or you will have permission problems
 ### If you used either **sbcloud** or **sbcloud-docker** then these scripts should be on system PATH
+The recommended way to mount your Google Drive is to use systemd which you can find in "rclone" folder. Make sure you create the folders first then move them into "/etc/systemd/system" Then you would only need to use the "rclone-upload" script.
 ## Rclone Mount Script
 ### This script mounts your cloud storage to your local machine
 
