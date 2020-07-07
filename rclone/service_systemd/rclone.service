@@ -8,10 +8,14 @@ After=network-online.target
 Type=notify
 User=1000
 Group=1000
+KillMode=none
+RestartSec=5
+Restart=on-failure
 
 ExecStart=/usr/bin/rclone mount \
 --uid=1000 --gid=1000 --umask=002 \
---log-level ERROR \
+--log-level INFO \
+--log-file /mnt/logs/rclone.log \
 --poll-interval 15s \
 --allow-other \
 --dir-cache-time 1000h \
@@ -20,13 +24,11 @@ ExecStart=/usr/bin/rclone mount \
 --vfs-read-chunk-size 128M \
 --vfs-read-chunk-size-limit off \
 --vfs-cache-mode writes \
---rc --rc-addr 127.0.0.1:5572 \
+--rc --rc-addr :5572 \
 YOUR_GOOGLE_DRIVE_REMOTE: /mnt/rclonedata/rclone_mount
 
 ExecStop=/usr/bin/fusermount -uz /mnt/rclonedata/rclone_mount
-Restart=on-failure
-RestartSec=10
-KillMode=none
+ExecStartPost=/usr/bin/rclone rc vfs/refresh recursive=true --rc-addr 127.0.0.1:5572 _async=true
  
 [Install]
 WantedBy=multi-user.target
